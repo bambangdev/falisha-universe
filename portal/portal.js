@@ -7,8 +7,8 @@ const GAMES = [
     desc: 'Game fighting keluarga! 5 karakter lengkap dengan jurus dan ultimate epic. Mode Arcade vs CPU.',
     tags: ['Fighting', '5 Karakter', 'Arcade vs CPU'] },
   { id: 'falisha-slug', title: 'Falisha Slug', href: 'games/falisha-slug/index.html', cover: 'portal/cover_game3.jpg',
-    desc: 'Remake Metal Slug! Kendarai Tank SV-001, selamatkan sandera Babah Nono, raih Heavy Machine Gun, dan kalahkan Mech Yanto!',
-    tags: ['Run & Gun', 'Super Tank', 'Metal Slug'] },
+    desc: 'Remake Metal Slug 5 Misi Lengkap! Pijakan platform nyata, kendarai Tank SV-001, sandera Babah Nono, raih Heavy Machine Gun, dan kalahkan Mech Yanto!',
+    tags: ['5 Misi', 'Super Tank', 'Metal Slug'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');
