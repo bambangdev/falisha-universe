@@ -132,18 +132,22 @@ html, body {
   -webkit-backdrop-filter: blur(6px);
 }
 
-#dpad span {
+#dpad .dp-btn, #dpad .dp-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  font-size: clamp(20px, 2.6vw, 32px);
+  border-radius: 14px;
+  font-size: clamp(22px, 2.8vw, 34px);
   font-weight: bold;
   color: #00f0ff;
   background: rgba(18, 25, 60, 0.85);
   border: 2px solid rgba(0, 240, 255, 0.4);
-  pointer-events: none;
-  transition: transform 0.08s, background 0.08s;
+  touch-action: none;
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: transform 0.06s, background 0.06s, border-color 0.06s;
 }
 
 #dpad .dp-up { grid-row: 1; grid-column: 2; }
@@ -155,16 +159,17 @@ html, body {
   font-size: 10px;
   color: #ffd23f;
   opacity: 0.6;
+  pointer-events: none;
 }
 #dpad .dp-right { grid-row: 2; grid-column: 3; }
 #dpad .dp-down { grid-row: 3; grid-column: 2; }
 
-#dpad span.on {
-  background: #ffd23f;
-  color: #050814;
-  border-color: #fff;
-  box-shadow: 0 0 22px #ffd23f, inset 0 0 8px #fff;
-  transform: scale(0.94);
+#dpad .dp-btn:active, #dpad .dp-btn.on {
+  background: #ffd23f !important;
+  color: #050814 !important;
+  border-color: #fff !important;
+  box-shadow: 0 0 24px #ffd23f, inset 0 0 10px #fff;
+  transform: scale(0.92);
 }
 
 /* Action Button Dash */

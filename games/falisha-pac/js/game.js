@@ -212,11 +212,13 @@ const G = {
   highScore: 19840,
   lives: 3,
   t: 0,
+  waveIndex: 0,
+  waveTimer: 420, // 7 detik scatter pertama
   frightTimer: 0,
   frightGhostsEaten: 0,
   dashCooldown: 0,
   dashActive: 0,
-  fruit: null, // { c, r, type, timer }
+  fruit: null, // { c, r, type, life }
   fruitTimer: 0,
   timer: 0
 };
@@ -235,7 +237,7 @@ const P = {
   angle: 0,
   mouthAngle: 0.25,
   mouthSpeed: 0.08,
-  speed: 2.2,
+  speed: 2.0, // Tepat membagi TS = 24 (12 frame per petak)
   radius: 11
 };
 
@@ -245,10 +247,10 @@ const P = {
 // 2: Inky (Arshad - Cyan / Flanker)
 // 3: Clyde (Nono - Oranye / Wanderer)
 const GHOSTS = [
-  { id: 'yanto', name: 'YANTO', color: '#ff2a2a', homeC: 12, homeR: 8, cornerC: 23, cornerR: 1, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'chase', speed: 1.85 },
-  { id: 'pupu',  name: 'PUPU',  color: '#ff66cc', homeC: 11, homeR: 10, cornerC: 1, cornerR: 1, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'house', speed: 1.8 },
-  { id: 'arshad',name: 'ARSHAD',color: '#00f0ff', homeC: 12, homeR: 10, cornerC: 23, cornerR: 19, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'house', speed: 1.75 },
-  { id: 'nono',  name: 'NONO',  color: '#ff9900', homeC: 13, homeR: 10, cornerC: 1, cornerR: 19, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'house', speed: 1.7 }
+  { id: 'yanto', name: 'YANTO', color: '#ff2a2a', homeC: 12, homeR: 8, cornerC: 23, cornerR: 1, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'scatter', speed: 1.5 },
+  { id: 'pupu',  name: 'PUPU',  color: '#ff66cc', homeC: 11, homeR: 10, cornerC: 1, cornerR: 1, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'house', speed: 1.4 },
+  { id: 'arshad',name: 'ARSHAD',color: '#00f0ff', homeC: 12, homeR: 10, cornerC: 23, cornerR: 19, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'house', speed: 1.35 },
+  { id: 'nono',  name: 'NONO',  color: '#ff9900', homeC: 13, homeR: 10, cornerC: 1, cornerR: 19, x: 0, y: 0, dirX: 0, dirY: -1, mode: 'house', speed: 1.3 }
 ];
 
 let particles = [];
@@ -265,18 +267,23 @@ function addSpark(x, y, color = '#00f0ff', n = 6) {
   }
 }
 
-/* ---------- Inisialisasi Karakter ---------- */
+/* ---------- Inisialisasi Karakter & Posisi ---------- */
 function resetPositions() {
   P.x = 12 * TS; P.y = 16 * TS;
   P.dirX = -1; P.dirY = 0;
-  P.nextX = -1; P.nextY = 0;
+  P.nextX = 0; P.nextY = 0;
   P.angle = Math.PI;
 
+  G.waveIndex = 0;
+  G.waveTimer = 420; // 7 detik scatter pertama
+
   const houseC = 12, houseR = 10;
-  GHOSTS[0].x = houseC * TS; GHOSTS[0].y = 8 * TS; GHOSTS[0].dirX = -1; GHOSTS[0].dirY = 0; GHOSTS[0].mode = 'chase';
-  GHOSTS[1].x = (houseC - 1) * TS; GHOSTS[1].y = houseR * TS; GHOSTS[1].dirX = 0; GHOSTS[1].dirY = -1; GHOSTS[1].mode = 'house'; GHOSTS[1].exitTimer = 40;
-  GHOSTS[2].x = houseC * TS; GHOSTS[2].y = houseR * TS; GHOSTS[2].dirX = 0; GHOSTS[2].dirY = 1; GHOSTS[2].mode = 'house'; GHOSTS[2].exitTimer = 160;
-  GHOSTS[3].x = (houseC + 1) * TS; GHOSTS[3].y = houseR * TS; GHOSTS[3].dirX = 0; GHOSTS[3].dirY = -1; GHOSTS[3].mode = 'house'; GHOSTS[3].exitTimer = 280;
+  const stageSpeedBonus = Math.min(0.3, G.stage * 0.1);
+
+  GHOSTS[0].x = houseC * TS; GHOSTS[0].y = 8 * TS; GHOSTS[0].dirX = -1; GHOSTS[0].dirY = 0; GHOSTS[0].mode = 'scatter'; GHOSTS[0].speed = 1.5 + stageSpeedBonus;
+  GHOSTS[1].x = (houseC - 1) * TS; GHOSTS[1].y = houseR * TS; GHOSTS[1].dirX = 0; GHOSTS[1].dirY = -1; GHOSTS[1].mode = 'house'; GHOSTS[1].exitTimer = 210; GHOSTS[1].speed = 1.4 + stageSpeedBonus;
+  GHOSTS[2].x = houseC * TS; GHOSTS[2].y = houseR * TS; GHOSTS[2].dirX = 0; GHOSTS[2].dirY = 1; GHOSTS[2].mode = 'house'; GHOSTS[2].exitTimer = 540; GHOSTS[2].speed = 1.35 + stageSpeedBonus;
+  GHOSTS[3].x = (houseC + 1) * TS; GHOSTS[3].y = houseR * TS; GHOSTS[3].dirX = 0; GHOSTS[3].dirY = -1; GHOSTS[3].mode = 'house'; GHOSTS[3].exitTimer = 960; GHOSTS[3].speed = 1.3 + stageSpeedBonus;
 
   G.frightTimer = 0;
   G.frightGhostsEaten = 0;
@@ -301,17 +308,37 @@ function initGame() {
   initStage(0);
 }
 
-/* ---------- Input Controller ---------- */
+/* ---------- Input Controller Responsif ---------- */
 let confirmReq = false;
 
-function gesture() { Chip.ensure(); if (!gesture.done) { gesture.done = true; Chip.play(THEMES, 0); } }
+function gesture() {
+  Chip.ensure();
+  if (!gesture.done) {
+    gesture.done = true;
+    Chip.play(THEMES, 0);
+  }
+}
 
+function setPlayerDir(dx, dy) {
+  gesture();
+  if (dx !== 0) {
+    P.nextX = dx;
+    P.nextY = 0;
+  } else if (dy !== 0) {
+    P.nextX = 0;
+    P.nextY = dy;
+  }
+}
+
+// Keyboard (Arrow Keys & WASD)
 addEventListener('keydown', e => {
-  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'w', 'a', 's', 'd'].includes(e.key)) e.preventDefault();
-  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { P.nextX = -1; P.nextY = 0; gesture(); }
-  else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { P.nextX = 1; P.nextY = 0; gesture(); }
-  else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') { P.nextX = 0; P.nextY = -1; gesture(); }
-  else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { P.nextX = 0; P.nextY = 1; gesture(); }
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
+    e.preventDefault();
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') setPlayerDir(-1, 0);
+  else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') setPlayerDir(1, 0);
+  else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') setPlayerDir(0, -1);
+  else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') setPlayerDir(0, 1);
   else if (e.key === ' ') { triggerDash(); confirmReq = true; gesture(); }
   else if (e.key === 'Enter') { confirmReq = true; gesture(); }
   else if (e.key === 'm' || e.key === 'M') setMuted(!Chip.isMuted());
@@ -319,77 +346,156 @@ addEventListener('keydown', e => {
 
 function triggerDash() {
   if (G.dashCooldown <= 0 && G.mode === 'playing') {
-    G.dashActive = 120; // 2 detik flash speed
+    G.dashActive = 120; // 2 detik flash speed (3.0 px/frame)
     G.dashCooldown = 600; // 10 detik cooldown
     sfx.dash();
     addPop(P.x + OX, P.y + OY - 20, 'FLASH DASH!', '#ffd23f');
   }
 }
 
-// Touch Handling on Tablet & Mobile
-cv.addEventListener('pointerdown', e => {
-  confirmReq = true; gesture();
-  if (COARSE && !document.fullscreenElement) {
-    document.documentElement.requestFullscreen?.().then(() => screen.orientation?.lock?.('landscape').catch(() => {})).catch(() => {});
-  }
-  // Swipe detection start
-  cv.touchStartX = e.clientX; cv.touchStartY = e.clientY;
-});
-
-cv.addEventListener('pointerup', e => {
-  if (cv.touchStartX === undefined) return;
-  const dx = e.clientX - cv.touchStartX, dy = e.clientY - cv.touchStartY;
-  if (Math.hypot(dx, dy) > 20) {
-    if (Math.abs(dx) > Math.abs(dy)) {
-      P.nextX = dx > 0 ? 1 : -1; P.nextY = 0;
-    } else {
-      P.nextX = 0; P.nextY = dy > 0 ? 1 : -1;
-    }
-  }
-  cv.touchStartX = undefined; cv.touchStartY = undefined;
-});
-
-// Setup Virtual D-Pad
-(() => {
+// Setup Virtual D-Pad untuk Tablet Samsung & Mobile
+;(() => {
   const dpad = document.getElementById('dpad');
   if (!dpad) return;
-  const spans = {
-    up: dpad.querySelector('.dp-up'),
-    left: dpad.querySelector('.dp-left'),
-    right: dpad.querySelector('.dp-right'),
-    down: dpad.querySelector('.dp-down')
+
+  const btnUp = dpad.querySelector('.dp-up');
+  const btnLeft = dpad.querySelector('.dp-left');
+  const btnRight = dpad.querySelector('.dp-right');
+  const btnDown = dpad.querySelector('.dp-down');
+
+  const highlight = (u, l, r, d) => {
+    btnUp?.classList.toggle('on', !!u);
+    btnLeft?.classList.toggle('on', !!l);
+    btnRight?.classList.toggle('on', !!r);
+    btnDown?.classList.toggle('on', !!d);
   };
-  const setDir = (l, r, u, d) => {
-    spans.left?.classList.toggle('on', !!l);
-    spans.right?.classList.toggle('on', !!r);
-    spans.up?.classList.toggle('on', !!u);
-    spans.down?.classList.toggle('on', !!d);
-    if (l) { P.nextX = -1; P.nextY = 0; }
-    else if (r) { P.nextX = 1; P.nextY = 0; }
-    else if (u) { P.nextX = 0; P.nextY = -1; }
-    else if (d) { P.nextX = 0; P.nextY = 1; }
-  };
-  const handlePoint = (clientX, clientY) => {
-    const b = dpad.getBoundingClientRect(), cx = b.left + b.width / 2, cy = b.top + b.height / 2;
-    const dx = clientX - cx, dy = clientY - cy;
-    if (Math.hypot(dx, dy) < b.width * 0.12) { setDir(false, false, false, false); return; }
+
+  const handleDpadCoords = (clientX, clientY) => {
+    const rect = dpad.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = clientX - cx;
+    const dy = clientY - cy;
+
+    if (Math.hypot(dx, dy) < rect.width * 0.12) {
+      highlight(false, false, false, false);
+      return;
+    }
+
     if (Math.abs(dx) > Math.abs(dy)) {
-      setDir(dx < 0, dx > 0, false, false);
+      if (dx < 0) {
+        highlight(false, true, false, false);
+        setPlayerDir(-1, 0);
+      } else {
+        highlight(false, false, true, false);
+        setPlayerDir(1, 0);
+      }
     } else {
-      setDir(false, false, dy < 0, dy > 0);
+      if (dy < 0) {
+        highlight(true, false, false, false);
+        setPlayerDir(0, -1);
+      } else {
+        highlight(false, false, false, true);
+        setPlayerDir(0, 1);
+      }
     }
   };
-  dpad.addEventListener('pointerdown', e => { e.preventDefault(); dpad.setPointerCapture?.(e.pointerId); gesture(); handlePoint(e.clientX, e.clientY); });
-  dpad.addEventListener('pointermove', e => { if (e.buttons > 0 || e.pressure > 0) handlePoint(e.clientX, e.clientY); });
-  const off = e => { e.preventDefault(); spans.left?.classList.remove('on'); spans.right?.classList.remove('on'); spans.up?.classList.remove('on'); spans.down?.classList.remove('on'); };
-  dpad.addEventListener('pointerup', off); dpad.addEventListener('pointercancel', off);
+
+  let activePointerId = null;
+
+  dpad.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    activePointerId = e.pointerId;
+    dpad.setPointerCapture?.(e.pointerId);
+    handleDpadCoords(e.clientX, e.clientY);
+  });
+
+  dpad.addEventListener('pointermove', e => {
+    if (activePointerId !== null && e.pointerId === activePointerId) {
+      e.preventDefault();
+      handleDpadCoords(e.clientX, e.clientY);
+    }
+  });
+
+  const stopDpad = e => {
+    if (e.pointerId === activePointerId) {
+      activePointerId = null;
+      highlight(false, false, false, false);
+    }
+  };
+
+  dpad.addEventListener('pointerup', stopDpad);
+  dpad.addEventListener('pointercancel', stopDpad);
+
+  // Direct Button Handlers per tombol
+  const bindButton = (btn, dx, dy, u, l, r, d) => {
+    if (!btn) return;
+    btn.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      highlight(u, l, r, d);
+      setPlayerDir(dx, dy);
+    });
+  };
+  bindButton(btnUp, 0, -1, true, false, false, false);
+  bindButton(btnLeft, -1, 0, false, true, false, false);
+  bindButton(btnRight, 1, 0, false, false, true, false);
+  bindButton(btnDown, 0, 1, false, false, false, true);
 })();
 
-// Setup Dash Button
+// Kontrol Gesture Swipe & Drag Halus di Layar Canvas (Responsif Tablet)
+;(() => {
+  let touchId = null;
+  let startX = 0, startY = 0;
+
+  cv.addEventListener('pointerdown', e => {
+    confirmReq = true;
+    gesture();
+    if (COARSE && !document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().then(() => screen.orientation?.lock?.('landscape').catch(() => {})).catch(() => {});
+    }
+    touchId = e.pointerId;
+    cv.setPointerCapture?.(e.pointerId);
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  cv.addEventListener('pointermove', e => {
+    if (touchId === null || e.pointerId !== touchId) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const dist = Math.hypot(dx, dy);
+
+    // Deteksi swipe kontinu minimal 14px tanpa perlu lepas jari!
+    if (dist >= 14) {
+      if (Math.abs(dx) > Math.abs(dy)) {
+        setPlayerDir(dx > 0 ? 1 : -1, 0);
+      } else {
+        setPlayerDir(0, dy > 0 ? 1 : -1);
+      }
+      // Update titik awal untuk kemudi lanjutan yang mulus
+      startX = e.clientX;
+      startY = e.clientY;
+    }
+  });
+
+  const endCanvasTouch = e => {
+    if (e.pointerId === touchId) {
+      touchId = null;
+    }
+  };
+  cv.addEventListener('pointerup', endCanvasTouch);
+  cv.addEventListener('pointercancel', endCanvasTouch);
+})();
+
+// Setup Tombol Dash
 const dashBtn = document.getElementById('btn-dash');
 if (dashBtn) {
   dashBtn.addEventListener('pointerdown', e => {
-    e.preventDefault(); gesture(); triggerDash();
+    e.preventDefault();
+    gesture();
+    triggerDash();
   });
 }
 
@@ -400,9 +506,9 @@ document.getElementById('btn-full').onclick = e => {
   else document.documentElement.requestFullscreen?.().then(() => screen.orientation?.lock?.('landscape').catch(() => {})).catch(() => {});
 };
 
-/* ---------- Logika Pac-Man & Hantu ---------- */
+/* ---------- Logika Pac-Man: Cornering Assist & Smooth Movement ---------- */
 function updatePacman() {
-  const currentSpeed = (G.dashActive > 0) ? P.speed * 1.85 : P.speed;
+  const currentSpeed = (G.dashActive > 0) ? 3.0 : P.speed;
   if (G.dashActive > 0) {
     G.dashActive--;
     if (G.t % 3 === 0) addSpark(P.x + OX + (rand() - 0.5) * 12, P.y + OY + (rand() - 0.5) * 12, '#ffd23f', 2);
@@ -412,50 +518,97 @@ function updatePacman() {
     dashBtn?.classList.toggle('ready', G.dashCooldown <= 0);
   }
 
-  // Pre-turn buffer / perpindahan arah di persimpangan grid
-  const cellC = Math.round(P.x / TS), cellR = Math.round(P.y / TS);
-  const alignedX = Math.abs(P.x - cellC * TS) < currentSpeed + 0.5;
-  const alignedY = Math.abs(P.y - cellR * TS) < currentSpeed + 0.5;
+  const curC = Math.round(P.x / TS);
+  const curR = Math.round(P.y / TS);
 
-  // Cek apakah nextDir bisa berbalik langsung 180 derajat
+  // 1. Putar Balik 180 Derajat Langsung (Immediate Reversal)
   if ((P.nextX !== 0 && P.nextX === -P.dirX) || (P.nextY !== 0 && P.nextY === -P.dirY)) {
-    P.dirX = P.nextX; P.dirY = P.nextY;
+    P.dirX = P.nextX;
+    P.dirY = P.nextY;
+    P.nextX = 0;
+    P.nextY = 0;
   }
 
-  // Cek belokan di persimpangan
-  if (alignedX && alignedY) {
-    if (P.nextX !== 0 || P.nextY !== 0) {
-      if (!isWall(cellC + P.nextX, cellR + P.nextY)) {
-        P.x = cellC * TS; P.y = cellR * TS;
-        P.dirX = P.nextX; P.dirY = P.nextY;
+  // 2. Memulai Gerak saat Berhenti di Tembok (Stationary Start)
+  if (P.dirX === 0 && P.dirY === 0) {
+    if (P.nextX !== 0 && !isWall(curC + P.nextX, curR)) {
+      P.dirX = P.nextX;
+      P.dirY = 0;
+      P.nextX = 0;
+    } else if (P.nextY !== 0 && !isWall(curC, curR + P.nextY)) {
+      P.dirY = P.nextY;
+      P.dirX = 0;
+      P.nextY = 0;
+    }
+  }
+
+  // 3. Cornering Assist / Pre-turn Snap (Belokan Mulus tanpa Nyangkut)
+  const CORNER_LEEWAY = 11; // Toleransi belokan hingga 11 pixel dari titik tengah
+
+  // A. Bergerak Horizontal, Ingin Belok Vertikal
+  if (P.dirX !== 0 && P.nextY !== 0) {
+    const targetC = Math.round(P.x / TS);
+    const distToCenter = Math.abs(P.x - targetC * TS);
+    if (distToCenter <= CORNER_LEEWAY && !isWall(targetC, curR + P.nextY)) {
+      P.x = targetC * TS;
+      P.dirX = 0;
+      P.dirY = P.nextY;
+      P.nextX = 0;
+      P.nextY = 0;
+    }
+  }
+
+  // B. Bergerak Vertikal, Ingin Belok Horizontal
+  if (P.dirY !== 0 && P.nextX !== 0) {
+    const targetR = Math.round(P.y / TS);
+    const distToCenter = Math.abs(P.y - targetR * TS);
+    if (distToCenter <= CORNER_LEEWAY && !isWall(curC + P.nextX, targetR)) {
+      P.y = targetR * TS;
+      P.dirY = 0;
+      P.dirX = P.nextX;
+      P.nextX = 0;
+      P.nextY = 0;
+    }
+  }
+
+  // 4. Deteksi Tembok di Depan (Berhenti Rapi di Tengah Petak)
+  if (P.dirX !== 0) {
+    const nextC = curC + P.dirX;
+    if (isWall(nextC, curR)) {
+      if ((P.dirX > 0 && P.x >= curC * TS) || (P.dirX < 0 && P.x <= curC * TS)) {
+        P.x = curC * TS;
+        P.dirX = 0;
       }
     }
-    // Jika arah sekarang terhalang tembok, berhenti
-    if (isWall(cellC + P.dirX, cellR + P.dirY)) {
-      P.x = cellC * TS; P.y = cellR * TS;
-      P.dirX = 0; P.dirY = 0;
+  }
+  if (P.dirY !== 0) {
+    const nextR = curR + P.dirY;
+    if (isWall(curC, nextR)) {
+      if ((P.dirY > 0 && P.y >= curR * TS) || (P.dirY < 0 && P.y <= curR * TS)) {
+        P.y = curR * TS;
+        P.dirY = 0;
+      }
     }
   }
 
-  // Bergerak
+  // 5. Perpindahan Posisi
   P.x += P.dirX * currentSpeed;
   P.y += P.dirY * currentSpeed;
 
-  // Warp tunnel di baris 10
-  if (cellR === 10) {
+  // 6. Warp Tunnel di Baris 10
+  if (curR === 10) {
     if (P.x < -TS / 2) P.x = (COLS - 0.5) * TS;
     else if (P.x > (COLS - 0.5) * TS) P.x = -TS / 2;
   }
 
-  // Arah hadap & animasi mulut
+  // 7. Arah Hadap & Animasi Mengunyah
   if (P.dirX !== 0 || P.dirY !== 0) {
     P.angle = Math.atan2(P.dirY, P.dirX);
     P.mouthAngle += P.mouthSpeed;
     if (P.mouthAngle > 0.4 || P.mouthAngle < 0.05) P.mouthSpeed = -P.mouthSpeed;
   }
 
-  // Makan Dot & Power Pellet
-  const curC = Math.round(P.x / TS), curR = Math.round(P.y / TS);
+  // 8. Makan Dot & Power Pellet Kumon
   if (curC >= 0 && curC < COLS && curR >= 0 && curR < ROWS) {
     const tile = grid[curR][curC];
     if (tile === 2) {
@@ -470,10 +623,15 @@ function updatePacman() {
       G.score += 50;
       dotsRemaining--;
       sfx.powerPellet();
-      G.frightTimer = 400; // ~6.6 detik mode scared
+      G.frightTimer = 420; // 7 detik mode panik
       G.frightGhostsEaten = 0;
       GHOSTS.forEach(g => {
-        if (g.mode === 'chase' || g.mode === 'scatter') g.mode = 'fright';
+        if (g.mode === 'chase' || g.mode === 'scatter') {
+          g.mode = 'fright';
+          // Balik arah saat panik
+          g.dirX = -g.dirX;
+          g.dirY = -g.dirY;
+        }
       });
       addPop(P.x + OX, P.y + OY - 20, 'MEGA KUMON!', '#00f0ff');
       addSpark(curC * TS + OX + 12, curR * TS + OY + 12, '#00f0ff', 12);
@@ -481,7 +639,7 @@ function updatePacman() {
     }
   }
 
-  // Makan Buah Bonus
+  // 9. Makan Buah Bonus
   if (G.fruit && Math.abs(P.x - G.fruit.c * TS) < 14 && Math.abs(P.y - G.fruit.r * TS) < 14) {
     const fr = FRUITS[G.fruit.type];
     G.score += fr.pts;
@@ -490,7 +648,7 @@ function updatePacman() {
     G.fruit = null;
   }
 
-  // Cek Stage Clear
+  // 10. Cek Stage Selesai
   if (dotsRemaining <= 0) {
     G.mode = 'stage_clear';
     G.timer = 120;
@@ -505,27 +663,55 @@ function checkFruitSpawn() {
   }
 }
 
+/* ---------- Logika AI Hantu dengan Wave Scatter/Chase Otentik ---------- */
 function updateGhosts() {
-  if (G.frightTimer > 0) G.frightTimer--;
+  // Pengatur Gelombang Scatter & Chase
+  if (G.frightTimer > 0) {
+    G.frightTimer--;
+  } else {
+    if (G.waveTimer > 0) {
+      G.waveTimer--;
+    } else if (G.waveIndex < 5) {
+      G.waveIndex++;
+      const waves = [420, 1200, 420, 1200, 300, Infinity]; // Scatter 7s, Chase 20s, Scatter 7s, Chase 20s, Scatter 5s, Chase tetap
+      G.waveTimer = waves[G.waveIndex];
+      const newMode = (G.waveIndex % 2 === 0) ? 'scatter' : 'chase';
+      GHOSTS.forEach(g => {
+        if (g.mode === 'chase' || g.mode === 'scatter') {
+          g.mode = newMode;
+          g.dirX = -g.dirX;
+          g.dirY = -g.dirY;
+        }
+      });
+    }
+  }
 
   GHOSTS.forEach(g => {
     // Mode Dalam Rumah (Ghost House)
     if (g.mode === 'house') {
+      // Keluar lebih cepat jika dot sudah banyak dimakan
+      const eaten = totalDots - dotsRemaining;
+      if ((g.id === 'arshad' && eaten >= 30) || (g.id === 'nono' && eaten >= 60)) {
+        g.exitTimer = Math.min(g.exitTimer, 10);
+      }
+
       if (--g.exitTimer <= 0) {
         g.x = 12 * TS; g.y = 8 * TS;
-        g.mode = 'chase'; g.dirX = -1; g.dirY = 0;
+        const curWaveMode = (G.frightTimer > 0) ? 'fright' : ((G.waveIndex % 2 === 0) ? 'scatter' : 'chase');
+        g.mode = curWaveMode;
+        g.dirX = -1; g.dirY = 0;
       } else {
-        // Naik-turun di dalam rumah
-        g.y += Math.sin(G.t * 0.1) * 0.8;
+        // Melayang santai di dalam rumah
+        g.y = (10 * TS) + Math.sin(G.t * 0.1) * 3;
       }
       return;
     }
 
-    // Kecepatan hantu
+    // Kecepatan hantu sesuai mode
     let sp = g.speed;
-    if (g.mode === 'fright') sp *= 0.65;
-    else if (g.mode === 'eyes') sp *= 2.4;
-    else if (g.id === 'yanto' && dotsRemaining < 25) sp *= 1.15; // Cruise Elroy
+    if (g.mode === 'fright') sp = 1.0;
+    else if (g.mode === 'eyes') sp = 3.0;
+    else if (g.id === 'yanto' && dotsRemaining < 20) sp += 0.2; // Cruise Elroy
 
     const cellC = Math.round(g.x / TS), cellR = Math.round(g.y / TS);
     const alignedX = Math.abs(g.x - cellC * TS) < sp + 0.5;
@@ -534,9 +720,9 @@ function updateGhosts() {
     if (alignedX && alignedY) {
       g.x = cellC * TS; g.y = cellR * TS;
 
-      // Hantu mata pulang ke rumah
+      // Hantu mata kembali masuk ke rumah
       if (g.mode === 'eyes' && cellC === 12 && (cellR === 8 || cellR === 9 || cellR === 10)) {
-        g.mode = 'house'; g.exitTimer = 60;
+        g.mode = 'house'; g.exitTimer = 90;
         return;
       }
 
@@ -546,7 +732,10 @@ function updateGhosts() {
         targetC = 12; targetR = 9;
       } else if (g.mode === 'fright') {
         targetC = (rand() * COLS) | 0; targetR = (rand() * ROWS) | 0;
+      } else if (g.mode === 'scatter') {
+        targetC = g.cornerC; targetR = g.cornerR;
       } else {
+        // Mode Chase Aktif
         const pC = Math.round(P.x / TS), pR = Math.round(P.y / TS);
         if (g.id === 'yanto') {
           // Blinky: langsung buru Falisha
@@ -555,7 +744,7 @@ function updateGhosts() {
           // Pinky: 4 petak di depan Falisha
           targetC = pC + P.dirX * 4; targetR = pR + P.dirY * 4;
         } else if (g.id === 'arshad') {
-          // Inky: koordinat bersilang
+          // Inky: koordinat bersilang dengan Blinky
           const bC = Math.round(GHOSTS[0].x / TS), bR = Math.round(GHOSTS[0].y / TS);
           targetC = pC + (pC - bC); targetR = pR + (pR - bR);
         } else if (g.id === 'nono') {
@@ -575,10 +764,9 @@ function updateGhosts() {
       ];
       let bestDir = null, minDist = Infinity;
       for (const d of dirs) {
-        // Jangan putar balik kecuali tak ada jalan
-        if (d.dx === -g.dirX && d.dy === -g.dirY) continue;
+        if (d.dx === -g.dirX && d.dy === -g.dirY) continue; // Tidak boleh putar balik
         const nc = cellC + d.dx, nr = cellR + d.dy;
-        // Pintu rumah hantu hanya bisa dilewati hantu mata
+        // Pintu rumah hantu hanya bisa dimasuki hantu mata
         if (g.mode !== 'eyes' && nr === 9 && (nc === 11 || nc === 12 || nc === 13)) continue;
         if (!isWall(nc, nr)) {
           const d2 = Math.hypot(nc - targetC, nr - targetR);
