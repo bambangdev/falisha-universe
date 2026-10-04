@@ -48,7 +48,8 @@ Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan 
 - Build: `games/falisha-kart/` — engine Mode 7 pseudo-3D (Canvas 2D), 5 pembalap keluarga (Falisha/Arshad/Babah Nono/Ibu Pupu/Baymax) dengan stat beda, 4 sirkuit Piala Keluarga (Taman Rumah, Dapur GP, Kamar Tidur Rally, Ruang Piano Sprint), 7 item keluarga (Sambal Petir, Buku Kumon, Piano Terbang, Kulit Pisang, Bintang Petir, Tempurung Raksasa, Kotak Kejutan), drift + mini-turbo, start boost, AI CPU rubber-banding, Grand Prix 4 balapan + podium, musik chiptune via `shared/audio.js`.
 - Kontrol: keyboard (Panah/WASD, Spasi=item, Shift=drift) + tombol sentuh multi-touch untuk Tab S8.
 - Cover portal: `portal/cover_game5.jpg`, entri baru di `portal/portal.js`.
-- Verifikasi: smoke test Node (fisika, AI, item) + render test headless lolos; **tes manual di tablet disarankan** (target 60fps di Tab S8).
+- **Overhaul visual (4 Okt 2026, atas feedback user):** seluruh sprite digambar ulang sebagai aset pixel-art: 5 sprite pembalap (3 pose: lurus/kiri/kanan, tampak belakang) di-generate berdasarkan foto asli di `assets/Photo/` (Falisha, Arsyad, Babah Nono, Ibu Pupu, Baymax), + 12 sprite world (pohon, bunga, semak, rumah, piano, buku, lampu, bantal, not, gift box, pisang, tempurung). Sprite di-embed base64 di `js/spr_*.js` (binary tidak bisa lewat GitHub MCP). Efek partikel baru: asap drift berwarna, percikan boost, ledakan POW, confetti finish, kilau item.
+- Verifikasi: smoke test Node (fisika, AI, item) + render test headless lolos; mockup visual sprite lolos; **tes manual di tablet disarankan** (target 60fps di Tab S8).
 - v2 (nanti): Piala Petir (4 sirkuit), Time Trial, VS 2P, slipstream.
 
 ## Cara Menjalankan

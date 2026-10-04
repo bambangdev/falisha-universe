@@ -87,9 +87,11 @@ const TrackDB = (() => {
     // dekorasi pinggir jalan
     const n = road.segments.length;
     for (let i = 20; i < n; i += def.decorGap) {
-      const fn = def.decors[(i / def.decorGap | 0) % def.decors.length];
+      const name = def.decors[(i / def.decorGap | 0) % def.decors.length];
       const side = (i / def.decorGap | 0) % 2 === 0 ? -1 : 1;
-      road.addSprite(i, { x: side * (1.6 + Math.random() * 1.6), w: 900 + Math.random() * 900, draw: (ctx, x, y, w) => fn(ctx, x, y, w) });
+      const sw = 1100 + Math.random() * 1100;
+      road.addSprite(i, { x: side * (1.7 + Math.random() * 1.7), w: sw,
+        draw: (ctx, x, y, w) => Sprites.drawDecor(ctx, name, x, y, w) });
     }
     // kotak item tiap ~110 segmen
     const boxes = [];
@@ -111,7 +113,7 @@ const TrackDB = (() => {
         [LEN.S, LEN.S, LEN.S, CURVE.NONE, HILL.NONE],
       ],
       decorGap: 45,
-      decors: [(c, x, y, s) => tree(c, x, y, s), (c, x, y, s) => flower(c, x, y, s * 0.7), (c, x, y, s) => bush(c, x, y, s * 0.8), (c, x, y, s) => house(c, x, y, s)],
+      decors: ['tree', 'flower', 'bush', 'house'],
       theme: {
         sky: ['#4aa8ff', '#c4ecff'],
         light: { road: '#6e7280', grass: '#5cbb4e', rumble: '#e63946' },
@@ -130,7 +132,7 @@ const TrackDB = (() => {
         [LEN.S, LEN.M, LEN.S, CURVE.NONE, HILL.NONE],
       ],
       decorGap: 50,
-      decors: [(c, x, y, s) => house(c, x, y, s, '#e8b04b', '#a85f2e'), (c, x, y, s) => lamp(c, x, y, s), (c, x, y, s) => book(c, x, y, s * 0.9, '#ff9d2e')],
+      decors: ['house', 'lamp', 'book'],
       theme: {
         sky: ['#ff9d5c', '#ffe3b3'],
         light: { road: '#cfc3a8', grass: '#e89b4b', rumble: '#a85f2e' },
@@ -149,7 +151,7 @@ const TrackDB = (() => {
         [LEN.S, LEN.S, LEN.S, CURVE.NONE, HILL.NONE],
       ],
       decorGap: 48,
-      decors: [(c, x, y, s) => pillow(c, x, y, s, '#ffb3d9'), (c, x, y, s) => pillow(c, x, y, s, '#9fd8ff'), (c, x, y, s) => lamp(c, x, y, s), (c, x, y, s) => book(c, x, y, s * 0.9)],
+      decors: ['pillow', 'lamp', 'book'],
       theme: {
         sky: ['#3b2d6e', '#8a6fbf'],
         light: { road: '#8a7bb8', grass: '#5c4d8f', rumble: '#ffb3d9' },
@@ -168,7 +170,7 @@ const TrackDB = (() => {
         [LEN.S, LEN.S, LEN.S, CURVE.NONE, HILL.LOW],
       ],
       decorGap: 52,
-      decors: [(c, x, y, s) => piano(c, x, y, s), (c, x, y, s) => note(c, x, y, s * 0.8), (c, x, y, s) => note(c, x, y, s * 0.8, '#9fd8ff'), (c, x, y, s) => lamp(c, x, y, s)],
+      decors: ['piano', 'note', 'lamp'],
       theme: {
         sky: ['#101030', '#3d3d7a'],
         light: { road: '#3f3f66', grass: '#26264a', rumble: '#ffe55c' },

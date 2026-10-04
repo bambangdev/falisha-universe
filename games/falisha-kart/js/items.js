@@ -147,10 +147,12 @@ const ItemSys = (() => {
 
   /* ---------- gambar item ---------- */
   function drawBox(ctx, x, y, w, t) {
-    const s = w / 60, bob = Math.sin(t * 4) * 4 * s;
-    ctx.save(); ctx.translate(x, y + bob);
+    const bob = Math.sin(t * 4) * w * 0.05;
+    if (typeof Sprites !== 'undefined' && Sprites.drawDecor(ctx, 'giftbox', x, y + bob2, w * 0.85)) return;
+    const s = w / 60, bob2 = Math.sin(t * 4) * 4 * s;
+    ctx.save(); ctx.translate(x, y + bob2);
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
-    ctx.beginPath(); ctx.ellipse(0, 2 * s - bob, 26 * s, 7 * s, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(0, 2 * s - bob2, 26 * s, 7 * s, 0, 0, 7); ctx.fill();
     ctx.fillStyle = '#c0392b'; ctx.fillRect(-24 * s, -48 * s, 48 * s, 40 * s);
     ctx.fillStyle = '#e74c3c'; ctx.fillRect(-24 * s, -48 * s, 48 * s, 12 * s);
     ctx.fillStyle = '#ffe55c'; ctx.fillRect(-5 * s, -48 * s, 10 * s, 40 * s); ctx.fillRect(-24 * s, -32 * s, 48 * s, 10 * s);
@@ -159,14 +161,16 @@ const ItemSys = (() => {
     ctx.restore();
   }
   function drawProjectile(ctx, x, y, w, type) {
+    const name = type === 'kumon' ? 'book' : type === 'piano' ? 'piano' : 'shell';
+    if (typeof Sprites !== 'undefined' && Sprites.drawDecor(ctx, name, x, y, w * 0.8)) return;
     const s = w / 50;
     ctx.save(); ctx.translate(x, y);
-    if (type === 'kumon') { ctx.font = `${34 * s}px serif`; ctx.textAlign = 'center'; ctx.fillText('📚', 0, -6 * s); }
-    else if (type === 'piano') { ctx.font = `${34 * s}px serif`; ctx.textAlign = 'center'; ctx.fillText('🎹', 0, -6 * s); }
-    else if (type === 'tempurung') { ctx.font = `${38 * s}px serif`; ctx.textAlign = 'center'; ctx.fillText('🐢', 0, -6 * s); }
+    const em = type === 'kumon' ? '📚' : type === 'piano' ? '🎹' : '🐢';
+    ctx.font = `${34 * s}px serif`; ctx.textAlign = 'center'; ctx.fillText(em, 0, -6 * s);
     ctx.restore();
   }
   function drawBanana(ctx, x, y, w) {
+    if (typeof Sprites !== 'undefined' && Sprites.drawDecor(ctx, 'banana', x, y, w * 0.7)) return;
     const s = w / 40;
     ctx.save(); ctx.translate(x, y);
     ctx.font = `${30 * s}px serif`; ctx.textAlign = 'center'; ctx.fillText('🍌', 0, -4 * s);

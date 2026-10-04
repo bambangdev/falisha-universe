@@ -71,6 +71,55 @@ let gp = null;            // {raceIdx, totals:{name:pts}}
 let race = null;          // {track, player, cpus, racers, itemSt, time, countT, countStep, over}
 let msgT = 0;
 
+/* ---------------- particle effects ---------------- */
+const particles = [];
+function spawn(o) { if (particles.length < 400) particles.push(Object.assign({ t: 0, life: 0.6 }, o)); }
+function burst(x, y, n, opt) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, sp = (opt.sp || 120) * (0.4 + Math.random());
+    spawn(Object.assign({ type: 'circle', x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (opt.up || 0),
+      size: 4 + Math.random() * (opt.size || 6), color: opt.color, life: 0.5 + Math.random() * 0.5 }, opt.extra || {}));
+  }
+}
+function updateParticles(dt) {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i]; p.t += dt;
+    if (p.t >= p.life) { particles.splice(i, 1); continue; }
+    p.x += (p.vx || 0) * dt; p.y += (p.vy || 0) * dt;
+    if (p.grav) p.vy += p.grav * dt;
+    if (p.drag) { p.vx *= (1 - p.drag * dt); p.vy *= (1 - p.drag * dt); }
+  }
+}
+function drawParticles() {
+  for (const p of particles) {
+    const k = 1 - p.t / p.life;
+    if (p.type === 'circle') {
+      ctx.globalAlpha = k * 0.85;
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * (p.grow ? (0.5 + p.t * 2.2) : 1), 0, 7); ctx.fill();
+    } else if (p.type === 'rect') {
+      ctx.globalAlpha = k;
+      ctx.fillStyle = p.color;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate((p.rot || 0) + p.t * (p.spin || 3));
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    } else if (p.type === 'text') {
+      ctx.globalAlpha = Math.min(1, k * 2);
+      ctx.font = `${p.size}px "Press Start 2P", monospace`; ctx.textAlign = 'center';
+      ctx.lineWidth = 5; ctx.strokeStyle = '#000';
+      const yy = p.y - p.t * 46;
+      ctx.strokeText(p.text, p.x, yy); ctx.fillStyle = p.color; ctx.fillText(p.text, p.x, yy);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+function confetti(n = 90) {
+  const cols = ['#ff3333', '#ffe55c', '#37b24d', '#3388ff', '#ff6b9d', '#ffffff'];
+  for (let i = 0; i < n; i++) spawn({ type: 'rect', x: Math.random() * W, y: -20 - Math.random() * 100,
+    vx: (Math.random() - 0.5) * 60, vy: 120 + Math.random() * 160, size: 8 + Math.random() * 8,
+    color: cols[i % cols.length], life: 2.5 + Math.random(), rot: Math.random() * 6, spin: 2 + Math.random() * 5 });
+}
+
 function show(name) {
   for (const k in screens) screens[k].classList.toggle('hidden', k !== name);
   if (!name) for (const k in screens) screens[k].classList.add('hidden');
@@ -87,7 +136,11 @@ function buildSelect() {
   for (const c of KartDB.CHARACTERS) {
     const d = document.createElement('div');
     d.className = 'char';
-    d.innerHTML = `<div class="face" style="background:${c.color}">${c.emoji}</div>
+    const uri = (typeof Sprites !== 'undefined') ? Sprites.racerDataURI(c.id, 0) : null;
+    const face = uri
+      ? `<div class="face" style="background-image:url(${uri});background-size:contain;background-repeat:no-repeat;background-position:center bottom;background-color:#0e1438"></div>`
+      : `<div class="face" style="background:${c.color}">${c.emoji}</div>`;
+    d.innerHTML = `${face}
       <div class="nm">${c.name}</div><div class="st">${c.title}<br>SPD ${Math.round(c.maxSpeed*100)} ACC ${Math.round(c.accel*100)}</div>`;
     d.onclick = () => { playerChar = c; sfx(() => Chip.beep(660, 0.12)); startGP(); };
     wrap.appendChild(d);
@@ -179,14 +232,37 @@ function update(dt) {
   ItemSys.pickup(player, track, playerPos, id => {
     setMsg(`${ItemSys.DEFS[id].icon} ${ItemSys.DEFS[id].name}!`, 1.4);
     sfx(() => Chip.beep(990, 0.12));
+    burst(W / 2, H - 120, 14, { color: '#ffe55c', sp: 160, up: 60, size: 7 });
     updateItemHud();
   });
   ItemSys.update(itemSt, racers, track, dt, kart => {
     if (kart === player) {
       setMsg('Aduh! Kena! 😵', 1.2);
       sfx(() => Chip.hit(1));
+      spawn({ type: 'text', text: 'POW!', x: W / 2, y: H - 200, size: 34, color: '#ff5533', life: 1 });
+      burst(W / 2, H - 140, 12, { color: '#ff9d2e', sp: 200, size: 8 });
     }
   });
+
+  // --- efek partikel pemain ---
+  const pkx = W / 2, pky = H - 40;
+  if (player.drift.on) {
+    const col = player.drift.charge > 1.4 ? '#ff9d2e' : player.drift.charge > 0.6 ? '#ffe55c' : '#9fd8ff';
+    for (let i = 0; i < 2; i++)
+      spawn({ type: 'circle', x: pkx + (Math.random() - 0.5) * 90, y: pky - 10, vx: (Math.random() - 0.5) * 40,
+        vy: -40 - Math.random() * 40, size: 7 + Math.random() * 6, color: col, life: 0.55, grow: true });
+  }
+  if (player.boostT > 0) {
+    for (let i = 0; i < 2; i++)
+      spawn({ type: 'circle', x: pkx + (Math.random() - 0.5) * 70, y: pky - 6, vx: (Math.random() - 0.5) * 60,
+        vy: 60 + Math.random() * 80, size: 5 + Math.random() * 6, color: Math.random() < 0.5 ? '#ff9d2e' : '#ffe55c', life: 0.4 });
+  }
+  if (player.starT > 0 && Math.random() < 0.5) {
+    const cols = ['#ff3333', '#ffe55c', '#37b24d', '#3388ff'];
+    spawn({ type: 'circle', x: pkx + (Math.random() - 0.5) * 160, y: pky - 60 - Math.random() * 120,
+      vx: 0, vy: -30, size: 4 + Math.random() * 4, color: cols[(Math.random() * 4) | 0], life: 0.7 });
+  }
+  updateParticles(dt);
 
   // tabrakan pemain vs CPU (senggolan)
   for (const cpu of cpus) {
@@ -206,6 +282,7 @@ function update(dt) {
     player.finishPos = KartAI.rank(racers).indexOf(player) + 1;
     setMsg(`FINISH! ${ORD[player.finishPos - 1]} 🏁`, 3);
     sfx(() => { Chip.beep(784, 0.15); setTimeout(() => Chip.beep(1046, 0.3), 150); });
+    if (player.finishPos <= 3) confetti(110);
     finishRace();
   } else if (!player.finished && player.lap === track.laps) {
     if (!race.finalLapMsg) { race.finalLapMsg = true; setMsg('FINAL LAP! 🔥', 2); }
@@ -251,6 +328,7 @@ function finishRace() {
 
 function updateRaceover(dt) {
   race.overT += dt;
+  updateParticles(dt);
   if (race.overT > 2.2) showResults();
 }
 
@@ -333,20 +411,22 @@ function render() {
   for (const pr of itemSt.projectiles) pushSprite(pr.z, pr.x, 650, (c, x, y, w) => ItemSys.drawProjectile(c, x, y, w, pr.type));
   for (const cpu of cpus) {
     const ch = cpu.char;
-    pushSprite(cpu.z, cpu.x, 1500, (c, x, y, w) => KartDB.drawKart(c, x, y, w, ch, { star: cpu.starT > 0 }));
+    const cpose = cpu.steerDir < 0 ? 1 : cpu.steerDir > 0 ? 2 : 0;
+    pushSprite(cpu.z, cpu.x, 1500, (c, x, y, w) => KartDB.drawKart(c, x, y, w, ch, { pose: cpose, star: cpu.starT > 0 }));
   }
 
   Mode7.render(ctx, W, H, road, {
     position: player.z, playerX: player.x, theme: track.theme, sprites,
   });
 
-  // kart pemain (tampak belakang, tengah bawah)
+  // kart pemain (tampak belakang, tengah bawah) — pose mengikuti setir
   const kw = Math.min(W * 0.30, 300);
   const kx = W / 2, ky = H - 18;
-  const tilt = ((readInputCache.left ? -1 : 0) + (readInputCache.right ? 1 : 0)) * 0.09;
+  const steerDir = ((readInputCache.left ? -1 : 0) + (readInputCache.right ? 1 : 0));
+  const pose = steerDir < 0 ? 1 : steerDir > 0 ? 2 : 0;
   let smoke = null;
   if (player.drift.on) smoke = player.drift.charge > 1.4 ? '#ff9d2e' : player.drift.charge > 0.6 ? '#ffe55c' : '#9fd8ff';
-  KartDB.drawKart(ctx, kx, ky, kw, player.char, { tilt, star: player.starT > 0, driftSmoke: smoke });
+  KartDB.drawKart(ctx, kx, ky, kw, player.char, { pose, star: player.starT > 0, driftSmoke: smoke });
   // efek boost: garis kecepatan
   if (player.boostT > 0 || player.starT > 0) {
     ctx.strokeStyle = '#ffffffaa'; ctx.lineWidth = 3;
@@ -355,6 +435,7 @@ function render() {
       ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx, sy + 30 + Math.random() * 40); ctx.stroke();
     }
   }
+  drawParticles();
 }
 let readInputCache = {};
 setInterval(() => { readInputCache = readInput(); }, 50);
@@ -371,6 +452,7 @@ function loop(now) {
 }
 
 /* ---------------- boot ---------------- */
+if (typeof Sprites !== 'undefined') Sprites.load();
 music('menu');
 show('title');
 requestAnimationFrame(loop);

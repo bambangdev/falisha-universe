@@ -93,9 +93,33 @@ const KartDB = (() => {
     if (p.z >= tl) { p.z -= tl; p.lap++; }
   }
 
-  /* ---------- gambar kart prosedural (tampak belakang) ---------- */
-  // x,y = tengah bawah kart; w = lebar px
+  /* ---------- gambar kart: sprite asli (fallback prosedural) ---------- */
+  // x,y = tengah bawah kart; w = lebar px; opts.pose: 0 lurus, 1 kiri, 2 kanan
   function drawKart(ctx, x, y, w, char, opts = {}) {
+    if (typeof Sprites !== 'undefined' && Sprites.drawRacer(ctx, char.id, opts.pose || 0, x, y, w)) {
+      // efek di atas sprite: star sparkles + asap drift
+      const s = w / 100;
+      ctx.save();
+      ctx.translate(x, y);
+      if (opts.star) {
+        ctx.fillStyle = '#ffe55c';
+        for (let i = 0; i < 6; i++) {
+          const a = Date.now() / 200 + i / 6 * Math.PI * 2;
+          ctx.beginPath(); ctx.arc(Math.cos(a) * 46 * s, -40 * s + Math.sin(a) * 30 * s, 4 * s, 0, 7); ctx.fill();
+        }
+      }
+      if (opts.driftSmoke) {
+        ctx.fillStyle = opts.driftSmoke; ctx.globalAlpha = 0.7;
+        ctx.beginPath(); ctx.arc(-30 * s, -8 * s, 9 * s, 0, 7); ctx.arc(-38 * s, -4 * s, 7 * s, 0, 7); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+      ctx.restore();
+      return;
+    }
+    drawKartProcedural(ctx, x, y, w, char, opts);
+  }
+
+  function drawKartProcedural(ctx, x, y, w, char, opts = {}) {
     const s = w / 100; // skala
     ctx.save();
     ctx.translate(x, y);

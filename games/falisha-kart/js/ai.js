@@ -48,6 +48,7 @@ const KartAI = (() => {
     let wantX = -ahead.curve * 0.16 + Math.sin(cpu.wob += dt * 0.7) * 0.12;
     wantX = clamp(wantX, -0.85, 0.85);
     const dx = wantX - cpu.x;
+    cpu.steerDir = dx > 0.05 ? 1 : dx < -0.05 ? -1 : 0;
     cpu.x += clamp(dx, -1, 1) * dt * 2.4 * cpu.char.handling;
     cpu.x = clamp(cpu.x, -2.2, 2.2);
 
