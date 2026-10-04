@@ -1,12 +1,12 @@
 /* Portal Dunia Falisha – daftar game: cukup tambah satu entri di GAMES */
 const GAMES = [
-  { id: 'falisha-vs-yanto', title: 'Falisha vs Yanto', href: 'games/falisha-vs-yanto/index.html', cover: 'portal/cover_game1.jpg',
+  { id: 'falisha-vs-yanto', title: 'Falisha vs Yanto', href: 'games/falisha-vs-yanto/', cover: 'portal/cover_game1.jpg',
     desc: 'Lari secepat kilat, kumpulkan cincin petir, lalu kalahkan bos Yanto di 3 stage seru!',
     tags: ['Platformer', '3 Stage + Bos', 'Powerup'] },
-  { id: 'warisan-combat', title: 'Warisan Combat', href: 'games/warisan-combat/index.html', cover: 'portal/cover_game2.jpg',
+  { id: 'warisan-combat', title: 'Warisan Combat', href: 'games/warisan-combat/', cover: 'portal/cover_game2.jpg',
     desc: 'Game fighting keluarga! 5 karakter lengkap dengan jurus dan ultimate epic. Mode Arcade vs CPU.',
     tags: ['Fighting', '5 Karakter', 'Arcade vs CPU'] },
-  { id: 'falisha-slug', title: 'Falisha Slug', href: 'games/falisha-slug/index.html', cover: 'portal/cover_game3.jpg',
+  { id: 'falisha-slug', title: 'Falisha Slug', href: 'games/falisha-slug/', cover: 'portal/cover_game3.jpg',
     desc: 'Remake Metal Slug 5 Misi Lengkap! Pijakan platform nyata, kendarai Tank SV-001, sandera Babah Nono, raih Heavy Machine Gun, dan kalahkan Mech Yanto!',
     tags: ['5 Misi', 'Super Tank', 'Metal Slug'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
