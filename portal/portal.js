@@ -4,8 +4,11 @@ const GAMES = [
     desc: 'Lari secepat kilat, kumpulkan cincin petir, lalu kalahkan bos Yanto di 3 stage seru!',
     tags: ['Platformer', '3 Stage + Bos', 'Powerup'] },
   { id: 'warisan-combat', title: 'Warisan Combat', href: 'games/warisan-combat/index.html', cover: 'portal/cover_game2.jpg',
-    desc: 'Game fighting keluarga! Pilih jagoan, keluarkan jurus dan ultimate epic. Mode Arcade vs CPU.',
-    tags: ['Fighting', 'Arcade vs CPU', 'Ultimate'] },
+    desc: 'Game fighting keluarga! 5 karakter lengkap dengan jurus dan ultimate epic. Mode Arcade vs CPU.',
+    tags: ['Fighting', '5 Karakter', 'Arcade vs CPU'] },
+  { id: 'falisha-slug', title: 'Falisha Slug', href: 'games/falisha-slug/index.html', cover: 'portal/cover_game3.jpg',
+    desc: 'Remake Metal Slug! Kendarai Tank SV-001, selamatkan sandera Babah Nono, raih Heavy Machine Gun, dan kalahkan Mech Yanto!',
+    tags: ['Run & Gun', 'Super Tank', 'Metal Slug'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');

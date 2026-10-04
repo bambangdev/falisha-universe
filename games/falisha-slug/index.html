@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a0f06">
+  <title>Falisha Slug – Super Vehicle 001</title>
+  <meta name="description" content="Falisha Slug: Remake aksi arcade 2D gaya Metal Slug dengan tank, Heavy Machine Gun, sandera, dan bos Yanto Mech!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Slug: Super Vehicle</h1>
+    <canvas id="game" width="960" height="540" aria-label="Falisha Slug Canvas"></canvas>
+
+    <!-- Tombol Sistem Atas -->
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Home">🏠</a>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <!-- Kontrol Sentuh Tablet (Samsung Tab S8 & Mobile) -->
+    <div id="touch" aria-hidden="true">
+      <div class="left">
+        <div id="dpad">
+          <span class="dp-up">▲</span>
+          <div class="dp-mid">
+            <span class="dp-left">◀</span>
+            <span class="dp-center">●</span>
+            <span class="dp-right">▶</span>
+          </div>
+          <span class="dp-down">▼</span>
+        </div>
+      </div>
+      <div class="right">
+        <div class="action-row top-row">
+          <button id="btn-slug" class="tbtn tbtn-slug">🚗 SLUG</button>
+          <button id="btn-bomb" class="tbtn tbtn-bomb">💣 BOMB</button>
+        </div>
+        <div class="action-row bot-row">
+          <button id="btn-fire" class="tbtn tbtn-fire">🔴 FIRE</button>
+          <button id="btn-jump" class="tbtn tbtn-jump">🟢 JUMP</button>
+        </div>
+      </div>
+    </div>
+
+    <p id="help">
+      A/D jalan • W bidik atas • S jongkok • J tembak • K lompat • L granat/meriam • E naik/turun tank • M suara
+    </p>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
