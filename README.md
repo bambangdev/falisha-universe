@@ -29,3 +29,7 @@ Buka `http://localhost:8000` di browser.
 
 ## ☁️ Deploy ke Vercel
 Game ini adalah aplikasi web statis murni (HTML5, Canvas, Web Audio API, Vanilla CSS) tanpa dependensi backend, sehingga dapat langsung di-deploy gratis di [Vercel](https://vercel.com).
+
+## 📚 Dokumentasi
+- [Walkthrough pengembangan](docs/WALKTHROUGH.md)
+- Plan tiap game: [docs/plans/](docs/plans/)
