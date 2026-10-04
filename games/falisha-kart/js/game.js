@@ -419,14 +419,14 @@ function render() {
     position: player.z, playerX: player.x, theme: track.theme, sprites,
   });
 
-  // kart pemain (tampak belakang, tengah bawah) — pose mengikuti setir
-  const kw = Math.min(W * 0.30, 300);
-  const kx = W / 2, ky = H - 18;
+  // kart pemain (POV agak dari atas: kart lebih kecil, jalan depan lebih lega)
+  const kw = Math.min(W * 0.24, 240);
+  const kx = W / 2, ky = H - 10;
   const steerDir = ((readInputCache.left ? -1 : 0) + (readInputCache.right ? 1 : 0));
   const pose = steerDir < 0 ? 1 : steerDir > 0 ? 2 : 0;
   let smoke = null;
   if (player.drift.on) smoke = player.drift.charge > 1.4 ? '#ff9d2e' : player.drift.charge > 0.6 ? '#ffe55c' : '#9fd8ff';
-  KartDB.drawKart(ctx, kx, ky, kw, player.char, { pose, star: player.starT > 0, driftSmoke: smoke });
+  KartDB.drawKart(ctx, kx, ky, kw, player.char, { pose, vscale: 0.9, star: player.starT > 0, driftSmoke: smoke });
   // efek boost: garis kecepatan
   if (player.boostT > 0 || player.starT > 0) {
     ctx.strokeStyle = '#ffffffaa'; ctx.lineWidth = 3;

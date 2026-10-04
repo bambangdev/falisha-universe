@@ -26,11 +26,12 @@ const Sprites = (() => {
   function imgOk(img) { return img && img.complete && img.naturalWidth > 0; }
 
   // pose: 0 = lurus, 1 = belok kiri, 2 = belok kanan. x = tengah, y = bawah, w = lebar.
-  function drawRacer(ctx, charId, pose, x, y, w) {
+  // opts.vscale: skala vertikal (efek POV dari atas)
+  function drawRacer(ctx, charId, pose, x, y, w, vscale) {
     const set = cache.racers[charId];
     const img = set && set[pose | 0];
     if (!imgOk(img)) return false;
-    const h = w * img.naturalHeight / img.naturalWidth;
+    const h = w * img.naturalHeight / img.naturalWidth * (vscale || 1);
     ctx.drawImage(img, x - w / 2, y - h, w, h);
     return true;
   }

@@ -3,7 +3,7 @@ const Mode7 = (() => {
   const SEG_LEN = 200;          // panjang 1 segmen (world units)
   const RUMBLE = 3;             // panjang rumble strip per segmen
   const ROAD_W = 2200;          // setengah lebar jalan (world units)
-  const CAM_H = 1150;           // tinggi kamera
+  const CAM_H = 1550;           // tinggi kamera (POV agak dari atas)
   const DRAW_DIST = 170;        // jumlah segmen digambar
   const FOV = 100;
   const CAM_DEPTH = 1 / Math.tan((FOV / 2) * Math.PI / 180);

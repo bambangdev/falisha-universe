@@ -96,7 +96,7 @@ const KartDB = (() => {
   /* ---------- gambar kart: sprite asli (fallback prosedural) ---------- */
   // x,y = tengah bawah kart; w = lebar px; opts.pose: 0 lurus, 1 kiri, 2 kanan
   function drawKart(ctx, x, y, w, char, opts = {}) {
-    if (typeof Sprites !== 'undefined' && Sprites.drawRacer(ctx, char.id, opts.pose || 0, x, y, w)) {
+    if (typeof Sprites !== 'undefined' && Sprites.drawRacer(ctx, char.id, opts.pose || 0, x, y, w, opts.vscale)) {
       // efek di atas sprite: star sparkles + asap drift
       const s = w / 100;
       ctx.save();
