@@ -148,7 +148,7 @@ const ItemSys = (() => {
   /* ---------- gambar item ---------- */
   function drawBox(ctx, x, y, w, t) {
     const bob = Math.sin(t * 4) * w * 0.05;
-    if (typeof Sprites !== 'undefined' && Sprites.drawDecor(ctx, 'giftbox', x, y + bob2, w * 0.85)) return;
+    if (typeof Sprites !== 'undefined' && Sprites.drawDecor(ctx, 'giftbox', x, y + bob, w * 0.85)) return;
     const s = w / 60, bob2 = Math.sin(t * 4) * 4 * s;
     ctx.save(); ctx.translate(x, y + bob2);
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
