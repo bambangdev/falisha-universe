@@ -10,6 +10,7 @@ Catatan perjalanan pengembangan dari awal sampai akhir. Plan detail tiap game ad
 | 2 | Warisan Combat | 2D fighting vs CPU (5 karakter) | `/games/warisan-combat/` | [plan](plans/02-warisan-combat-plan.md) |
 | 3 | Falisha Slug | Run-and-gun (remake Metal Slug) | `/games/falisha-slug/` | [plan](plans/03-falisha-slug-plan.md) |
 | 4 | Falisha Pac | Arcade maze (remake Pac-Man) | `/games/falisha-pac/` | [plan](plans/04-falisha-pac-plan.md) |
+| 5 | Falisha Kart | Kart racing ala Mario Kart (Mode 7) | `/games/falisha-kart/` | [plan](plans/05-falisha-kart-plan.md) |
 
 Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan untuk tablet (Samsung Tab S8) dan desktop. Portal ada di `/` (`index.html`, `portal/`).
 
@@ -42,6 +43,10 @@ Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan 
   - Wave scatter/chase klasik, jadwal keluar rumah hantu, kecepatan hantu diturunkan.
 - Diverifikasi dengan simulasi headless (Node) untuk belokan, putar balik, dash, swipe, dan D-pad.
 
+### 6. Falisha Kart (Mario Kart remake) — Plan
+- Plan ditulis di `docs/plans/05-falisha-kart-plan.md`: balapan kart Mode 7 pseudo-3D ala SNES Mario Kart, 5 pembalap keluarga dari foto asli, 7 item keluarga (Sambal Petir, Buku Kumon, Piano Terbang, dll), 8 sirkuit (2 piala), mode Grand Prix / Time Trial / VS 2P.
+- Status: menunggu feedback user sebelum mulai build.
+
 ## Cara Menjalankan
 ```bash
 python3 -m http.server 8000
@@ -51,3 +56,4 @@ Buka `http://localhost:8000`. Live: https://falisha-universe.vercel.app
 ## Catatan
 - Folder `.vercel/` bersifat lokal dan jangan di-commit.
 - Verifikasi browser otomatis tidak tersedia saat sesi terakhir (driver Playwright gagal diunduh), jadi pengujian kontrol Pac dilakukan lewat simulasi Node. Disarankan tes manual di tablet.
+
