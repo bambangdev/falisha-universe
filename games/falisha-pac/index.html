@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#070913">
+  <title>Falisha Pac – Arcade Edition</title>
+  <meta name="description" content="Falisha Pac: Remake Pac-Man klasik dengan visual neon synthwave, 4 labirin, mode hantu keluarga, dan Flash Dash!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Pac: Arcade Pac-Man Remake</h1>
+    <canvas id="game" width="960" height="540" aria-label="Falisha Pac Game Canvas"></canvas>
+
+    <!-- Tombol Sistem Atas -->
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <!-- Kontrol Sentuh Tablet (Samsung Tab S8 & Mobile) -->
+    <div id="touch" aria-hidden="true">
+      <div class="left">
+        <div id="dpad" role="group" aria-label="Arah Gerakan">
+          <span class="dp-btn dp-up">▲</span>
+          <span class="dp-btn dp-left">◀</span>
+          <span class="dp-center">●</span>
+          <span class="dp-btn dp-right">▶</span>
+          <span class="dp-btn dp-down">▼</span>
+        </div>
+      </div>
+      <div class="right">
+        <button id="btn-dash" class="tbtn tbtn-dash" aria-label="Flash Dash">⚡ DASH</button>
+      </div>
+    </div>
+
+    <p id="help">
+      Panah / WASD untuk belok • Spasi: Flash Dash ⚡ • M: Suara
+    </p>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

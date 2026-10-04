@@ -9,6 +9,9 @@ const GAMES = [
   { id: 'falisha-slug', title: 'Falisha Slug', href: 'games/falisha-slug/', cover: 'portal/cover_game3.jpg',
     desc: 'Remake Metal Slug 5 Misi Lengkap! Pijakan platform nyata, kendarai Tank SV-001, sandera Babah Nono, raih Heavy Machine Gun, dan kalahkan Mech Yanto!',
     tags: ['5 Misi', 'Super Tank', 'Metal Slug'] },
+  { id: 'falisha-pac', title: 'Falisha Pac', href: 'games/falisha-pac/', cover: 'portal/cover_game4.jpg',
+    desc: 'Remake Arcade Pac-Man 4 Labirin Neon! Lahap titik petir waka-waka, ambil Mega Kumon, mangsa 4 hantu keluarga, dan gunakan Flash Dash!',
+    tags: ['Pac-Man', '4 Labirin', 'Arcade Neon'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');
