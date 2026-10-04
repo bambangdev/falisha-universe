@@ -35,13 +35,13 @@ Sprite kart pixel-art karikatur per karakter (pipeline foto seperti Warisan Comb
 3. **Kamar Tidur Rally** — bantal rintangan, karpet boost
 4. **Ruang Piano Sprint** — nada-nada beterbangan
 
-### 🏆 Piala Petir (sulit)
+### 🏆 Piala Petir (sulit) — v2
 5. **Stadion Petir** — tikungan tajam + tanjakan
 6. **Lab Kumon** — soal-soal beterbangan
 7. **Hutan Emerald** — lumpur memperlambat
 8. **Benteng Yanto** — final, jebakan terbanyak
 
-v1: 8 sirkuit (2 piala), tiap sirkuit 3 lap.
+v1 (keputusan user 4 Okt 2026): **4 sirkuit — Piala Keluarga saja**, tiap sirkuit 3 lap. Piala Petir (4 sirkuit) jadi v2.
 
 ## 5. Mode Permainan
 1. **Grand Prix:** 4 balapan berurutan vs 7 CPU, sistem poin (15-12-10-8-7-5-4-3), podium di akhir.
@@ -49,10 +49,12 @@ v1: 8 sirkuit (2 piala), tiap sirkuit 3 lap.
 3. **VS 2 Pemain:** split-screen — tablet landscape (dua sisi sentuh) atau keyboard + sentuh.
 4. **Battle (v2):** arena balon.
 
+**Keputusan user (4 Okt 2026):** nama "Falisha Kart" OK, roster 5 karakter, Tempurung Raksasa boleh, v1 = 4 sirkuit (Piala Keluarga), mode prioritas Grand Prix.
+
 ## 6. Mekanik Balap
 - **Drift & Mini-Turbo:** tahan belok saat drift → boost biru/oranye ala Mario Kart.
 - **Start Boost:** gas tepat saat lampu hijau = lompatan awal.
-- **Slipstream:** menempel di belakang lawan = boost kecil.
+- **Slipstream:** menempel di belakang lawan = boost kecil. (v2)
 - **Off-road:** rumput/pasir memperlambat (kecuali saat boost).
 - **AI CPU:** 3 tingkat kesulitan (Mudah/Sedang/Susah, default **Mudah**), rubber-banding ringan supaya seru.
 
@@ -68,7 +70,7 @@ v1: 8 sirkuit (2 piala), tiap sirkuit 3 lap.
 1. **Engine Mode 7:** renderer jalan pseudo-3D (lurus, tikungan, tanjakan), kamera chase.
 2. **Sprite kart:** 5 karakter + animasi (belok, drift, kena item).
 3. **Fisika:** kecepatan, drift, mini-turbo, off-road, tabrakan.
-4. **Track builder:** format data sirkuit (8 trek).
+4. **Track builder:** format data sirkuit (4 trek v1).
 5. **Item system:** kotak item, 7 item keluarga, efek & balance.
 6. **AI CPU:** racing line, rubber-banding, 3 difficulty.
 7. **Mode:** Grand Prix, Time Trial, VS 2P.

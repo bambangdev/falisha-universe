@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b1030">
+  <title>Falisha Kart – Balapan Keluarga</title>
+  <meta name="description" content="Falisha Kart: remake Mario Kart ala SNES! Balapan kart 5 karakter keluarga, 4 sirkuit, item keluarga, mode Grand Prix.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Kart: Balapan Keluarga</h1>
+    <canvas id="game" width="960" height="540" aria-label="Falisha Kart Game Canvas"></canvas>
+
+    <!-- HUD balapan -->
+    <div id="hud" class="hidden">
+      <div class="hud-left">
+        <div id="hud-pos">8th</div>
+        <div id="hud-lap">LAP 1/3</div>
+      </div>
+      <div class="hud-right">
+        <div id="hud-time">0:00.0</div>
+        <div id="hud-item">—</div>
+      </div>
+      <div id="hud-msg"></div>
+      <div id="hud-count"></div>
+    </div>
+
+    <!-- Tombol Sistem Atas -->
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <!-- Kontrol Sentuh Tablet (Samsung Tab S8 & Mobile) -->
+    <div id="touch" class="hidden" aria-hidden="true">
+      <div class="left">
+        <button type="button" id="t-left" class="tbtn tbtn-steer" aria-label="Belok kiri">◀</button>
+        <button type="button" id="t-right" class="tbtn tbtn-steer" aria-label="Belok kanan">▶</button>
+      </div>
+      <div class="right">
+        <button type="button" id="t-drift" class="tbtn" aria-label="Drift">💨</button>
+        <button type="button" id="t-item" class="tbtn" aria-label="Pakai item">🎁</button>
+        <button type="button" id="t-brake" class="tbtn" aria-label="Rem">🛑</button>
+        <button type="button" id="t-gas" class="tbtn tbtn-gas" aria-label="Gas">🏁</button>
+      </div>
+    </div>
+
+    <!-- Layar judul -->
+    <div id="screen-title" class="screen">
+      <h2 class="gtitle">🏎️ FALISHA KART</h2>
+      <p class="gsub">Balapan Keluarga • Grand Prix 4 Sirkuit</p>
+      <button id="btn-start" class="bigbtn">▶ MULAI</button>
+      <p class="ghint">Keyboard: Panah/WASD • Spasi: Item • Shift: Drift<br>Tablet: tombol sentuh di layar</p>
+    </div>
+
+    <!-- Layar pilih karakter -->
+    <div id="screen-select" class="screen hidden">
+      <h2 class="gtitle2">PILIH PEMBALAPMU!</h2>
+      <div id="chars" class="chars"></div>
+    </div>
+
+    <!-- Layar hasil balapan -->
+    <div id="screen-results" class="screen hidden">
+      <h2 class="gtitle2" id="res-title">HASIL BALAPAN</h2>
+      <div id="res-table" class="restable"></div>
+      <button id="btn-next" class="bigbtn">▶ LANJUT</button>
+    </div>
+
+    <!-- Layar podium Grand Prix -->
+    <div id="screen-podium" class="screen hidden">
+      <h2 class="gtitle">🏆 GRAND PRIX SELESAI!</h2>
+      <div id="pod-table" class="restable"></div>
+      <div class="prow">
+        <button id="btn-again" class="bigbtn">🔄 MAIN LAGI</button>
+        <a class="bigbtn ghost" href="../../index.html">🏠 PORTAL</a>
+      </div>
+    </div>
+
+    <p id="help">Panah / WASD: belok • Spasi: item • Shift: drift • M: suara</p>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script src="js/mode7.js"></script>
+  <script src="js/track.js"></script>
+  <script src="js/kart.js"></script>
+  <script src="js/items.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

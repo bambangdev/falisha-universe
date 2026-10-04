@@ -43,9 +43,13 @@ Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan 
   - Wave scatter/chase klasik, jadwal keluar rumah hantu, kecepatan hantu diturunkan.
 - Diverifikasi dengan simulasi headless (Node) untuk belokan, putar balik, dash, swipe, dan D-pad.
 
-### 6. Falisha Kart (Mario Kart remake) — Plan
-- Plan ditulis di `docs/plans/05-falisha-kart-plan.md`: balapan kart Mode 7 pseudo-3D ala SNES Mario Kart, 5 pembalap keluarga dari foto asli, 7 item keluarga (Sambal Petir, Buku Kumon, Piano Terbang, dll), 8 sirkuit (2 piala), mode Grand Prix / Time Trial / VS 2P.
-- Status: menunggu feedback user sebelum mulai build.
+### 6. Falisha Kart (Mario Kart remake) — Selesai v1
+- Plan: `docs/plans/05-falisha-kart-plan.md`. Keputusan user (4 Okt 2026): nama "Falisha Kart", roster 5 karakter, Tempurung Raksasa boleh, v1 = 4 sirkuit (Piala Keluarga), mode Grand Prix dulu.
+- Build: `games/falisha-kart/` — engine Mode 7 pseudo-3D (Canvas 2D), 5 pembalap keluarga (Falisha/Arshad/Babah Nono/Ibu Pupu/Baymax) dengan stat beda, 4 sirkuit Piala Keluarga (Taman Rumah, Dapur GP, Kamar Tidur Rally, Ruang Piano Sprint), 7 item keluarga (Sambal Petir, Buku Kumon, Piano Terbang, Kulit Pisang, Bintang Petir, Tempurung Raksasa, Kotak Kejutan), drift + mini-turbo, start boost, AI CPU rubber-banding, Grand Prix 4 balapan + podium, musik chiptune via `shared/audio.js`.
+- Kontrol: keyboard (Panah/WASD, Spasi=item, Shift=drift) + tombol sentuh multi-touch untuk Tab S8.
+- Cover portal: `portal/cover_game5.jpg`, entri baru di `portal/portal.js`.
+- Verifikasi: smoke test Node (fisika, AI, item) + render test headless lolos; **tes manual di tablet disarankan** (target 60fps di Tab S8).
+- v2 (nanti): Piala Petir (4 sirkuit), Time Trial, VS 2P, slipstream.
 
 ## Cara Menjalankan
 ```bash
