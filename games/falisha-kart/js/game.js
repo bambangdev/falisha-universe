@@ -385,13 +385,14 @@ function render() {
 
   // kumpulkan sprite: dekorasi segmen terlihat + item + kart CPU
   const sprites = [];
+  const kw = Math.min(W * 0.24, 240); // lebar kart pemain (dipakai juga sbg acuan batas sprite CPU)
   const baseIdx = Math.floor(player.z / Mode7.SEG_LEN);
-  const pushSprite = (zAbsRaw, x, w, draw) => {
+  const pushSprite = (zAbsRaw, x, w, draw, maxW) => {
     let zAbs = ((zAbsRaw % tl) + tl) % tl;
     let relZ = zAbs - player.z;
     if (relZ < 0) relZ += tl;
     if (relZ > Mode7.DRAW_DIST * Mode7.SEG_LEN || relZ < Mode7.CAM_DEPTH * 2) return;
-    sprites.push({ zAbs, relZ, x, w, draw });
+    sprites.push({ zAbs, relZ, x, w, maxW, draw });
   };
 
   for (let n = 0; n < Mode7.DRAW_DIST; n++) {
@@ -412,7 +413,8 @@ function render() {
   for (const cpu of cpus) {
     const ch = cpu.char;
     const cpose = cpu.steerDir < 0 ? 1 : cpu.steerDir > 0 ? 2 : 0;
-    pushSprite(cpu.z, cpu.x, 1500, (c, x, y, w) => KartDB.drawKart(c, x, y, w, ch, { pose: cpose, star: cpu.starT > 0 }));
+    // batas ukuran: rival yg mepet pemain max ~2x kart pemain, biar nggak raksasa nutupin layar
+    pushSprite(cpu.z, cpu.x, 1500, (c, x, y, w) => KartDB.drawKart(c, x, y, w, ch, { pose: cpose, star: cpu.starT > 0 }), kw * 2);
   }
 
   Mode7.render(ctx, W, H, road, {
@@ -420,7 +422,6 @@ function render() {
   });
 
   // kart pemain (POV agak dari atas: kart lebih kecil, jalan depan lebih lega)
-  const kw = Math.min(W * 0.24, 240);
   const kx = W / 2, ky = H - 10;
   const steerDir = ((readInputCache.left ? -1 : 0) + (readInputCache.right ? 1 : 0));
   const pose = steerDir < 0 ? 1 : steerDir > 0 ? 2 : 0;

@@ -122,7 +122,8 @@ const Mode7 = (() => {
       if (scale <= 0) continue;
       const destX = seg.p1.screen.x + scale * sp.x * ROAD_W * W / 2;
       const destY = seg.p1.screen.y;
-      const destW = sp.w * scale * W / 2 * (ROAD_W / 2200);
+      let destW = sp.w * scale * W / 2 * (ROAD_W / 2200);
+      if (sp.maxW > 0 && destW > sp.maxW) destW = sp.maxW; // cegah sprite raksasa saat mepet kamera
       const clipY = seg.clip || H;
       if (destY - destW > clipY) continue;
       ctx.save();
