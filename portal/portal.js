@@ -12,7 +12,7 @@ const GAMES = [
   { id: 'falisha-pac', title: 'Falisha Pac', href: 'games/falisha-pac/', cover: 'portal/cover_game4.jpg',
     desc: 'Remake Arcade Pac-Man 4 Labirin Neon! Lahap titik petir waka-waka, ambil Mega Kumon, mangsa 4 hantu keluarga, dan gunakan Flash Dash!',
     tags: ['Pac-Man', '4 Labirin', 'Arcade Neon'] },
-  { id: 'falisha-kart', title: 'Falisha Kart', href: 'games/falisha-kart/', cover: 'portal/cover_game5.jpg',
+  { id: 'falisha-kart', title: 'Falisha Kart', href: 'games/falisha-kart/', cover: 'portal/cover_game5.svg',
     desc: 'Remake Mario Kart ala SNES! Balapan kart Mode 7: 5 pembalap keluarga, 4 sirkuit Piala Keluarga, 7 item keluarga, dan Grand Prix seru!',
     tags: ['Kart Racing', '5 Karakter', 'Grand Prix'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
