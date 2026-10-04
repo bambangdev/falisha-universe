@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b1030">
+  <title>Falisha vs Yanto</title>
+  <meta name="description" content="Falisha the Flash: game platformer pixel art, lari secepat kilat, 3 stage dan bos Yanto!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha the Flash</h1>
+    <canvas id="game" width="960" height="540" aria-label="Game Falisha the Flash"></canvas>
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Home">🏠</a>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+    <div id="touch" aria-hidden="true">
+      <div id="dpad"><span>◀</span><span>▶</span></div>
+      <div class="pad">
+        <button id="btn-turbo" class="tbtn turbo">⚡</button>
+        <button id="btn-jump" class="tbtn jump">▲</button>
+      </div>
+    </div>
+    <p id="help">← → jalan &nbsp; Spasi / ↑ lompat &nbsp; Shift = TURBO ⚡ &nbsp; M = musik</p>
+  </main>
+  <script src="js/game.js"></script>
+</body>
+</html>

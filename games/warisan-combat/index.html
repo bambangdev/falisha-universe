@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b1030">
+  <title>Warisan Combat – Game Fighting Keluarga</title>
+  <meta name="description" content="Warisan Combat: game fighting pixel art dengan jagoan keluarga, jurus dan ultimate epic.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Warisan Combat</h1>
+    <canvas id="game" width="960" height="540" aria-label="Warisan Combat"></canvas>
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Home">🏠</a>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+    <div id="touch" aria-hidden="true">
+      <div class="left">
+        <button id="btn-jump" class="tbtn jump">⤒</button>
+        <div id="dpad"><span>◀</span><span>▶</span></div>
+      </div>
+      <div class="right">
+        <div class="row"><button id="btn-s1" class="tbtn sp">1</button><button id="btn-s2" class="tbtn sp">2</button><button id="btn-ult" class="tbtn ult">ULT</button></div>
+        <div class="row"><button id="btn-light" class="tbtn atk">👊</button><button id="btn-heavy" class="tbtn atk big">🦶</button></div>
+      </div>
+    </div>
+    <p id="help">← → jalan (tahan menjauh = tangkis) &nbsp; ↑ lompat &nbsp; J pukul &nbsp; K tendang &nbsp; U jurus 1 &nbsp; I jurus 2 &nbsp; O ULTIMATE &nbsp; M musik</p>
+  </main>
+  <script src="../../shared/audio.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
