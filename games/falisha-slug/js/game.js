@@ -64,21 +64,31 @@ const loadImg = src => new Promise((res, rej) => { const i = new Image(); i.onlo
 
 function cutSprite(img, x, y, w, h) {
   const c = document.createElement('canvas'); c.width = w; c.height = h;
-  const g = c.getContext('2d'); g.drawImage(img, x, y, w, h, 0, 0, w, h);
+  const g = c.getContext('2d');
+  g.drawImage(img, x, y, w, h, 0, 0, w, h);
   const d = g.getImageData(0, 0, w, h), p = d.data;
   let minX = w, minY = h, maxX = 0, maxY = 0;
+  let nonBgCount = 0;
   for (let i = 0; i < p.length; i += 4) {
     const r = p[i], gr = p[i + 1], b = p[i + 2];
-    if (r > 135 && b > 120 && gr < Math.min(r, b) - 45) {
+    // Chroma-key deteksi magenta: merah dan biru dominan tinggi, hijau rendah
+    if (r > 130 && b > 110 && gr < Math.min(r, b) - 35) {
       p[i + 3] = 0;
     } else {
+      nonBgCount++;
       const px = (i / 4) % w, py = (i / 4 / w) | 0;
       if (px < minX) minX = px; if (px > maxX) maxX = px;
       if (py < minY) minY = py; if (py > maxY) maxY = py;
     }
   }
   g.putImageData(d, 0, 0);
-  const tw = Math.max(1, maxX - minX + 1), th = Math.max(1, maxY - minY + 1);
+
+  // Safeguard: jika gambar kosong atau crop tidak valid, kembalikan seluruh canvas sel
+  if (nonBgCount < 40 || maxX <= minX || maxY <= minY) {
+    return { c, w, h };
+  }
+
+  const tw = maxX - minX + 1, th = maxY - minY + 1;
   const out = document.createElement('canvas'); out.width = tw; out.height = th;
   out.getContext('2d').drawImage(c, minX, minY, tw, th, 0, 0, tw, th);
   return { c: out, w: tw, h: th };
@@ -152,12 +162,13 @@ const MISSIONS = [
       { type: 'soldier', x: 450, y: 340, hp: 2 },
       { type: 'soldier', x: 720, y: FLOOR, hp: 2 },
       { type: 'soldier', x: 920, y: 270, hp: 2 },
-      { type: 'chopper', x: 1120, y: 180, hp: 4 },
+      { type: 'chopper', x: 1120, y: 180, hp: 6 },
       { type: 'soldier', x: 1380, y: FLOOR, hp: 2 },
       { type: 'soldier', x: 1680, y: 290, hp: 2 },
-      { type: 'chopper', x: 2020, y: 170, isMiniBoss: true, hp: 12 }
+      { type: 'chopper', x: 2020, y: 170, isMiniBoss: true, hp: 16 }
     ],
-    hasTank: false
+    hasTank: true,
+    tankX: 340 // Tank SV-001 terparkir di Misi 1 siap dinaiki!
   },
   {
     num: 2,
@@ -180,12 +191,13 @@ const MISSIONS = [
     enemies: [
       { type: 'soldier', x: 500, y: 340, hp: 2 },
       { type: 'soldier', x: 780, y: 260, hp: 2 },
-      { type: 'chopper', x: 950, y: 170, hp: 5 },
+      { type: 'chopper', x: 950, y: 170, hp: 6 },
       { type: 'soldier', x: 1200, y: FLOOR, hp: 2 },
       { type: 'soldier', x: 1600, y: 270, hp: 2 },
-      { type: 'chopper', x: 2100, y: 170, isMiniBoss: true, hp: 16 }
+      { type: 'chopper', x: 2100, y: 170, isMiniBoss: true, hp: 20 }
     ],
-    hasTank: false
+    hasTank: true,
+    tankX: 380
   },
   {
     num: 3,
@@ -322,21 +334,40 @@ Object.entries(tbtns).forEach(([id, act]) => {
     down: dpad.querySelector('.dp-down')
   };
   const setDir = (l, r, u, d) => {
-    touchState.left = l; touchState.right = r; touchState.up = u; touchState.down = d;
-    spans.left.classList.toggle('on', l); spans.right.classList.toggle('on', r);
-    spans.up.classList.toggle('on', u); spans.down.classList.toggle('on', d);
+    touchState.left = !!l; touchState.right = !!r; touchState.up = !!u; touchState.down = !!d;
+    spans.left?.classList.toggle('on', !!l);
+    spans.right?.classList.toggle('on', !!r);
+    spans.up?.classList.toggle('on', !!u);
+    spans.down?.classList.toggle('on', !!d);
   };
-  const upd = e => {
-    const b = dpad.getBoundingClientRect(), cx = b.left + b.width / 2, cy = b.top + b.height / 2;
-    const dx = e.clientX - cx, dy = e.clientY - cy;
+  const handlePoint = (clientX, clientY) => {
+    const b = dpad.getBoundingClientRect();
+    const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+    const dx = clientX - cx, dy = clientY - cy;
     const dist = Math.hypot(dx, dy);
-    if (dist < 14) { setDir(false, false, false, false); return; }
-    setDir(dx < -18, dx > 18, dy < -18, dy > 18);
+    const deadzone = b.width * 0.12;
+    if (dist < deadzone) { setDir(false, false, false, false); return; }
+    const thresh = b.width * 0.14;
+    setDir(dx < -thresh, dx > thresh, dy < -thresh, dy > thresh);
   };
-  dpad.addEventListener('pointerdown', e => { e.preventDefault(); dpad.setPointerCapture?.(e.pointerId); gesture(); upd(e); });
-  dpad.addEventListener('pointermove', e => { if (e.buttons || e.pressure > 0) upd(e); });
-  const off = () => setDir(false, false, false, false);
-  dpad.addEventListener('pointerup', off); dpad.addEventListener('pointercancel', off);
+  dpad.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    dpad.setPointerCapture?.(e.pointerId);
+    gesture();
+    handlePoint(e.clientX, e.clientY);
+  });
+  dpad.addEventListener('pointermove', e => {
+    if (e.buttons > 0 || e.pressure > 0 || e.isPrimary) {
+      handlePoint(e.clientX, e.clientY);
+    }
+  });
+  const off = e => {
+    e.preventDefault();
+    setDir(false, false, false, false);
+  };
+  dpad.addEventListener('pointerup', off);
+  dpad.addEventListener('pointercancel', off);
+  dpad.addEventListener('pointerleave', off);
 })();
 
 document.getElementById('btn-mute').onclick = e => { e.stopPropagation(); setMuted(!Chip.isMuted()); };
@@ -495,7 +526,12 @@ function update() {
     return;
   }
   if (G.mode === 'stage_clear') {
-    if (++G.clearTimer > 120) {
+    G.clearTimer++;
+    // Hanya pindah stage jika pemain menekan confirmReq (Spasi / Enter / Sentuh Layar)
+    // dan sudah tampil minimal 45 frame (0.75 detik) agar pemain dapat membaca ringkasan misi
+    if (confirmReq && G.clearTimer > 45) {
+      confirmReq = false;
+      sfx.select();
       if (G.currentMissionIdx + 1 < MISSIONS.length) {
         loadMission(G.currentMissionIdx + 1);
       } else {
@@ -650,7 +686,13 @@ function update() {
 
   // Kamera scrolling
   const maxCam = currentMis.len - W;
-  if (P.x - G.camX > W * 0.45 && G.camX < maxCam && (!boss || boss.hp <= 0 || P.x < 1100)) {
+  const activeMini = enemies.find(e => e.isMiniBoss && e.hp > 0);
+  if (activeMini && P.x >= activeMini.x - 520) {
+    // Kunci kamera di arena pertarungan mini-boss hingga dikalahkan
+    const lockCam = Math.min(maxCam, activeMini.x - 480);
+    if (G.camX < lockCam) G.camX = Math.min(lockCam, G.camX + 3.8);
+    P.x = Math.max(G.camX + 30, Math.min(G.camX + W - 40, P.x));
+  } else if (P.x - G.camX > W * 0.45 && G.camX < maxCam && (!boss || boss.hp <= 0 || P.x < 1100)) {
     G.camX = Math.min(maxCam, P.x - W * 0.45);
   }
 
@@ -751,6 +793,9 @@ function update() {
     }
   }
 
+  // Hapus musuh panik/kalah yang sudah terlempar jauh keluar layar
+  enemies = enemies.filter(e => !(e.panic && (e.x < G.camX - 150 || e.x > G.camX + W + 150)));
+
   // --- Update Peluru Musuh ---
   for (const eb of enemyBullets) {
     eb.life--; eb.x += eb.vx; eb.y += eb.vy;
@@ -808,13 +853,15 @@ function update() {
 
   // --- Cek Selesai Misi (Clear Stage) ---
   if (!currentMis.isFinalBoss) {
-    // Jika pemain mencapai ujung stage dan mini-boss/musuh akhir sudah tumbang
+    // Selesai misi hanya jika sampai di helikopter evakuasi dan mini-boss telah kalah
     const miniBoss = enemies.find(e => e.isMiniBoss);
-    if (P.x >= currentMis.len - 150 && (!miniBoss || miniBoss.hp <= 0)) {
+    const finishX = currentMis.len - 140;
+    const miniBossDead = !miniBoss || miniBoss.hp <= 0;
+    if (P.x >= finishX && miniBossDead) {
       G.mode = 'stage_clear';
       G.clearTimer = 0;
       sfx.thankyou();
-      showBanner(`MISI ${currentMis.num} SELESAI!`, 120, '#ffd23f');
+      showBanner(`MISI ${currentMis.num} SELESAI!`, 180, '#ffd23f');
       speakAnnouncer('Mission Complete!');
     }
   } else if (boss && boss.hp > 0) {
@@ -890,11 +937,18 @@ function draw() {
   // 2. Gambar Seluruh Pijakan (Platforms) Bertingkat
   drawPlatforms();
 
+  // 2b. Gambar Helikopter Evakuasi di Akhir Stage
+  if (!currentMis.isFinalBoss) {
+    const extX = currentMis.len - 100 - G.camX;
+    if (extX > -150 && extX < W + 150) {
+      drawExtractionPost(extX);
+    }
+  }
+
   // 3. Gambar Sandera Babah Nono
   for (const h of hostages) {
     const screenX = h.x - G.camX;
     if (screenX > -100 && screenX < W + 100) {
-      // Bayangan kaki sandera
       drawShadow(screenX, h.y, 22);
       const fr = h.freed ? S.items[3] : S.items[2];
       const sc = 110 / fr.h;
@@ -921,14 +975,18 @@ function draw() {
   for (const e of enemies) {
     const screenX = e.x - G.camX;
     if (screenX > -100 && screenX < W + 100) {
-      if (e.type !== 'chopper') drawShadow(screenX, e.y, 24);
-      ctx.save();
-      ctx.translate(screenX, e.y);
-      ctx.scale(e.face, 1);
-      const fr = S.items[e.panic ? 7 : 6];
-      const sc = 115 / fr.h;
-      ctx.drawImage(fr.c, -fr.w * sc / 2, -fr.h * sc, fr.w * sc, fr.h * sc);
-      ctx.restore();
+      if (e.type === 'chopper') {
+        drawGunship(screenX, e.y, e);
+      } else {
+        drawShadow(screenX, e.y, 24);
+        ctx.save();
+        ctx.translate(screenX, e.y);
+        ctx.scale(e.face, 1);
+        const fr = S.items[e.panic ? 7 : 6];
+        const sc = 115 / fr.h;
+        ctx.drawImage(fr.c, -fr.w * sc / 2, -fr.h * sc, fr.w * sc, fr.h * sc);
+        ctx.restore();
+      }
     }
   }
 
@@ -966,7 +1024,6 @@ function draw() {
     ctx.restore();
   } else {
     const screenX = P.x - G.camX;
-    // Bayangan kaki tegas pada platform
     drawShadow(screenX, P.y, P.crouch ? 28 : 22);
 
     ctx.save();
@@ -1035,11 +1092,32 @@ function draw() {
 
   if (G.mode === 'stage_clear') {
     ctx.save();
-    ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#ffd23f'; ctx.font = '36px "Press Start 2P"'; ctx.textAlign = 'center';
-    ctx.fillText(`MISI ${currentMis.num} SELESAI!`, W / 2, H / 2 - 30);
-    ctx.font = '14px "Press Start 2P"'; ctx.fillStyle = '#fff';
-    ctx.fillText('MENYIAPKAN MISI BERIKUTNYA...', W / 2, H / 2 + 25);
+    ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillRect(0, 0, W, H);
+
+    // Kartu Hasil Misi Metal Slug
+    const boxW = 660, boxH = 340;
+    const bx = W / 2 - boxW / 2, by = H / 2 - boxH / 2;
+    ctx.fillStyle = '#140c06'; ctx.fillRect(bx, by, boxW, boxH);
+    ctx.strokeStyle = '#ff9933'; ctx.lineWidth = 4; ctx.strokeRect(bx, by, boxW, boxH);
+    ctx.strokeStyle = '#ffd23f'; ctx.lineWidth = 1; ctx.strokeRect(bx + 6, by + 6, boxW - 12, boxH - 12);
+
+    ctx.fillStyle = '#ffd23f'; ctx.font = '26px "Press Start 2P"'; ctx.textAlign = 'center';
+    ctx.fillText('MISSION COMPLETE!', W / 2, by + 55);
+
+    ctx.font = '13px "Press Start 2P"'; ctx.fillStyle = '#ff9f1c';
+    ctx.fillText(currentMis.title, W / 2, by + 95);
+
+    ctx.font = '12px "Press Start 2P"'; ctx.fillStyle = '#fff'; ctx.textAlign = 'left';
+    const freedCount = hostages.filter(h => h.freed).length;
+    ctx.fillText(`• SANDERA DISELAMATKAN : ${freedCount} / ${hostages.length}`, bx + 60, by + 150);
+    ctx.fillText(`• SENJATA TERAKHIR     : ${P.weapon.toUpperCase()}`, bx + 60, by + 185);
+    ctx.fillText(`• TOTAL SKOR SAAT INI  : ${G.score}`, bx + 60, by + 220);
+
+    const blink = Math.sin(G.t * 0.12) > 0;
+    ctx.textAlign = 'center';
+    ctx.font = '12px "Press Start 2P"';
+    ctx.fillStyle = blink ? '#70e000' : '#fff';
+    ctx.fillText(COARSE ? '▶ SENTUH LAYAR UNTUK MISI SELANJUTNYA ◀' : '▶ TEKAN SPASI / ENTER UNTUK LANJUT ◀', W / 2, by + 295);
     ctx.restore();
   } else if (G.mode === 'gameover') {
     ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, W, H);
@@ -1066,6 +1144,168 @@ function drawShadow(x, y, rad = 22) {
   ctx.beginPath();
   ctx.ellipse(x, y + 2, rad, 6, 0, 0, 6.28);
   ctx.fill();
+  ctx.restore();
+}
+
+// Gambar Pesawat Tempur / Gunship Chopper ala Metal Slug
+function drawGunship(x, y, e) {
+  ctx.save();
+  const isMini = !!e.isMiniBoss;
+  const sz = isMini ? 1.35 : 1.0;
+  ctx.translate(x, y);
+
+  // Bayangan tanah tegap
+  drawShadow(0, FLOOR - y, isMini ? 45 : 32);
+
+  // Bobbing helikopter
+  const bob = Math.sin(G.t * 0.08 + (e.x % 10)) * 4;
+  ctx.translate(0, bob);
+
+  // Arah hadap (menghadap player)
+  ctx.scale(e.face, 1);
+
+  // 1. Baling-Baling Utama (Rotor Blades)
+  const rotorW = (isMini ? 95 : 68) * Math.cos(G.t * 0.7);
+  ctx.strokeStyle = '#1b263b'; ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(-rotorW, -34 * sz); ctx.lineTo(rotorW, -34 * sz);
+  ctx.stroke();
+
+  // Rotor Hub
+  ctx.fillStyle = '#415a77';
+  ctx.fillRect(-6 * sz, -32 * sz, 12 * sz, 9 * sz);
+
+  // 2. Ekor Helikopter (Tail Boom & Tail Rotor)
+  ctx.fillStyle = isMini ? '#7f1d1d' : '#2b4129';
+  ctx.fillRect(18 * sz, -12 * sz, 44 * sz, 9 * sz);
+  // Tail fin
+  ctx.beginPath();
+  ctx.moveTo(56 * sz, -12 * sz); ctx.lineTo(62 * sz, -26 * sz); ctx.lineTo(66 * sz, -8 * sz);
+  ctx.fill();
+  // Tail rotor spin
+  const tailR = 12 * Math.sin(G.t * 0.8);
+  ctx.strokeStyle = '#222'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(64 * sz, -20 * sz - tailR); ctx.lineTo(64 * sz, -20 * sz + tailR);
+  ctx.stroke();
+
+  // 3. Badan Helikopter (Fuselage)
+  ctx.fillStyle = isMini ? '#991b1b' : '#3d5a40';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 36 * sz, 20 * sz, 0, 0, 6.28);
+  ctx.fill();
+  ctx.strokeStyle = isMini ? '#f87171' : '#588157'; ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // 4. Kaca Kokpit
+  ctx.fillStyle = isMini ? 'rgba(254, 202, 202, 0.9)' : 'rgba(72, 202, 228, 0.85)';
+  ctx.beginPath();
+  ctx.ellipse(-16 * sz, -4 * sz, 15 * sz, 11 * sz, -0.2, 0, 6.28);
+  ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Siluet pilot
+  ctx.fillStyle = '#111';
+  ctx.beginPath();
+  ctx.arc(-14 * sz, -3 * sz, 4 * sz, 0, 6.28);
+  ctx.fill();
+
+  // 5. Sayap Senjata & Pod Roket
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(-10 * sz, 8 * sz, 24 * sz, 6 * sz);
+  ctx.fillStyle = '#475569';
+  ctx.fillRect(-14 * sz, 11 * sz, 20 * sz, 8 * sz);
+  ctx.fillStyle = '#ef4444';
+  ctx.fillRect(-16 * sz, 12 * sz, 3 * sz, 6 * sz);
+
+  // 6. Moncong Meriam Vulcan di depan
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(-38 * sz, 2 * sz, 14 * sz, 5 * sz);
+  if (e.cd > 75) {
+    ctx.fillStyle = '#ffd166';
+    ctx.fillRect(-44 * sz, 0, 7 * sz, 9 * sz);
+  }
+
+  // 7. Lampu Beacon Berkedip
+  if ((G.t / 12 | 0) % 2 === 0) {
+    ctx.fillStyle = isMini ? '#ef4444' : '#22c55e';
+    ctx.beginPath();
+    ctx.arc(0, -30 * sz, 3.5 * sz, 0, 6.28);
+    ctx.fill();
+  }
+
+  // Label Boss Bar jika Mini Boss
+  if (isMini) {
+    ctx.restore();
+    ctx.save();
+    ctx.translate(x, y - 65 * sz);
+    ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(-50, 0, 100, 12);
+    const hpPct = Math.max(0, e.hp / 16);
+    ctx.fillStyle = '#ef4444'; ctx.fillRect(-48, 2, 96 * hpPct, 8);
+    ctx.strokeStyle = '#ffd23f'; ctx.lineWidth = 1; ctx.strokeRect(-50, 0, 100, 12);
+    ctx.font = '8px "Press Start 2P"'; ctx.fillStyle = '#ffd23f'; ctx.textAlign = 'center';
+    ctx.fillText(`GUNSHIP BOSS [${e.hp}]`, 0, -5);
+  }
+
+  ctx.restore();
+}
+
+// Gambar Helikopter Evakuasi di Garis Finish Misi
+function drawExtractionPost(x) {
+  ctx.save();
+  ctx.translate(x, 260);
+
+  // Bayangan helikopter evakuasi
+  drawShadow(0, FLOOR - 260, 48);
+
+  const bob = Math.sin(G.t * 0.08) * 5;
+  ctx.translate(0, bob);
+
+  // Baling-Baling Penyelamat
+  const rotorW = 85 * Math.cos(G.t * 0.7);
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(-rotorW, -36); ctx.lineTo(rotorW, -36);
+  ctx.stroke();
+
+  // Badan Helikopter Evakuasi Medis / Militer Putih & Biru
+  ctx.fillStyle = '#e2e8f0';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 44, 24, 0, 0, 6.28);
+  ctx.fill();
+  ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3; ctx.stroke();
+
+  // Palang Penyelamat Merah
+  ctx.fillStyle = '#ef4444';
+  ctx.fillRect(-8, -4, 16, 8);
+  ctx.fillRect(-4, -8, 8, 16);
+
+  // Kaca Kokpit
+  ctx.fillStyle = 'rgba(56, 189, 248, 0.85)';
+  ctx.beginPath();
+  ctx.ellipse(-20, -4, 16, 12, -0.2, 0, 6.28);
+  ctx.fill();
+
+  // Tangga Tali Penyelamat Turun ke Tanah
+  ctx.strokeStyle = '#d97706'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(-8, 22); ctx.lineTo(-8, FLOOR - 260 - bob);
+  ctx.moveTo(8, 22); ctx.lineTo(8, FLOOR - 260 - bob);
+  ctx.stroke();
+  for (let ly = 32; ly < FLOOR - 260 - bob; ly += 18) {
+    ctx.beginPath();
+    ctx.moveTo(-10, ly); ctx.lineTo(10, ly);
+    ctx.stroke();
+  }
+
+  // Tanda RESCUE ZONE
+  ctx.restore();
+  ctx.save();
+  ctx.translate(x, FLOOR - 140);
+  ctx.font = '10px "Press Start 2P"';
+  ctx.fillStyle = Math.sin(G.t * 0.15) > 0 ? '#4ade80' : '#ffd23f';
+  ctx.textAlign = 'center';
+  ctx.fillText('▼ RESCUE ZONE ▼', 0, Math.sin(G.t * 0.1) * 3);
   ctx.restore();
 }
 

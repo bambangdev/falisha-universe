@@ -31,24 +31,22 @@
     <!-- Kontrol Sentuh Tablet (Samsung Tab S8 & Mobile) -->
     <div id="touch" aria-hidden="true">
       <div class="left">
-        <div id="dpad">
-          <span class="dp-up">▲</span>
-          <div class="dp-mid">
-            <span class="dp-left">◀</span>
-            <span class="dp-center">●</span>
-            <span class="dp-right">▶</span>
-          </div>
-          <span class="dp-down">▼</span>
+        <div id="dpad" role="group" aria-label="Arah Gerakan">
+          <span class="dp-btn dp-up">▲</span>
+          <span class="dp-btn dp-left">◀</span>
+          <span class="dp-center">●</span>
+          <span class="dp-btn dp-right">▶</span>
+          <span class="dp-btn dp-down">▼</span>
         </div>
       </div>
       <div class="right">
-        <div class="action-row top-row">
-          <button id="btn-slug" class="tbtn tbtn-slug">🚗 SLUG</button>
-          <button id="btn-bomb" class="tbtn tbtn-bomb">💣 BOMB</button>
+        <div class="tbtn-row top-row">
+          <button id="btn-slug" class="tbtn tbtn-slug" aria-label="Tank Slug">🚗 SLUG</button>
+          <button id="btn-bomb" class="tbtn tbtn-bomb" aria-label="Granat / Bom">💣 BOMB</button>
         </div>
-        <div class="action-row bot-row">
-          <button id="btn-fire" class="tbtn tbtn-fire">🔴 FIRE</button>
-          <button id="btn-jump" class="tbtn tbtn-jump">🟢 JUMP</button>
+        <div class="tbtn-row bot-row">
+          <button id="btn-fire" class="tbtn tbtn-fire" aria-label="Tembak">🔴 FIRE</button>
+          <button id="btn-jump" class="tbtn tbtn-jump" aria-label="Lompat">🟢 JUMP</button>
         </div>
       </div>
     </div>
