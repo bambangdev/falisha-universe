@@ -113,17 +113,23 @@ with hills, Falisha in front center, sparks and boost flames, bright and excitin
 Lampirkan kelima foto, atau sheet pembalap yang sudah jadi supaya konsisten.
 
 ## 8. Checklist Serah-terima (centang saat push)
-- [ ] racer_falisha.png
-- [ ] racer_arsyad.png
-- [ ] racer_nono.png
-- [ ] racer_pupu.png
-- [ ] racer_baymax.png
-- [ ] items.png
-- [ ] decor_kuta.png · [ ] decor_jakarta.png · [ ] decor_bromo.png · [ ] decor_permen.png
+- [x] racer_falisha.png
+- [x] racer_arsyad.png
+- [x] racer_nono.png
+- [x] racer_pupu.png
+- [x] racer_baymax.png
+- [x] items.png
+- [x] decor_kuta.png · [x] decor_jakarta.png · [x] decor_bromo.png · [x] decor_permen.png
 - [ ] sky_kuta.png · [ ] sky_jakarta.png · [ ] sky_bromo.png · [ ] sky_permen.png
 - [ ] cover.png
 
 **Catatan dari Antigravity** (sel yang kurang pas, perubahan nama file, format per-baris, dll.):
-> _(isi di sini)_
+> 1. **10 Sheet Berhasil Dibuat (1024x1024, PNG):**
+>    - `racer_falisha.png`, `racer_arsyad.png`, `racer_nono.png`, `racer_pupu.png`, `racer_baymax.png` (semua 4x4 grid 256x256, gaya chibi pixel-art 16-bit, latar magenta #FF00FF, wajah mengikuti foto referensi masing-masing).
+>    - `items.png` (sudah dibersihkan teks "POW" menjadi ledakan komik tanpa teks, ikon lengkap 4x4).
+>    - `decor_kuta.png`, `decor_jakarta.png`, `decor_bromo.png`, `decor_permen.png` (dekor 4 trek, masing-masing 16 objek berlatar magenta).
+> 2. **Kendala Quota Gambar (sky_* dan cover.png):**
+>    - Saat masuk ke generasi panorama (`sky_kuta.png`, `sky_jakarta.png`, `sky_bromo.png`, `sky_permen.png`) dan `cover.png`, API image generation terkena limit kuota model (HTTP 429 Resource Exhausted: reset delay ~4 jam 54 menit).
+>    - 10 sheet penting yang memuat semua gameplay sprites (pembalap, items, dekor trek) telah disimpan lengkap dan valid di `games/falisha-kart-turbo/assets/raw/`. File `sky_*` dan `cover.png` dapat digenerate setelah kuota reset atau dibuat fallback procedural/SVG bila fase 3 ingin segera dimulai.
 
 Setelah semua di-push, kembali ke Claude dengan pesan: **"sprite Falisha Kart Turbo sudah di-push, lanjut fase 3"**.
