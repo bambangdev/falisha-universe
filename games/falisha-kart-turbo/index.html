@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b1030">
+  <title>Falisha Kart Turbo</title>
+  <meta name="description" content="Falisha Kart Turbo: balapan kart pseudo-3D ala Mario Kart 64 bersama keluarga — 4 sirkuit Piala Nusantara, drift mini-turbo, ramp, dan 7 item keluarga.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Kart Turbo</h1>
+    <canvas id="game" width="960" height="540" aria-label="Layar game Falisha Kart Turbo"></canvas>
+
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-pause" class="sbtn" aria-label="Pause">⏸</button>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <div id="touch" class="hidden" aria-hidden="true">
+      <div class="left">
+        <button type="button" class="tbtn steer" data-k="left" aria-label="Belok kiri">◀</button>
+        <button type="button" class="tbtn steer" data-k="right" aria-label="Belok kanan">▶</button>
+      </div>
+      <div class="right">
+        <button type="button" class="tbtn" data-k="item" aria-label="Pakai item">🎁</button>
+        <button type="button" class="tbtn" data-k="drift" aria-label="Drift">💨</button>
+        <button type="button" class="tbtn" data-k="brake" aria-label="Rem">🛑</button>
+        <button type="button" class="tbtn gas" data-k="gas" aria-label="Gas">🏁</button>
+      </div>
+    </div>
+
+    <p id="help">↑ gas • ↓ rem • ←/→ belok • Shift drift • Spasi item • P pause • M suara</p>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script src="assets/sprites/atlas.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/road.js"></script>
+  <script src="js/tracks.js"></script>
+  <script src="js/kart.js"></script>
+  <script src="js/items.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

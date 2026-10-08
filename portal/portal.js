@@ -18,6 +18,9 @@ const GAMES = [
   { id: 'falisha-spidey', title: 'Falisha Spidey & Sahabat', href: 'games/falisha-spidey/', cover: 'portal/cover_game6.svg',
     desc: 'Ala Spidey and His Amazing Friends! Ayun jaring keliling kota bersama Ibu Pupu & Baymax, selamatkan warga, dan jaring Goblin Kacamata & Badak Peci!',
     tags: ['Superhero', 'Ayun Jaring', '3 Sahabat'] },
+  { id: 'falisha-kart-turbo', title: 'Falisha Kart Turbo', href: 'games/falisha-kart-turbo/', cover: 'portal/cover_game7.jpg',
+    desc: 'Balapan kart pseudo-3D ala Mario Kart 64! Tanjakan, terowongan & ramp di 4 sirkuit Piala Nusantara, drift mini-turbo, item keluarga, dan Time Trial dengan ghost.',
+    tags: ['Kart Racing', 'Piala Nusantara', 'Time Trial'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');

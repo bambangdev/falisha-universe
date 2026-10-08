@@ -59,6 +59,12 @@ Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan 
 - Verifikasi: Playwright headless (Chromium) — screenshot judul/gameplay/bos/ending tanpa error console; bot otomatis berhasil menyeberangi ketiga stage sampai arena bos. **Tes manual di tablet disarankan.**
 - Cover portal: `portal/cover_game6.svg`, entri baru di `portal/portal.js`. Plan: `docs/plans/06-falisha-spidey-plan.md`.
 
+### 7. Falisha Kart Turbo (remake Mario Kart, gaya pseudo-3D)
+- Alur 3 fase: Claude menulis plan + brief sprite → Antigravity/Nano Banana membuat sprite (sky & cover dibuat manual lewat Gemini/ChatGPT karena kuota habis) → Claude mengolah sprite & menulis game.
+- Olah sprite: script PIL — hapus latar magenta dengan flood fill dari tepi sel (supaya kart pink Ibu Pupu aman), buang garis grid/rak, trim, anchor tengah-bawah, atlas `assets/sprites/*.png` + `atlas.js`; panorama langit dibuat seamless (cermin/crossfade).
+- Mesin: jalan berbasis segmen (tikungan, bukit, terowongan, ramp) digambar jauh→dekat; kart 8 sudut; drift mini-turbo 2 tingkat, start turbo, slipstream, 7 item, AI racing line + rubber-band, Grand Prix/Time Trial (ghost)/Latihan.
+- Verifikasi: Playwright headless — screenshot semua layar & 4 sirkuit; simulasi Grand Prix penuh (Mudah & Susah) dan Time Trial selesai tanpa error. **Tes manual di tablet disarankan.**
+
 ## Cara Menjalankan
 ```bash
 python3 -m http.server 8000
