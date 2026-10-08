@@ -15,6 +15,9 @@ const GAMES = [
   { id: 'falisha-kart', title: 'Falisha Kart', href: 'games/falisha-kart/', cover: 'portal/cover_game5.svg',
     desc: 'Remake Mario Kart ala SNES! Balapan kart Mode 7: 5 pembalap keluarga, 4 sirkuit Piala Keluarga, 7 item keluarga, dan Grand Prix seru!',
     tags: ['Kart Racing', '5 Karakter', 'Grand Prix'] },
+  { id: 'falisha-spidey', title: 'Falisha Spidey & Sahabat', href: 'games/falisha-spidey/', cover: 'portal/cover_game6.svg',
+    desc: 'Ala Spidey and His Amazing Friends! Ayun jaring keliling kota bersama Ibu Pupu & Baymax, selamatkan warga, dan jaring Goblin Kacamata & Badak Peci!',
+    tags: ['Superhero', 'Ayun Jaring', '3 Sahabat'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');

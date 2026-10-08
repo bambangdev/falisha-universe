@@ -52,6 +52,13 @@ Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan 
 - Verifikasi: smoke test Node (fisika, AI, item) + render test headless lolos; mockup visual sprite lolos; **tes manual di tablet disarankan** (target 60fps di Tab S8).
 - v2 (nanti): Piala Petir (4 sirkuit), Time Trial, VS 2P, slipstream.
 
+### 6. Falisha Spidey & Sahabat (ala Spidey and His Amazing Friends)
+- Pilihan user: teman = Ibu Pupu & Baymax (musuh = Arsyad & Babah Nono), gameplay platformer ayun jaring, aset = wajah foto + kostum digambar.
+- Wajah di-crop dari `assets/Photo/` dengan PIL (pixelate ringan + masker oval) → `games/falisha-spidey/js/faces.js` (base64). Kostum/badan/musuh/latar digambar prosedural di canvas.
+- 3 stage (Kota Siang, Pelabuhan Senja, Atap Gedung Malam) + bos Goblin Kacamata, Badak Peci, dan duo. Team-Up "GO WEBS GO!".
+- Verifikasi: Playwright headless (Chromium) — screenshot judul/gameplay/bos/ending tanpa error console; bot otomatis berhasil menyeberangi ketiga stage sampai arena bos. **Tes manual di tablet disarankan.**
+- Cover portal: `portal/cover_game6.svg`, entri baru di `portal/portal.js`. Plan: `docs/plans/06-falisha-spidey-plan.md`.
+
 ## Cara Menjalankan
 ```bash
 python3 -m http.server 8000

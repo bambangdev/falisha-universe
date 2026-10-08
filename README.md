@@ -19,6 +19,13 @@ Portal web game retro pixel art untuk keluarga, dioptimalkan untuk layar tablet 
   - **Baymax:** Kasih Hadiah 🎁, Tidur Pulas 💤, Ultimate: ROBOT BAYMAX ! 🚀
 - **Path:** `/games/warisan-combat/`
 
+### 6. Falisha Spidey & Sahabat 🕷️🕸️
+- **Genre:** Platformer ayun jaring (terinspirasi *Spidey and His Amazing Friends*)
+- **Tim hero:** Falisha (Spidey-Kilat), Ibu Pupu (Ghost-Spider Pink), Baymax (Spin Robot) — bisa tukar kapan saja
+- **Musuh lucu:** Arsyad si Goblin Kacamata & Babah Nono si Badak Peci
+- **Fitur:** ayun & tembak jaring, selamatkan warga, Team-Up "GO WEBS GO!", 3 stage + bos. Wajah karakter diambil dari foto `assets/Photo/`.
+- **Path:** `/games/falisha-spidey/`
+
 ---
 
 ## 🚀 Menjalankan Secara Lokal
