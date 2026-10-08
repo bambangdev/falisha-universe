@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0a0f2c">
+  <title>Falisha Spidey &amp; Sahabat</title>
+  <meta name="description" content="Falisha Spidey &amp; Sahabat: ayun jaring bersama Ibu Pupu dan Baymax, selamatkan kota dari Goblin Kacamata dan Badak Peci!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Spidey &amp; Sahabat</h1>
+    <canvas id="game" width="960" height="540" aria-label="Layar game Falisha Spidey"></canvas>
+
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <div id="touch" aria-hidden="true">
+      <div class="left">
+        <button type="button" class="tbtn" data-k="left" aria-label="Kiri">◀</button>
+        <button type="button" class="tbtn" data-k="right" aria-label="Kanan">▶</button>
+      </div>
+      <div class="right">
+        <button type="button" class="tbtn small" data-k="swap" aria-label="Tukar hero">🔄</button>
+        <button type="button" class="tbtn small team" data-k="team" aria-label="Team-Up">⭐</button>
+        <button type="button" class="tbtn" data-k="shoot" aria-label="Tembak jaring">🕸️</button>
+        <button type="button" class="tbtn" data-k="swing" aria-label="Ayun jaring">🪢</button>
+        <button type="button" class="tbtn jump" data-k="jump" aria-label="Lompat">⤒</button>
+      </div>
+    </div>
+
+    <p id="help">←/→ jalan • ↑/Spasi lompat • J tembak jaring • K ayun (tahan) • L tukar hero • U Team-Up • M suara</p>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script src="js/faces.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/level.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
