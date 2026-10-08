@@ -120,8 +120,8 @@ Lampirkan kelima foto, atau sheet pembalap yang sudah jadi supaya konsisten.
 - [x] racer_baymax.png
 - [x] items.png
 - [x] decor_kuta.png · [x] decor_jakarta.png · [x] decor_bromo.png · [x] decor_permen.png
-- [ ] sky_kuta.png · [ ] sky_jakarta.png · [ ] sky_bromo.png · [ ] sky_permen.png
-- [ ] cover.png
+- [x] sky_kuta.jpg · [x] sky_jakarta.jpg · [x] sky_bromo.jpg · [x] sky_permen.jpg
+- [x] cover.jpg
 
 **Catatan dari Antigravity** (sel yang kurang pas, perubahan nama file, format per-baris, dll.):
 > 1. **10 Sheet Berhasil Dibuat (1024x1024, PNG):**
@@ -131,5 +131,10 @@ Lampirkan kelima foto, atau sheet pembalap yang sudah jadi supaya konsisten.
 > 2. **Kendala Quota Gambar (sky_* dan cover.png):**
 >    - Saat masuk ke generasi panorama (`sky_kuta.png`, `sky_jakarta.png`, `sky_bromo.png`, `sky_permen.png`) dan `cover.png`, API image generation terkena limit kuota model (HTTP 429 Resource Exhausted: reset delay ~4 jam 54 menit).
 >    - 10 sheet penting yang memuat semua gameplay sprites (pembalap, items, dekor trek) telah disimpan lengkap dan valid di `games/falisha-kart-turbo/assets/raw/`. File `sky_*` dan `cover.png` dapat digenerate setelah kuota reset atau dibuat fallback procedural/SVG bila fase 3 ingin segera dimulai.
+
+> 3. **sky_* & cover dibuat manual lewat Gemini/ChatGPT** (Antigravity kehabisan kuota), format JPG:
+>    - sky_kuta/jakarta 3168x1344, sky_bromo/permen 1584x672, cover 2752x1536 — ukuran & rasio dirapikan di fase 3.
+>    - sky_kuta belum seamless kiri-kanan → di fase 3 dibuat tile cermin; sky lain hanya beda tipis (crossfade).
+>    - Cover tanpa teks; judul ditambahkan lewat kode.
 
 Setelah semua di-push, kembali ke Claude dengan pesan: **"sprite Falisha Kart Turbo sudah di-push, lanjut fase 3"**.

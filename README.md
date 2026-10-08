@@ -26,6 +26,13 @@ Portal web game retro pixel art untuk keluarga, dioptimalkan untuk layar tablet 
 - **Fitur:** ayun & tembak jaring, selamatkan warga, Team-Up "GO WEBS GO!", 3 stage + bos. Wajah karakter diambil dari foto `assets/Photo/`.
 - **Path:** `/games/falisha-spidey/`
 
+### 7. Falisha Kart Turbo 🏁
+- **Genre:** Kart racing pseudo-3D ala Mario Kart 64 (tanjakan, terowongan, ramp)
+- **Pembalap:** Falisha, Arsyad, Babah Nono, Ibu Pupu, Baymax — sprite 8 sudut dibuat dengan Nano Banana dari foto `assets/Photo/`
+- **Sirkuit Piala Nusantara:** Pantai Kuta, Jakarta Malam, Gunung Bromo, Istana Permen
+- **Fitur:** Grand Prix vs CPU (3 tingkat kesulitan), Time Trial + ghost, Latihan, drift mini-turbo, start turbo, slipstream, 7 item keluarga, gas otomatis untuk anak
+- **Path:** `/games/falisha-kart-turbo/`
+
 ---
 
 ## 🚀 Menjalankan Secara Lokal
