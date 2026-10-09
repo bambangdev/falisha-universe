@@ -21,6 +21,9 @@ const GAMES = [
   { id: 'falisha-kart-turbo', title: 'Falisha Kart Turbo', href: 'games/falisha-kart-turbo/', cover: 'portal/cover_game7.jpg',
     desc: 'Balapan kart pseudo-3D ala Mario Kart 64! Tanjakan, terowongan & ramp di 4 sirkuit Piala Nusantara, drift mini-turbo, item keluarga, dan Time Trial dengan ghost.',
     tags: ['Kart Racing', 'Piala Nusantara', 'Time Trial'] },
+  { id: 'falisha-sekolah', title: 'Petualangan Falisha di MIMHa', href: 'games/falisha-sekolah/', cover: 'portal/cover_game8.jpg',
+    desc: 'Satu hari sekolah di Madrasah Interaktif Miftahul Huda! Wudhu, shalat dhuha, belajar Iqro & berhitung, jajan di kantin, lompat tali, dan bantu teman.',
+    tags: ['RPG Sekolah', '7 Mini-game', 'Edukasi'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');

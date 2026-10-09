@@ -194,11 +194,11 @@ with small golden star corners, empty inside, flat solid magenta #FF00FF backgro
 ---
 
 ## Checklist Upload
-- [ ] 1 `char_falisha_walk.png`  - [ ] 2 `char_falisha_poses.png`  - [ ] 3 `char_keluarga.png`  - [ ] 4 `char_sekolah.png`
-- [ ] 5 `portrait_utama.png`  - [ ] 6 `portrait_sekolah.png`
-- [ ] 7 `map_rumah.png`  - [ ] 8 `map_jalan.png`  - [ ] 9 `map_gerbang.png`  - [ ] 10 `map_lapangan.png`
-- [ ] 11 `map_kelas.png`  - [ ] 12 `map_musala.png`  - [ ] 13 `map_kantin.png`
-- [ ] 14 `items.png`  - [ ] 15 `jajan_uang.png`  - [ ] 16 `wudhu.png`  - [ ] 17 `iqro_cards.png` (opsional)  - [ ] 18 `minigame_props.png`
-- [ ] 19 `cover.png`  - [ ] 20 `rapor_bg.png`  - [ ] 21 `dialog_box.png`
+- [x] 1 `char_falisha_walk.png`  - [x] 2 `char_falisha_poses.png`  - [x] 3 `char_keluarga.png`  - [x] 4 `char_sekolah.png`
+- [x] 5 `portrait_utama.png`  - [x] 6 `portrait_sekolah.png`
+- [x] 7 `map_rumah.png`  - [x] 8 `map_jalan.png`  - [x] 9 `map_gerbang.png`  - [x] 10 `map_lapangan.png`
+- [x] 11 `map_kelas.png`  - [x] 12 `map_musala.png`  - [x] 13 `map_kantin.png`
+- [x] 14 `items.png`  - [x] 15 `jajan_uang.png`  - [x] 16 `wudhu.png`  - [x] 17 `iqro_cards.png` (opsional)  - [x] 18 `minigame_props.png`
+- [x] 19 `cover.png`  - [x] 20 `rapor_bg.png`  - [x] 21 `dialog_box.png`
 
 Setelah semua di-upload, kirim ke Claude: **"sprite MIMHa sudah di-upload, lanjut eksekusi plan"**.
