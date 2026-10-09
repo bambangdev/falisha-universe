@@ -41,7 +41,7 @@ const Dialog = (() => {
     ctx.fillText(NAMES[L.who] || L.who, x + 160, y + 20);
     ctx.font = '12px "Press Start 2P", monospace'; ctx.fillStyle = '#2b2b2b';
     wrap(ctx, L.text.slice(0, Math.floor(shown)), w - 190).slice(0, 5).forEach((s, i) => ctx.fillText(s, x + 160, y + 48 + i * 20));
-    if (shown >= L.text.length && Math.floor(t * 3) % 2) { ctx.fillStyle = '#2f6b3f'; ctx.fillText('▼', x + w - 36, y + h - 30); }
+    if (shown >= L.text.length && Math.floor(t * 3) % 2) { ctx.fillStyle = '#2f6b3f'; ctx.font = '9px "Press Start 2P", monospace'; ctx.textAlign = 'right'; ctx.fillText('Ketuk / A untuk lanjut ▼', x + w - 24, y + h - 26); }
   }
   return { open, active, update, draw, NAMES };
 })();

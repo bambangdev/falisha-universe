@@ -31,22 +31,24 @@ const Input = (() => {
       let id = null;
       const move = e => {
         const r = joyEl.getBoundingClientRect(), R = r.width / 2;
+        if (!R) return;
         let dx = (e.clientX - r.left - R) / R, dy = (e.clientY - r.top - R) / R;
         const m = Math.hypot(dx, dy); if (m > 1) { dx /= m; dy /= m; }
         setJoystick(dx, dy);
         if (knob) knob.style.transform = `translate(${dx * R * 0.6}px, ${dy * R * 0.6}px)`;
       };
+      const cap = (el, id) => { try { el.setPointerCapture(id); } catch (e) {} };
       const end = e => {
         if (id !== e.pointerId) return;
         id = null; joy = { dx: 0, dy: 0 }; if (knob) knob.style.transform = '';
       };
-      joyEl.addEventListener('pointerdown', e => { e.preventDefault(); id = e.pointerId; joyEl.setPointerCapture?.(id); move(e); });
+      joyEl.addEventListener('pointerdown', e => { e.preventDefault(); id = e.pointerId; cap(joyEl, id); move(e); });
       joyEl.addEventListener('pointermove', e => { if (e.pointerId === id) move(e); });
       for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) joyEl.addEventListener(ev, end);
     }
     for (const b of btnEls || []) {
       const k = b.dataset.k;
-      b.addEventListener('pointerdown', e => { e.preventDefault(); b.setPointerCapture?.(e.pointerId); b.classList.add('on'); press(k); });
+      b.addEventListener('pointerdown', e => { e.preventDefault(); try { b.setPointerCapture(e.pointerId); } catch (err) {} b.classList.add('on'); press(k); });
       const off = e => { e.preventDefault(); b.classList.remove('on'); held[k] = false; };
       for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) b.addEventListener(ev, off);
     }
