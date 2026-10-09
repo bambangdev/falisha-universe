@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1d4d2b">
+  <title>Petualangan Falisha di MIMHa</title>
+  <meta name="description" content="Petualangan Falisha di MIMHa: RPG satu hari sekolah di Madrasah Interaktif Miftahul Huda — wudhu, shalat dhuha, Iqro, berhitung, jajan, lompat tali, dan cari pensil Putra.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Naskh+Arabic:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Petualangan Falisha di MIMHa</h1>
+    <canvas id="game" width="960" height="540" aria-label="Layar game Petualangan Falisha di MIMHa"></canvas>
+
+    <div id="sys">
+      <a id="btn-home" class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-menu" class="sbtn" aria-label="Menu">⏸</button>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <div id="touch" class="hidden" aria-hidden="true">
+      <div class="left">
+        <div id="joy"><div id="joy-knob"></div></div>
+      </div>
+      <div class="right">
+        <button type="button" class="tbtn small" data-k="menu" aria-label="Menu">☰</button>
+        <button type="button" class="tbtn" data-k="action" aria-label="Aksi">A</button>
+      </div>
+    </div>
+
+    <p id="help">Panah/WASD jalan • Spasi/Enter aksi • Esc menu • M suara</p>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script src="assets/sprites/atlas.js"></script>
+  <script src="js/core/collide.js"></script>
+  <script src="js/core/input.js"></script>
+  <script src="js/core/sprites.js"></script>
+  <script src="js/core/save.js"></script>
+  <script src="js/world/maps.js"></script>
+  <script src="js/world/player.js"></script>
+  <script src="js/world/scene.js"></script>
+  <script src="js/story/quests.js"></script>
+  <script src="js/story/script.js"></script>
+  <script src="js/story/dialog.js"></script>
+  <script src="js/minigames/logic.js"></script>
+  <script src="js/minigames/screens.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
