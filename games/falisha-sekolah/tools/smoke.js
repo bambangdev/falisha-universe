@@ -82,6 +82,12 @@ async function day(p) {
   const stars = Object.values(fin.st.stars);
   if (stars.length !== 7 || stars.some(s => s !== 3)) fail('bintang ' + JSON.stringify(fin.st.stars));
   await shot('rapor');
+  // rapor & judul: satu tekan Spasi / ketukan tidak boleh menghapus simpanan
+  await p.keyboard.press('Space'); await p.mouse.click(480, 497); await p.waitForTimeout(300);
+  if (await D(() => Game.debug.state().step) !== 14) fail('rapor: simpanan terhapus oleh satu tekan/ketukan');
+  await p.reload(); await p.waitForTimeout(1200);
+  await p.mouse.click(640, 472); await p.waitForTimeout(300);
+  if (await D(() => Game.debug.state().step) !== 14) fail('judul: MAIN BARU menghapus tanpa konfirmasi');
   // joystick dilepas dengan pointercancel → Falisha berhenti
   await D(() => Game.debug.newGame()); await p.waitForTimeout(300);
   const moved = await D(async () => {

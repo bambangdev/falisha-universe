@@ -50,3 +50,34 @@ test('NPC wajib ada di petanya', () => {
     kelas: ['guru', 'putra', 'seyan'], kantin: ['kantin'], lapangan: ['anasya', 'ayana'] };
   for (const [id, list] of Object.entries(want)) for (const n of list) assert.ok(MAPS[id].npcs.some(e => e.id === n), `${id}.${n}`);
 });
+
+/* jelajah semua posisi kotak kaki yang bisa dicapai dari tiap spawn (grid 4 px) */
+function reach(m, s) {
+  const start = MAPS.footBox(s.x, s.y), seen = new Set(), q = [[Math.round(start.x / 4) * 4, Math.round(start.y / 4) * 4]], out = [], boxes = [];
+  while (q.length) {
+    const [x, y] = q.pop(), k = x + ',' + y;
+    if (seen.has(k)) continue; seen.add(k);
+    const b = { x, y, w: 28, h: 18 };
+    if (Collide.insideAny(b, m.walls)) continue;
+    boxes.push(b);
+    if (Collide.insideAny(b, m.warps)) continue;
+    if (x < 0 || y < 0 || x + 28 > 960 || y + 18 > 540) { out.push(k); continue; }
+    q.push([x + 4, y], [x - 4, y], [x, y + 4], [x, y - 4]);
+  }
+  return { out, boxes };
+}
+for (const id of IDS) {
+  test(`${id}: Falisha tidak bisa keluar layar selain lewat warp`, () => {
+    for (const [k, s] of Object.entries(MAPS[id].spawns)) {
+      const r = reach(MAPS[id], s);
+      assert.equal(r.out.length, 0, `${id}.${k} bocor di ${r.out.slice(0, 3).join(' ')}`);
+    }
+  });
+  test(`${id}: semua warp, NPC, objek, dan spot bisa dicapai dari spawn default`, () => {
+    const m = MAPS[id], { boxes } = reach(m, m.spawns.default);
+    const near = r => boxes.some(b => Collide.overlaps({ x: b.x - 30, y: b.y - 30, w: 88, h: 78 }, r));
+    for (const w of m.warps) assert.ok(boxes.some(b => Collide.overlaps(b, w)), `${id} warp->${w.to}`);
+    for (const e of [...m.npcs, ...m.objects]) assert.ok(near(MAPS.footBox(e.x, e.y)), `${id}.${e.id}`);
+    for (const sp of m.spots) assert.ok(near(sp), `${id}.${sp.id}`);
+  });
+}

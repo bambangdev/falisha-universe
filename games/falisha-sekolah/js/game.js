@@ -29,12 +29,12 @@ const Game = (() => {
 
   /* ---------- state ---------- */
   let st = Save.load(localStorage);
-  let screen = 'load', mapId = 'rumah', tap = null, toasts = [], t = 0, confirmNew = false, celebrate = 0;
+  let screen = 'load', mapId = 'rumah', tap = null, toasts = [], t = 0, confirmNew = false, celebrate = 0, screenT = 0;
   const save = () => Save.store(localStorage, st);
   const current = () => Quests.current(st);
   function toast(text, col = '#fff') { toasts.push({ text, col, t: 2.2 }); if (toasts.length > 3) toasts.shift(); }
   function setScreen(s) {
-    screen = s;
+    screen = s; screenT = 0; confirmNew = false;
     touchEl.classList.toggle('hidden', s !== 'world');
     if (s !== 'world') Input.reset();
   }
@@ -116,7 +116,9 @@ const Game = (() => {
     if (document.fullscreenElement) document.exitFullscreen();
     else document.documentElement.requestFullscreen?.().then(() => window.screen.orientation?.lock?.('landscape').catch(() => {})).catch(() => {});
   };
-  function toggleMenu() { if (screen === 'world') { setScreen('menu'); confirmNew = false; } else if (screen === 'menu') setScreen('world'); }
+  function toggleMenu() { if (screen === 'world') setScreen('menu'); else if (screen === 'menu') setScreen('world'); }
+  /* tombol yang menghapus simpanan selalu minta ketukan kedua */
+  const askNew = () => { if (confirmNew) newGame(); else confirmNew = true; };
 
   /* ---------- gambar ---------- */
   function txt(s, x, y, size, col = '#fff', align = 'center', outline = '#123') {
@@ -157,7 +159,7 @@ const Game = (() => {
     txt('PETUALANGAN FALISHA', 400, 54, 26, '#ffe14d', 'center', '#1d4d2b');
     txt('di MIMHa', 400, 98, 20, '#fff', 'center', '#1d4d2b');
     const cont = st.step > 0;
-    if (cont) { button(W / 2 - 300, 440, 280, 64, Quests.finished(st) ? '📜 RAPOR' : '▶ LANJUTKAN', continueGame); button(W / 2 + 20, 440, 280, 64, '★ MAIN BARU', newGame, '#c0392b'); }
+    if (cont) { button(W / 2 - 300, 440, 280, 64, Quests.finished(st) ? '📜 RAPOR' : '▶ LANJUTKAN', continueGame); button(W / 2 + 20, 440, 280, 64, confirmNew ? 'YAKIN? KETUK LAGI' : '★ MAIN BARU', askNew, '#c0392b', confirmNew ? 11 : 14); }
     else button(W / 2 - 140, 440, 280, 64, '▶ MULAI', newGame);
   }
   function drawMenu() {
@@ -166,7 +168,7 @@ const Game = (() => {
     txt('MENU', W / 2, 90, 30, '#ffe14d');
     button(W / 2 - 160, 140, 320, 58, '▶ LANJUT', () => setScreen('world'));
     button(W / 2 - 160, 214, 320, 58, has && Chip.isMuted() ? '🔇 SUARA: MATI' : '🔊 SUARA: NYALA', () => has && setMuted(!Chip.isMuted()), '#2456d8', 12);
-    button(W / 2 - 160, 288, 320, 58, confirmNew ? 'YAKIN? KETUK LAGI' : '★ MAIN BARU', () => { if (confirmNew) newGame(); else confirmNew = true; }, '#c0392b', 12);
+    button(W / 2 - 160, 288, 320, 58, confirmNew ? 'YAKIN? KETUK LAGI' : '★ MAIN BARU', askNew, '#c0392b', 12);
     button(W / 2 - 160, 362, 320, 58, '🏠 PORTAL', () => { location.href = '../../index.html'; }, '#555', 12);
   }
   function drawRapor() {
@@ -182,7 +184,7 @@ const Game = (() => {
     txt(`Stiker: ${st.stickers}/14`, 200, 410, 13, '#c0392b', 'left', '#fff');
     Spr.draw(ctx, 'falisha', 'pose.lompat', 720, 440 + Math.sin(t * 6) * 6, 150);
     txt('MasyaAllah, hari yang hebat!', W / 2, 455, 11, '#2f6b3f', 'center', '#fff');
-    button(W / 2 - 150, 470, 300, 54, '↻ MAIN LAGI', newGame);
+    if (screenT > 1.5) button(W / 2 - 150, 470, 300, 54, confirmNew ? 'YAKIN? KETUK LAGI' : '↻ MAIN LAGI', askNew, '#2e8c46', confirmNew ? 11 : 14);
   }
   function drawLoad() {
     ctx.fillStyle = '#1d4d2b'; ctx.fillRect(0, 0, W, H);
@@ -192,7 +194,7 @@ const Game = (() => {
 
   /* ---------- loop ---------- */
   function frame(dt) {
-    t += dt; UI = [];
+    t += dt; screenT += dt; UI = [];
     for (const o of toasts) o.t -= dt; toasts = toasts.filter(o => o.t > 0);
     celebrate = Math.max(0, celebrate - dt);
     if (Input.pressed('mute') && has) setMuted(!Chip.isMuted());
@@ -214,7 +216,7 @@ const Game = (() => {
     } else if (screen === 'menu') drawMenu();
     else if (screen === 'rapor') drawRapor();
     if (tap && screen !== 'minigame' && !(screen === 'world')) { const b = UI.find(u => tap.x >= u.x && tap.x <= u.x + u.w && tap.y >= u.y && tap.y <= u.y + u.h); if (b) b.act(); }
-    else if (screen !== 'world' && screen !== 'minigame' && Input.pressed('action') && UI.length) UI[0].act();
+    else if ((screen === 'title' || screen === 'menu') && Input.pressed('action') && UI.length) UI[0].act();   // rapor: tidak ada aksi keyboard
     tap = null; Input.endFrame();
   }
   let last = performance.now();

@@ -26,6 +26,8 @@ const MAPS = (() => {
       }
     }
     walls.push(...def.block.map(R));
+    // batas layar: Falisha tidak boleh keluar kanvas kecuali lewat warp (warp di tepi tetap terjangkau)
+    walls.push({ x: -100, y: -100, w: 1160, h: 100 }, { x: -100, y: 540, w: 1160, h: 100 }, { x: -100, y: 0, w: 100, h: 540 }, { x: 960, y: 0, w: 100, h: 540 });
     const spawns = {};
     for (const [key, v] of Object.entries(def.spawns)) spawns[key] = { ...P(v[0], v[1]), face: v[2] || 'down' };
     return {
@@ -79,8 +81,8 @@ const MAPS = (() => {
     walk: [[[300, 500], [400, 300], [420, 235], [665, 235], [665, 190], [725, 190], [725, 235], [1376, 235], [1376, 768], [0, 768], [0, 500]]],
     block: [[285, 250, 25, 160], [80, 470, 60, 90], [995, 190, 190, 190], [1185, 270, 170, 250], [1035, 555, 341, 213],
       [0, 590, 90, 178], [740, 680, 100, 88], [915, 165, 95, 80]],
-    spawns: { default: [60, 545, 'right'], gerbang: [60, 545, 'right'], kantin: [695, 300, 'down'] },
-    warps: [{ r: [0, 505, 30, 80], to: 'gerbang', at: 'lapangan' }, { r: [665, 190, 60, 40], to: 'kantin', at: 'lapangan' }],
+    spawns: { default: [32, 582, 'right'], gerbang: [32, 582, 'right'], kantin: [695, 300, 'down'] },
+    warps: [{ r: [0, 515, 44, 40], to: 'gerbang', at: 'lapangan' }, { r: [665, 190, 60, 40], to: 'kantin', at: 'lapangan' }],
     npcs: [['anasya', 560, 430, 'right'], ['ayana', 700, 430, 'left']],
     objects: [['pensil2', 'pensil_kuning', 'pensil', 880, 470, 'pensil'], ['sampah4', 'kertas', 'sampah', 420, 640, 'piket'], ['sampah5', 'bungkus', 'sampah', 680, 560, 'piket']],
     spots: [['tong', [925, 545, 50, 60], null]]
