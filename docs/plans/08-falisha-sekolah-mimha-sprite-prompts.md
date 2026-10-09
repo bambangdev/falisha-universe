@@ -69,8 +69,8 @@ Row 1: (1) Bu Guru Aisyah — kind female teacher, light-blue hijab, long dark-b
        (3) Pak Satpam Dadang — friendly school security guard, navy uniform, cap, whistle;
        (4) Bu Kantin Euis — canteen lady, orange hijab, apron.
 Row 2: four classmates in the same school uniform as Falisha (white shirt, dark-green bottoms):
-       (1) Rafi — boy with black peci, glasses; (2) Nisa — girl with white hijab, pigtail-style hijab tails, cheerful;
-       (3) Zahra — girl with white hijab, holding a skipping rope; (4) Fikri — chubby boy with peci, holding a broom.
+       (1) Putra — boy with black peci, glasses; (2) Anasya — girl with white hijab, pigtail-style hijab tails, cheerful;
+       (3) Ayana — girl with white hijab, holding a skipping rope; (4) Seyan — chubby boy with peci, holding a broom.
 ```
 
 ### 5. `portrait_utama.png` — potret dialog, lampirkan foto keluarga + `char_falisha_walk.png`
@@ -87,7 +87,7 @@ Row 2: Ibu Pupu smiling, Baymax smiling, Babah Nono big laugh, Arsyad cute serio
 16-bit pixel art dialogue portraits (head and shoulders), same style and the same fictional characters as the attached
 NPC sheet. Grid 4 columns x 2 rows of square portraits, each with a soft light-green rounded-square background, no text.
 Row 1: Bu Guru Aisyah, Pak Ustadz Hasan, Pak Satpam Dadang, Bu Kantin Euis.
-Row 2: Rafi, Nisa, Zahra, Fikri.
+Row 2: Putra, Anasya, Ayana, Seyan.
 ```
 
 ---

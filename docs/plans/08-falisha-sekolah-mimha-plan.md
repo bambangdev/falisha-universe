@@ -18,7 +18,7 @@ Alur kerja sama seperti Falisha Kart Turbo:
 | **Pak Ustadz Hasan** | fiktif | Imam shalat dhuha di musala dan pengajar wudhu. |
 | **Pak Satpam Dadang** | fiktif | Penjaga gerbang. |
 | **Bu Kantin Euis** | fiktif | Penjual di kantin, mini-game uang. |
-| **Teman: Rafi, Nisa, Zahra, Fikri** | fiktif | Teman sekelas. Rafi kehilangan pensil warna, Nisa dan Zahra mengajak lompat tali, Fikri teman piket. |
+| **Teman: Putra, Anasya, Ayana, Seyan** | fiktif | Teman sekelas. Putra kehilangan pensil warna, Anasya dan Ayana mengajak lompat tali, Seyan teman piket. |
 
 Guru dan teman **sengaja fiktif**, tidak memakai foto orang asli.
 
@@ -49,8 +49,8 @@ Objektif aktif selalu tampil di HUD, misalnya "🎒 Ambil tas & botol minum".
 | 8 | `hitung` | Berhitung bersama Bu Guru | kelas | Mini-game **Berhitung** selesai |
 | 9 | `doa` | Hafalan doa sebelum makan | kelas | Mini-game **Susun Doa** selesai |
 | 10 | `jajan` | Istirahat: jajan di kantin | kantin | Mini-game **Kantin** selesai |
-| 11 | `lompat_tali` | Main lompat tali dengan Nisa & Zahra | lapangan | Mini-game **Lompat Tali** selesai |
-| 12 | `pensil` | Cari 5 pensil warna Rafi | semua peta sekolah | 5 pensil dipungut lalu diberikan ke Rafi |
+| 11 | `lompat_tali` | Main lompat tali dengan Anasya & Ayana | lapangan | Mini-game **Lompat Tali** selesai |
+| 12 | `pensil` | Cari 5 pensil warna Putra | semua peta sekolah | 5 pensil dipungut lalu diberikan ke Putra |
 | 13 | `piket` | Piket: buang 8 sampah ke tempat sampah | kelas + gerbang + lapangan | 8 sampah dipungut lalu dibuang ke tempat sampah mana pun |
 | 14 | `pulang` | Pulang, dijemput Babah Nono & Arsyad | gerbang | Bicara dengan Babah Nono → layar **Rapor Hari Ini** |
 

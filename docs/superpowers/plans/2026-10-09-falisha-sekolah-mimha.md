@@ -68,8 +68,8 @@
 |---|---|---|
 | `falisha` (walk 3×4 + poses 4×2) | | `walk.{down,left,right,up}.{0,1,2}`, `pose.{lompat,baca,makan,tali,qiyam,rukuk,sujud,duduk}` |
 | `keluarga` 4×4 | kolom = pupu, baymax, nono, arsyad | `<id>.{down,wave,walk0,walk1}` |
-| `sekolah` 4×2 | | `guru, ustadz, satpam, kantin, rafi, nisa, zahra, fikri` |
-| `portrait` (utama 4×2 + sekolah 4×2) | tanpa chroma-key | `falisha.{senang,kaget,sedih,bangga}`, `pupu, baymax, nono, arsyad, guru, ustadz, satpam, kantin, rafi, nisa, zahra, fikri` |
+| `sekolah` 4×2 | | `guru, ustadz, satpam, kantin, putra, anasya, ayana, seyan` |
+| `portrait` (utama 4×2 + sekolah 4×2) | tanpa chroma-key | `falisha.{senang,kaget,sedih,bangga}`, `pupu, baymax, nono, arsyad, guru, ustadz, satpam, kantin, putra, anasya, ayana, seyan` |
 | `items` 4×4 | | `tas, botol, iqro, bekal, pensil_merah, pensil_kuning, pensil_hijau, pensil_biru, pensil_ungu, kertas, botol_plastik, bungkus, tong, bintang, hati, panah` |
 | `jajan` 4×2 | | `roti, susu, pisang, risol, uang500, uang1000, uang2000, dompet` |
 | `wudhu` 4×2 | tanpa chroma-key | `tangan, kumur, hidung, wajah, lengan, kepala, telinga, kaki` |
@@ -205,7 +205,7 @@
     - Koordinat dalam ruang canvas 960×540; `spawns.default` wajib ada.
     - `objects`: `tas` dan `botol` (rumah, step `siap`, `item` = nama yang sama); 5 pensil dengan `sprite` `pensil_merah|kuning|hijau|biru|ungu` dan `item: 'pensil'`, tersebar di gerbang/kelas/lapangan/musala/kantin (step `pensil`); 8 sampah dengan `sprite` `kertas|botol_plastik|bungkus` dan `item: 'sampah'`, di kelas (3), gerbang (3), dan lapangan (2) (step `piket`).
     - `spots`: `tong` di kelas, gerbang, dan lapangan; `keran` di musala.
-    - NPC: `pupu` (rumah); `baymax` (jalan, pengikut); `satpam` dan `guru` (gerbang); `nono` dan `arsyad` (gerbang, hanya saat langkah `pulang`); `ustadz` (musala); `guru`, `rafi`, dan `fikri` (kelas); `kantin` (kantin); `nisa` dan `zahra` (lapangan).
+    - NPC: `pupu` (rumah); `baymax` (jalan, pengikut); `satpam` dan `guru` (gerbang); `nono` dan `arsyad` (gerbang, hanya saat langkah `pulang`); `ustadz` (musala); `guru`, `putra`, dan `seyan` (kelas); `kantin` (kantin); `anasya` dan `ayana` (lapangan).
   - `Scene.enter(mapId, spawnKey, state)`.
   - `Scene.update(dt, axis, actionPressed, state) -> event | null`, dengan `event`:
     - `{type: 'warp', to, at}`
@@ -247,15 +247,15 @@
 - Consumes: `Quests`.
 - Produces:
   - `Script.talk(npc, state) -> {lines: [{who, text}], action: null | {type: 'complete', id} | {type: 'minigame', id} | {type: 'give', item, n, then: 'complete'}}`. Fungsi ini murni dan tidak mengubah state.
-    - `who` ∈ `falisha, pupu, baymax, nono, arsyad, guru, ustadz, satpam, kantin, rafi, nisa, zahra, fikri`.
+    - `who` ∈ `falisha, pupu, baymax, nono, arsyad, guru, ustadz, satpam, kantin, putra, anasya, ayana, seyan`.
     - Pemetaan aksi:
       - `pupu@pamit` → complete.
       - `guru@salam_guru` (di gerbang) → complete.
       - `ustadz@wudhu` → minigame `wudhu`; `ustadz@dhuha` → minigame `dhuha`.
       - `guru@iqro|hitung|doa` (di kelas) → minigame dengan id yang sama.
       - `kantin@jajan` → minigame `jajan`.
-      - `nisa|zahra@lompat_tali` → minigame `lompat_tali`.
-      - `rafi@pensil`: jika jumlah pensil `=== 5` → give 5 `pensil` lalu complete; jika kurang → petunjuk `"Pensilnya masih kurang N"`.
+      - `anasya|ayana@lompat_tali` → minigame `lompat_tali`.
+      - `putra@pensil`: jika jumlah pensil `=== 5` → give 5 `pensil` lalu complete; jika kurang → petunjuk `"Pensilnya masih kurang N"`.
       - `nono|arsyad@pulang` → complete.
       - Di luar giliran: satu baris petunjuk yang memuat `Quests.current(state).text`.
   - `Dialog.open(lines, onDone)`, `Dialog.active()`, `Dialog.update(dt, actionPressed)` (mengetik 40 karakter/dtk; aksi pertama = tampilkan penuh, aksi berikut = baris berikutnya), `Dialog.draw(ctx)` (bingkai `ui.dialog`, potret `portrait.<who>`, nama, teks yang dibungkus ±40 karakter per baris).
@@ -263,7 +263,7 @@
 - [ ] **Step 1: Tulis tes gagal** — `script.test.js`, satu tes per baris pemetaan di Interfaces:
   - state di langkah `iqro` + `talk('guru')` → `action` `deepEqual` `{type: 'minigame', id: 'iqro'}`.
   - state di `siap` + `talk('pupu')` → `action === null` dan teks memuat `'Ambil tas & botol minum'`.
-  - `rafi` dengan 3 pensil → `action === null`, teks memuat `'kurang 2'`.
+  - `putra` dengan 3 pensil → `action === null`, teks memuat `'kurang 2'`.
   - `talk` tidak mengubah state (bandingkan `JSON.stringify` sebelum/sesudah).
 - [ ] **Step 2: Jalankan** → FAIL.
 - [ ] **Step 3: Implementasi** `script.js`. Teks dialog ditulis singkat, hangat, Bahasa Indonesia untuk anak 6 tahun, dengan salam Islami di tempat yang wajar.
