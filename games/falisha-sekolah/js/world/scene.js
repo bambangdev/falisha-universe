@@ -2,7 +2,7 @@
 const Scene = (() => {
   const W = 960, H = 540;
   const FAM = { pupu: 1, baymax: 1, nono: 1, arsyad: 1 };
-  let map = null, mapId = '', P = null, follower = null, target = null, t = 0;
+  let map = null, mapId = '', P = null, follower = null, target = null, t = 0, banner = 0;
   const S = { debug: false };
   const key = o => mapId + ':' + o.id;
   const stepId = st => (Quests.current(st) || {}).id;
@@ -20,7 +20,7 @@ const Scene = (() => {
     follower = null;
     const bay = map.npcs.find(n => n.id === 'baymax');
     if (bay && npcVisible(bay, st)) follower = { x: sp.x - 40, y: sp.y, face: sp.face, moving: false, t: 0, trail: [] };
-    target = null;
+    target = null; banner = 2.4;
   }
   function walls(st) {
     const solid = map.npcs.filter(n => n.id !== 'baymax' && npcVisible(n, st)).map(n => MAPS.footBox(n.x, n.y));
@@ -37,7 +37,7 @@ const Scene = (() => {
     return null;
   }
   function update(dt, axis, action, st) {
-    t += dt;
+    t += dt; banner = Math.max(0, banner - dt);
     Player.update(P, axis, dt, walls(st));
     if (follower) {
       const fx = P.x + P.w / 2, fy = P.y + P.h;
@@ -77,6 +77,7 @@ const Scene = (() => {
       Spr.draw(ctx, 'falisha', `walk.${face}.${P.frame}`, px, py + 2, h, P.face === 'left');
     } });
     list.sort((a, b) => a.y - b.y).forEach(e => e.d());
+    drawGuide(ctx, st);
     if (target) {
       const y = target.y - 8 + Math.sin(t * 6) * 3;
       ctx.fillStyle = '#ffe14d'; ctx.strokeStyle = '#1d4d2b'; ctx.lineWidth = 3;
@@ -88,6 +89,51 @@ const Scene = (() => {
       ctx.fillStyle = 'rgba(0,80,255,0.45)'; for (const w of map.warps) ctx.fillRect(w.x, w.y, w.w, w.h);
       ctx.fillStyle = 'rgba(0,255,0,0.4)'; for (const s of map.spots) ctx.fillRect(s.x, s.y, s.w, s.h);
       ctx.strokeStyle = '#ff0'; ctx.lineWidth = 1; ctx.strokeRect(P.x, P.y, P.w, P.h);
+    }
+  }
+  /* ---------- papan nama pintu, panah tujuan, banner nama area ---------- */
+  const ROT = { up: -Math.PI / 2, down: Math.PI / 2, left: Math.PI, right: 0 };
+  function arrow(ctx, x, y, dir, size, fill, stroke) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ROT[dir]);
+    ctx.beginPath(); ctx.moveTo(size, 0); ctx.lineTo(0, -size * 0.75); ctx.lineTo(0, -size * 0.32); ctx.lineTo(-size, -size * 0.32);
+    ctx.lineTo(-size, size * 0.32); ctx.lineTo(0, size * 0.32); ctx.lineTo(0, size * 0.75); ctx.closePath();
+    ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = stroke; ctx.stroke(); ctx.restore();
+  }
+  function label(ctx, text, x, y, hot) {
+    ctx.font = '10px "Press Start 2P", monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const w = ctx.measureText(text).width + 44, h = 26;
+    ctx.fillStyle = hot ? '#ffe14d' : 'rgba(92,58,30,0.9)'; ctx.strokeStyle = hot ? '#c0392b' : '#f4dfb0'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x - w / 2, y - h / 2, w, h, 8) : ctx.rect(x - w / 2, y - h / 2, w, h); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = hot ? '#5a2a10' : '#fff'; ctx.fillText(text, x + 10, y + 1);
+    return w;
+  }
+  function drawGuide(ctx, st) {
+    const g = typeof Guide !== 'undefined' ? Guide.next(st, mapId) : null;
+    for (const w of map.warps) {
+      const sg = Guide.sign(w), hot = g && g.type === 'warp' && g.warp === w;
+      const lw = label(ctx, sg.name, sg.x, sg.y, hot);
+      arrow(ctx, sg.x - lw / 2 + 16, sg.y, sg.dir, 9, hot ? '#c0392b' : '#ffe14d', hot ? '#fff' : '#5a2a10');
+      if (hot) {
+        const b = Math.sin(t * 6) * 8, cx = w.x + w.w / 2, cy = w.y + w.h / 2;
+        const off = { up: [0, 30], down: [0, -30], left: [30, 0], right: [-30, 0] }[sg.dir];
+        ctx.globalAlpha = 0.35 + 0.25 * Math.sin(t * 6); ctx.fillStyle = '#ffe14d'; ctx.fillRect(w.x, w.y, w.w, w.h); ctx.globalAlpha = 1;
+        const k = sg.dir === 'up' || sg.dir === 'down' ? [0, b] : [b, 0];
+        arrow(ctx, cx + off[0] + k[0] * (sg.dir === 'left' ? -1 : 1), cy + off[1] + k[1] * (sg.dir === 'up' ? -1 : 1), sg.dir, 20, '#ffe14d', '#c0392b');
+      }
+    }
+    if (g && g.type === 'point' && !(target && Math.hypot(target.x - g.x, target.y - (g.y - map.charH)) < 30)) {
+      const b = Math.abs(Math.sin(t * 5)) * 10, top = g.id === 'tong' ? g.y - 70 : g.y - (map.npcs.some(n => n.id === g.id) ? map.charH * 1.15 + 18 : 52);
+      arrow(ctx, g.x, top - b, 'down', 16, '#ffe14d', '#c0392b');
+    }
+    if (banner > 0) {
+      ctx.globalAlpha = Math.min(1, banner * 2);
+      const name = Guide.PLACE[mapId];
+      ctx.font = '18px "Press Start 2P", monospace'; const w = ctx.measureText(name).width + 70;
+      ctx.fillStyle = 'rgba(18,48,28,0.88)'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(480 - w / 2, 110, w, 50, 14) : ctx.rect(480 - w / 2, 110, w, 50); ctx.fill();
+      ctx.strokeStyle = '#ffe14d'; ctx.lineWidth = 3; ctx.stroke();
+      ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.arc(480 - w / 2 + 26, 130, 8, Math.PI, 0); ctx.lineTo(480 - w / 2 + 26, 147); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(name, 480 + 14, 136);
+      ctx.globalAlpha = 1;
     }
   }
   return Object.assign(S, { enter, update, draw, player: () => P, mapId: () => mapId, target: () => target, activeObjects });
