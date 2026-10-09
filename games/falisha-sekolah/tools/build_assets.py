@@ -117,7 +117,7 @@ wu = grid(find('wudhu'), 4, 2, box=(30, 40, 1348, 728), inset=4, keyed=False)
 sheet('wudhu', list(zip(['tangan', 'kumur', 'hidung', 'wajah', 'lengan', 'kepala', 'telinga', 'kaki'], wu)))
 
 if find('iqro_cards'):
-    iq = grid(find('iqro_cards'), 7, 4, box=(14, 20, 1362, 750), inset=4, keyed=False)
+    iq = grid(find('iqro_cards'), 7, 4, box=(14, 20, 1362, 750), inset=12, keyed=False)
     sheet('iqro', [(str(i), c) for i, c in enumerate(iq)])
 else: print('LEWATI iqro_cards')
 
