@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- Alat uji peta: ?map=<id>&debug=1 menggambar tembok (merah), warp (biru), spot (hijau) -->
+<html lang="id"><head><meta charset="UTF-8"><base href="../"><title>Uji Peta MIMHa</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#000}canvas{width:960px;height:540px}</style></head>
+<body><canvas id="c" width="960" height="540"></canvas>
+<script src="assets/sprites/atlas.js"></script>
+<script src="js/core/collide.js"></script><script src="js/core/input.js"></script><script src="js/core/sprites.js"></script>
+<script src="js/world/maps.js"></script><script src="js/world/player.js"></script><script src="js/story/quests.js"></script>
+<script src="js/world/scene.js"></script>
+<script>
+const q = new URLSearchParams(location.search), ctx = document.getElementById('c').getContext('2d');
+window.state = Quests.create(); state.step = +(q.get('step') || 0);
+Scene.debug = q.get('debug') === '1';
+Input.attach(window, null, []);
+Spr.load().then(() => {
+  Scene.enter(q.get('map') || 'rumah', q.get('at') || 'default', state);
+  let last = performance.now();
+  (function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    window.lastEvent = Scene.update(dt, Input.axis(), Input.pressed('action'), state) || window.lastEvent;
+    Scene.draw(ctx, state); Input.endFrame(); requestAnimationFrame(loop);
+  })(last);
+});
+</script></body></html>

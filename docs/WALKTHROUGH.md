@@ -65,6 +65,13 @@ Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan 
 - Mesin: jalan berbasis segmen (tikungan, bukit, terowongan, ramp) digambar jauh→dekat; kart 8 sudut; drift mini-turbo 2 tingkat, start turbo, slipstream, 7 item, AI racing line + rubber-band, Grand Prix/Time Trial (ghost)/Latihan.
 - Verifikasi: Playwright headless — screenshot semua layar & 4 sirkuit; simulasi Grand Prix penuh (Mudah & Susah) dan Time Trial selesai tanpa error. **Tes manual di tablet disarankan.**
 
+### 8. Petualangan Falisha di MIMHa (RPG sekolah)
+- Spesifikasi: `docs/plans/08-falisha-sekolah-mimha-plan.md`; prompt sprite Gemini: `docs/plans/08-falisha-sekolah-mimha-sprite-prompts.md`; rencana implementasi: `docs/superpowers/plans/2026-10-09-falisha-sekolah-mimha.md`.
+- Sprite dibuat user satu per satu di Gemini (21 file + foto asli MIMHa), diolah `tools/build_assets.py` (flood-fill magenta per sel, kartu potret dipotong tanpa chroma-key) jadi atlas. Halaman sekolah memakai `map_sekolah` yang mirip foto asli MIMHa.
+- Nama teman sekelas diganti user: Putra, Anasya, Ayana, Seyan.
+- Kode modular satu global per file; logika murni diuji `node --test games/falisha-sekolah/tests/*.test.js` (84 tes). Smoke Playwright: `tools/smoke.js minigames` (7/7) dan `day` (14 langkah sampai rapor, simpanan saat muat ulang, joystick berhenti saat pointercancel).
+- Alat uji: `tools/scene.html?map=<id>&debug=1` (overlay tembok/warp) dan `tools/mg.html?id=<minigame>`.
+
 ## Cara Menjalankan
 ```bash
 python3 -m http.server 8000

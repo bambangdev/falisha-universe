@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- Halaman uji mini-game: memuat skrip yang sama dengan index.html kecuali game.js -->
+<html lang="id"><head><meta charset="UTF-8"><base href="../"><title>Uji Mini-game MIMHa</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Naskh+Arabic:wght@700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#000}canvas{width:960px;height:540px}</style></head>
+<body><canvas id="c" width="960" height="540"></canvas>
+<script src="../../shared/audio.js"></script><script src="assets/sprites/atlas.js"></script>
+<script src="js/core/input.js"></script><script src="js/core/sprites.js"></script>
+<script src="js/minigames/logic.js"></script><script src="js/minigames/screens.js"></script>
+<script>
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let tap = null;
+cv.addEventListener('pointerdown', e => { const r = cv.getBoundingClientRect(); tap = { x: (e.clientX - r.left) * 960 / r.width, y: (e.clientY - r.top) * 540 / r.height }; });
+Input.attach(window, null, []);
+Spr.load().then(() => {
+  const id = new URLSearchParams(location.search).get('id');
+  if (id) Minigames.start(id, s => { window.__done = s; });
+  let last = performance.now();
+  (function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const nav = (Input.pressed('right') || Input.pressed('down') ? 1 : 0) - (Input.pressed('left') || Input.pressed('up') ? 1 : 0);
+    Minigames.update(dt, tap, Input.pressed('action'), nav); tap = null;
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 960, 540); Minigames.draw(ctx);
+    Input.endFrame(); requestAnimationFrame(loop);
+  })(last);
+});
+</script></body></html>
