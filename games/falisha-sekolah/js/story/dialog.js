@@ -1,7 +1,7 @@
 /* Petualangan Falisha di MIMHa – kotak dialog: potret, nama, teks mengetik 40 huruf/detik */
 const Dialog = (() => {
-  const NAMES = { falisha: 'Falisha', pupu: 'Ibu Pupu', baymax: 'Baymax', nono: 'Babah Nono', arsyad: 'Arsyad', guru: 'Bu Guru Aisyah',
-    ustadz: 'Pak Ustadz Hasan', satpam: 'Pak Satpam Dadang', kantin: 'Bu Kantin Euis', putra: 'Putra', anasya: 'Anasya', ayana: 'Ayana', seyan: 'Seyan' };
+  const NAMES = { falisha: 'Falisha', pupu: 'Ibu Pupu', baymax: 'Baymax', nono: 'Babah Nono', arsyad: 'Arsyad', guru: 'Ibu Dewi',
+    ustadz: 'Pak Gungun', satpam: 'Pak Satpam Dadang', kantin: 'Bu Kantin Euis', putra: 'Putra', anasya: 'Anasya', ayana: 'Ayana', seyan: 'Seyan' };
   const CPS = 40;
   let lines = [], idx = 0, shown = 0, done = null, t = 0;
   function open(ls, onDone) { lines = ls; idx = 0; shown = 0; done = onDone || null; }

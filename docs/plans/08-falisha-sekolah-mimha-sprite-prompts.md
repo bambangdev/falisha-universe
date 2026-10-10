@@ -64,8 +64,8 @@ Same scale as Falisha (adults taller, Arsyad smaller), feet at the bottom of eac
 16-bit pixel art top-down RPG NPC sprite sheet, same style as the attached sprite sheet, fictional characters
 (not real people). Grid 4 columns x 2 rows, flat solid magenta #FF00FF background, no text, no grid lines.
 All facing down (toward the camera), standing, centered at the bottom of each cell.
-Row 1: (1) Bu Guru Aisyah — kind female teacher, light-blue hijab, long dark-blue dress, holding a book;
-       (2) Pak Ustadz Hasan — male religious teacher, white koko shirt, white peci, short beard, sarong;
+Row 1: (1) Ibu Dewi — kind female teacher, light-blue hijab, long dark-blue dress, holding a book;
+       (2) Pak Gungun — male religious teacher, white koko shirt, white peci, short beard, sarong;
        (3) Pak Satpam Dadang — friendly school security guard, navy uniform, cap, whistle;
        (4) Bu Kantin Euis — canteen lady, orange hijab, apron.
 Row 2: four classmates in the same school uniform as Falisha (white shirt, dark-green bottoms):
@@ -86,7 +86,7 @@ Row 2: Ibu Pupu smiling, Baymax smiling, Babah Nono big laugh, Arsyad cute serio
 ```
 16-bit pixel art dialogue portraits (head and shoulders), same style and the same fictional characters as the attached
 NPC sheet. Grid 4 columns x 2 rows of square portraits, each with a soft light-green rounded-square background, no text.
-Row 1: Bu Guru Aisyah, Pak Ustadz Hasan, Pak Satpam Dadang, Bu Kantin Euis.
+Row 1: Ibu Dewi, Pak Gungun, Pak Satpam Dadang, Bu Kantin Euis.
 Row 2: Putra, Anasya, Ayana, Seyan.
 ```
 

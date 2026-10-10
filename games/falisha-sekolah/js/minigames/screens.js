@@ -43,7 +43,7 @@ const Minigames = (() => {
     dhuha(pose) {
       const s = G.s;
       if (M.DHUHA[s.idx] === pose) { s.idx++; good(); if (s.idx === M.DHUHA.length) finish(); }
-      else wrong('Lihat gerakan Pak Ustadz, ya!', pose);
+      else wrong('Lihat gerakan Pak Gungun, ya!', pose);
     },
     iqro(i) {
       const s = G.s;

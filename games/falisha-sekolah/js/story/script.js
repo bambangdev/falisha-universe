@@ -4,7 +4,7 @@ const Script = (() => {
   const hint = (npc, st) => {
     const c = Quests.current(st);
     if (!c) return [L(npc, 'Hari ini seru sekali ya, Falisha!')];
-    const name = { pupu: 'Ibu Pupu', baymax: 'Baymax', nono: 'Babah Nono', arsyad: 'Arsyad', guru: 'Bu Guru Aisyah', ustadz: 'Pak Ustadz Hasan',
+    const name = { pupu: 'Ibu Pupu', baymax: 'Baymax', nono: 'Babah Nono', arsyad: 'Arsyad', guru: 'Ibu Dewi', ustadz: 'Pak Gungun',
       satpam: 'Pak Satpam', kantin: 'Bu Euis', putra: 'Putra', anasya: 'Anasya', ayana: 'Ayana', seyan: 'Seyan' };
     const chat = {
       pupu: 'Hati-hati ya, Nak.', baymax: 'Ayo semangat!', nono: 'Babah bangga sama Falisha!', arsyad: 'Kakak! Kakak!',
@@ -24,10 +24,10 @@ const Script = (() => {
       berangkat: () => ({ lines: [L('baymax', 'Ayo kita jalan ke MIMHa. Lewat trotoar ya!')], action: null })
     },
     satpam: {
-      salam_guru: () => ({ lines: [L('satpam', 'Selamat pagi! Bu Guru Aisyah sudah menunggu di halaman.')], action: null })
+      salam_guru: () => ({ lines: [L('satpam', 'Selamat pagi! Ibu Dewi sudah menunggu di halaman.')], action: null })
     },
     guru: {
-      salam_guru: () => ({ lines: [L('falisha', "Assalamu'alaikum, Bu Guru!"), L('guru', "Wa'alaikumussalam, Falisha. MasyaAllah, datang tepat waktu!"),
+      salam_guru: () => ({ lines: [L('falisha', "Assalamu'alaikum, Ibu Dewi!"), L('guru', "Wa'alaikumussalam, Falisha. MasyaAllah, datang tepat waktu!"),
         L('guru', 'Sebelum belajar, kita wudhu dan shalat dhuha dulu di musala ya.')], action: { type: 'complete', id: 'salam_guru' } }),
       iqro: () => ({ lines: [L('guru', 'Ayo belajar huruf hijaiyah! Ketuk huruf yang Ibu sebut, ya.')], action: { type: 'minigame', id: 'iqro' } }),
       hitung: () => ({ lines: [L('guru', 'Sekarang berhitung pakai apel. Siap?')], action: { type: 'minigame', id: 'hitung' } }),
