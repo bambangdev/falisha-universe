@@ -35,7 +35,7 @@ Portal web game retro pixel art untuk keluarga, dioptimalkan untuk layar tablet 
 
 ### 8. Petualangan Falisha di MIMHa 🏫
 - **Genre:** RPG top-down satu hari sekolah di MIMHa (Madrasah Interaktif Miftahul Huda, Cikadut, Bandung)
-- **Tokoh:** Falisha + keluarga (dari foto `assets/Photo/`), Bu Guru Aisyah, Pak Ustadz Hasan, teman sekelas Putra, Anasya, Ayana, Seyan
+- **Tokoh:** Falisha + keluarga (dari foto `assets/Photo/`), Ibu Dewi, Pak Gungun, teman sekelas Putra, Anasya, Ayana, Seyan
 - **Alur 14 langkah:** dari siap-siap di rumah, jalan ke sekolah bersama Baymax, sampai dijemput Babah Nono & Arsyad
 - **7 mini-game:** urutan wudhu, shalat dhuha, huruf hijaiyah, berhitung apel, susun doa, belanja di kantin (uang pas), lompat tali — tanpa kalah, ada rapor bintang
 - **Path:** `/games/falisha-sekolah/`

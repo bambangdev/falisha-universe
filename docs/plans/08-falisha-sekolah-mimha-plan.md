@@ -14,8 +14,8 @@ Alur kerja sama seperti Falisha Kart Turbo:
 | **Ibu Pupu** | foto `pupu.jpeg` | Di rumah, memberi bekal dan menerima salam pamit. |
 | **Baymax** | foto `baymax.jpeg` | Mengantar Falisha jalan ke sekolah. |
 | **Babah Nono** + **Arsyad** | foto `babah nono.jpeg`, `arsyad.jpeg` | Menjemput di gerbang saat pulang. |
-| **Bu Guru Aisyah** | fiktif | Wali kelas, memberi misi Iqro, berhitung, dan doa. |
-| **Pak Ustadz Hasan** | fiktif | Imam shalat dhuha di musala dan pengajar wudhu. |
+| **Ibu Dewi** | fiktif | Wali kelas, memberi misi Iqro, berhitung, dan doa. |
+| **Pak Gungun** | fiktif | Imam shalat dhuha di musala dan pengajar wudhu. |
 | **Pak Satpam Dadang** | fiktif | Penjaga gerbang. |
 | **Bu Kantin Euis** | fiktif | Penjual di kantin, mini-game uang. |
 | **Teman: Putra, Anasya, Ayana, Seyan** | fiktif | Teman sekelas. Putra kehilangan pensil warna, Anasya dan Ayana mengajak lompat tali, Seyan teman piket. |
@@ -42,11 +42,11 @@ Objektif aktif selalu tampil di HUD, misalnya "🎒 Ambil tas & botol minum".
 | 1 | `siap` | Ambil tas & botol minum | rumah | Kedua barang dipungut |
 | 2 | `pamit` | Salam pamit ke Ibu Pupu | rumah | Bicara dengan Ibu Pupu → dialog "Assalamu'alaikum" |
 | 3 | `berangkat` | Jalan ke sekolah bersama Baymax | jalan → gerbang | Masuk peta `gerbang` (Baymax berjalan mengikuti) |
-| 4 | `salam_guru` | Salam ke Bu Guru Aisyah | gerbang | Bicara dengan Bu Guru |
+| 4 | `salam_guru` | Salam ke Ibu Dewi | gerbang | Bicara dengan Ibu Dewi |
 | 5 | `wudhu` | Wudhu di musala | musala | Mini-game **Wudhu** selesai |
 | 6 | `dhuha` | Shalat dhuha berjamaah | musala | Mini-game **Dhuha** selesai |
 | 7 | `iqro` | Belajar huruf hijaiyah | kelas | Mini-game **Hijaiyah** selesai |
-| 8 | `hitung` | Berhitung bersama Bu Guru | kelas | Mini-game **Berhitung** selesai |
+| 8 | `hitung` | Berhitung bersama Ibu Dewi | kelas | Mini-game **Berhitung** selesai |
 | 9 | `doa` | Hafalan doa sebelum makan | kelas | Mini-game **Susun Doa** selesai |
 | 10 | `jajan` | Istirahat: jajan di kantin | kantin | Mini-game **Kantin** selesai |
 | 11 | `lompat_tali` | Main lompat tali dengan Anasya & Ayana | lapangan | Mini-game **Lompat Tali** selesai |
@@ -64,7 +64,7 @@ Semuanya tanpa kalah. Salah → coba lagi dengan petunjuk. Bintang: 3 = tanpa sa
 | id | Nama | Cara main | Detail |
 |---|---|---|---|
 | `wudhu` | Urutan Wudhu | Ketuk kartu gambar langkah wudhu dalam urutan benar | 8 langkah: cuci tangan → kumur → hidung → wajah → tangan sampai siku → kepala → telinga → kaki. Kartu dari sheet `wudhu.png`. |
-| `dhuha` | Ikuti Imam | Pak Ustadz menunjukkan gerakan, Falisha menekan gerakan yang sama | Urutan 2 rakaat: berdiri → rukuk → i'tidal (berdiri) → sujud → duduk → sujud → berdiri … → salam. 4 pilihan tombol pose. |
+| `dhuha` | Ikuti Imam | Pak Gungun menunjukkan gerakan, Falisha menekan gerakan yang sama | Urutan 2 rakaat: berdiri → rukuk → i'tidal (berdiri) → sujud → duduk → sujud → berdiri … → salam. 4 pilihan tombol pose. |
 | `iqro` | Huruf Hijaiyah | Dengar/lihat nama huruf, ketuk huruf yang benar dari 4 pilihan | 10 ronde dari 28 huruf (ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن و ه ي), font **Noto Naskh Arabic**. |
 | `hitung` | Berhitung Apel | Hitung benda/soal, ketuk jawaban dari 3 pilihan | 10 soal: penjumlahan & pengurangan hasil 0–20, digambar dengan apel. |
 | `doa` | Susun Doa | Ketuk potongan kata doa sesuai urutan | Doa sebelum makan: "Allahumma / baarik lanaa / fiimaa razaqtanaa / wa qinaa / 'adzaaban naar". 2 ronde (+ doa keluar rumah: "Bismillaahi / tawakkaltu / 'alallaahi / laa haula / wa laa quwwata / illaa billaah"). |

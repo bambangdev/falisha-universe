@@ -74,7 +74,7 @@ const Game = (() => {
       const total = Quests.count(st, 'dibuang');
       toast(`Sampah dibuang ${total}/8`, '#9fe3c0');
       if (total >= 8 && c && c.id === 'piket') complete('piket');
-    } else if (id === 'keran') toast(c && c.id === 'wudhu' ? 'Minta Pak Ustadz mengajari wudhu dulu, ya!' : 'Airnya segar!');
+    } else if (id === 'keran') toast(c && c.id === 'wudhu' ? 'Minta Pak Gungun mengajari wudhu dulu, ya!' : 'Airnya segar!');
   }
   function apply(a) {
     if (!a) return;

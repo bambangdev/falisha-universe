@@ -284,7 +284,7 @@
   - `Minigames.debugFinish(stars)`: memanggil `onDone(stars)`. `Minigames.debugSolveStep()`: melakukan satu jawaban benar di mini-game aktif. Keduanya hanya untuk smoke.
   - Tiap mini-game memakai ketukan (`tap`, dalam koordinat canvas). Tombol keyboard: ←/→ memindah fokus, aksi = pilih. Setelah selesai tampil layar "⭐⭐⭐ Hebat!" 1,5 dtk lalu `onDone`. Tata letaknya:
     - **wudhu**: 8 kartu `wudhu.*` diacak dalam 2 baris. Kartu benar tetap tampil di slot urutan atas; salah → kartu bergetar + petunjuk.
-    - **dhuha**: Pak Ustadz memperagakan pose (`falisha.pose.*` sebagai siluet hijau), lalu 4 tombol pose.
+    - **dhuha**: Pak Gungun memperagakan pose (`falisha.pose.*` sebagai siluet hijau), lalu 4 tombol pose.
     - **iqro**: nama huruf besar + `Chip.beep` sebagai ketukan, lalu 4 kartu huruf (`iqro.n` atau teks font Naskh 72 px).
     - **hitung**: apel `props.apel` sebanyak `a`, operator, apel sebanyak `b`, lalu 3 tombol angka.
     - **doa**: potongan kata acak dijadikan baris kalimat dari kiri ke kanan.
