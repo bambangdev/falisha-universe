@@ -143,8 +143,8 @@ const Game = (() => {
       if (c.id === 'pensil') sub = `Pensil ${Quests.count(st, 'pensil')}/5`;
       else if (c.id === 'piket') sub = `Sampah ${Quests.count(st, 'sampah') + Quests.count(st, 'dibuang')}/8 • dibuang ${Quests.count(st, 'dibuang')}/8`;
       else if (c.id === 'siap') sub = `Tas ${Quests.count(st, 'tas') ? '✓' : '-'}  Botol ${Quests.count(st, 'botol') ? '✓' : '-'}`;
-      const target = c.id === 'pensil' || c.id === 'piket' ? null : (c.id === 'siap' || c.id === 'pamit') ? 'rumah' : c.map;
-      if (target && target !== mapId) sub = (sub ? sub + '  ' : '') + '→ ke ' + PLACE[target];
+      const g = Guide.next(st, mapId);
+      if (g && g.type === 'warp') sub = (sub ? sub + '  ' : '') + '→ ke ' + PLACE[g.to] + ' (ikuti panah)';
       if (sub) { ctx.fillStyle = '#ffe14d'; ctx.font = '9px "Press Start 2P", monospace'; ctx.fillText(sub, 64, 47); }
     }
     ctx.fillStyle = 'rgba(18,48,28,0.82)'; rr(10, 66, 120, 30, 10); ctx.fill();

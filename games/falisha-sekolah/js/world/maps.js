@@ -32,7 +32,7 @@ const MAPS = (() => {
     for (const [key, v] of Object.entries(def.spawns)) spawns[key] = { ...P(v[0], v[1]), face: v[2] || 'down' };
     return {
       bg: def.bg, walls, spawns, charH: def.charH || 76,
-      warps: def.warps.map(w => ({ ...R(w.r), to: w.to, at: w.at })),
+      warps: def.warps.map(w => ({ ...R(w.r), to: w.to, at: w.at, dir: w.dir || null })),
       npcs: def.npcs.map(([id, x, y, face, when]) => ({ id, ...P(x, y), face: face || 'down', when: when || null })),
       objects: def.objects.map(([id, sprite, item, x, y, step]) => ({ id, sprite, item, ...P(x, y), step })),
       spots: def.spots.map(([id, r, sprite]) => ({ id, ...R(r), sprite: sprite || null }))
@@ -68,8 +68,8 @@ const MAPS = (() => {
     walk: [[[880, 640], [1830, 885], [1830, 930], [1330, 1116], [0, 1116], [0, 1010], [300, 985]]],
     block: [[860, 560, 60, 80], [690, 700, 30, 70], [1365, 960, 45, 90]],
     spawns: { default: [1640, 960, 'left'], jalan: [1640, 960, 'left'], kelas: [605, 915, 'down'], musala: [1240, 835, 'down'], lapangan: [170, 1070, 'right'] },
-    warps: [{ r: [1730, 870, 100, 60], to: 'jalan', at: 'gerbang' }, { r: [555, 825, 100, 40], to: 'kelas', at: 'gerbang' },
-      { r: [1195, 750, 90, 40], to: 'musala', at: 'gerbang' }, { r: [0, 1030, 60, 86], to: 'lapangan', at: 'gerbang' }],
+    warps: [{ r: [1730, 870, 100, 60], to: 'jalan', at: 'gerbang', dir: 'right' }, { r: [555, 825, 100, 40], to: 'kelas', at: 'gerbang' },
+      { r: [1195, 750, 90, 40], to: 'musala', at: 'gerbang' }, { r: [0, 1030, 60, 86], to: 'lapangan', at: 'gerbang', dir: 'left' }],
     npcs: [['satpam', 1560, 1000, 'left'], ['guru', 1000, 800, 'down'], ['nono', 1460, 1010, 'left', 'pulang'], ['arsyad', 1290, 1065, 'left', 'pulang']],
     objects: [['pensil1', 'pensil_merah', 'pensil', 420, 1050, 'pensil'], ['sampah1', 'kertas', 'sampah', 800, 980, 'piket'],
       ['sampah2', 'bungkus', 'sampah', 1120, 900, 'piket'], ['sampah3', 'botol_plastik', 'sampah', 560, 1080, 'piket']],
