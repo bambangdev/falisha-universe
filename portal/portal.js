@@ -24,6 +24,9 @@ const GAMES = [
   { id: 'falisha-sekolah', title: 'Petualangan Falisha di MIMHa', href: 'games/falisha-sekolah/', cover: 'portal/cover_game8.jpg',
     desc: 'Satu hari sekolah di Madrasah Interaktif Miftahul Huda! Wudhu, shalat dhuha, belajar Iqro & berhitung, jajan di kantin, lompat tali, dan bantu teman.',
     tags: ['RPG Sekolah', '7 Mini-game', 'Edukasi'] },
+  { id: 'falisha-surfers', title: 'Falisha Surfers', href: 'games/falisha-surfers/', cover: 'portal/cover_game9.jpg',
+    desc: 'Remake Subway Surfers 3D! Lari di rel KRL, lompat, guling, naik atap kereta, kumpulkan koin, pakai jetpack & hoverboard, dan kabur dari Pak Satpam!',
+    tags: ['Endless Runner', '3D', '5 Karakter'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');

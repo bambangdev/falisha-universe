@@ -40,6 +40,13 @@ Portal web game retro pixel art untuk keluarga, dioptimalkan untuk layar tablet 
 - **7 mini-game:** urutan wudhu, shalat dhuha, huruf hijaiyah, berhitung apel, susun doa, belanja di kantin (uang pas), lompat tali — tanpa kalah, ada rapor bintang
 - **Path:** `/games/falisha-sekolah/`
 
+### 9. Falisha Surfers 🛹🚆
+- **Genre:** Endless runner 3D ala *Subway Surfers* (Three.js)
+- **Pelari:** Falisha, Arsyad, Babah Nono, Ibu Pupu, Baymax. Dikejar Pak Satpam & kucing oren
+- **Fitur:** 3 jalur rel KRL, lompat/guling/geser, naik atap kereta lewat tanjakan, kereta melaju, koin, magnet, jetpack, sepatu super, skor x2, hoverboard, kotak misteri, rekor tersimpan
+- **Sprite:** dibuat manual dengan Nano Banana memakai [prompt ini](docs/plans/09-falisha-surfers-sprite-prompts.md), lalu upload ke `games/falisha-surfers/assets/raw/` (latar magenta dihapus otomatis). Sebelum sprite ada, game memakai karakter chibi 3D dengan wajah dari foto `assets/Photo/`
+- **Path:** `/games/falisha-surfers/`
+
 ---
 
 ## 🚀 Menjalankan Secara Lokal
