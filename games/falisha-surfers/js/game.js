@@ -90,7 +90,7 @@ const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.3), new THREE.MeshB
 shadow.rotation.x = -Math.PI / 2; scene.add(shadow);
 function makeActor(c) {
   const cells = assets.runners[c.id];
-  const a = cells ? new M.SpriteActor(cells, c.h * 1.12) : new M.ChibiActor(c);
+  const a = cells ? new M.SpriteActor(cells, c.h * 1.12, cells.map) : new M.ChibiActor(c);
   if (!cells) a.root.rotation.y = Math.PI;
   return a;
 }
@@ -103,8 +103,9 @@ function makeChaser() {
   if (chaser) { scene.remove(chaser.root); scene.remove(cat); }
   const cs = assets.chaser;
   if (cs) {
-    chaser = new M.SpriteActor(cs, CHASER.h * 1.12, { run: [0, 1, 2, 3], grab: 6, caught: 6, idle: 0 });
-    catSprite = new M.SpriteActor(cs, 0.6, { run: [4, 5] }); cat = catSprite.root;
+    const m = cs.map || { run: [0, 1, 2, 3], cat: [4, 5], grab: 6 };
+    chaser = new M.SpriteActor(cs, CHASER.h * 1.12, { run: m.run, grab: m.grab, caught: m.grab, idle: m.run[0] });
+    catSprite = new M.SpriteActor(cs, 0.6, { run: m.cat }); cat = catSprite.root;
   } else {
     chaser = new M.ChibiActor(CHASER); chaser.root.rotation.y = Math.PI;
     catSprite = null; cat = catModel();
@@ -435,7 +436,7 @@ function buildMenu() {
   const grid = $('chars'); grid.innerHTML = '';
   CHARS.forEach((c, i) => {
     const b = document.createElement('button'); b.className = 'char' + (i === charIdx ? ' sel' : '');
-    const cells = assets.runners[c.id], src = (cells && portraitURL(cells[15] || cells[12])) || `assets/faces/${c.id}.jpg`;
+    const cells = assets.runners[c.id], src = (cells && portraitURL(cells[cells.map.portrait] || cells[cells.map.idle])) || `assets/faces/${c.id}.jpg`;
     b.innerHTML = `<img src="${src}" alt=""><b>${c.name}</b><small>${c.tag}</small>`;
     b.onclick = () => { Chip?.ensure(); Chip?.beep(880, 0.06); setChar(i); grid.querySelectorAll('.char').forEach((e, j) => e.classList.toggle('sel', j === i)); };
     grid.appendChild(b);
@@ -461,7 +462,8 @@ function gameOver() {
   $('o-title').textContent = deathKind === 'caught' ? 'Ketangkap Pak Satpam! 👮' : 'Nabrak! 💥';
   $('o-score').textContent = s.toLocaleString('id-ID'); $('o-coins').textContent = coinRun;
   $('o-best').textContent = Math.max(s, b).toLocaleString('id-ID'); $('o-new').classList.toggle('hidden', !nb);
-  $('o-face').src = (assets.runners[CHARS[charIdx].id] && portraitURL(assets.runners[CHARS[charIdx].id][14])) || `assets/faces/${CHARS[charIdx].id}.jpg`;
+  const rc = assets.runners[CHARS[charIdx].id];
+  $('o-face').src = (rc && portraitURL(rc[rc.map.caught] || rc[rc.map.portrait])) || `assets/faces/${CHARS[charIdx].id}.jpg`;
   show('over');
 }
 function pause(on) {
@@ -532,7 +534,18 @@ function frame(now) {
   try { assets = await loadAll(CHARS.map(c => c.id)); } catch (e) { console.warn('Sprite gagal dimuat', e); assets = { runners: {} }; }
   trainTex = M.trainTextures(assets);
   far.material.map = assets.city ? M.imgTexture(assets.city) : (farTex = skyline());
-  if (assets.city) { far.material.transparent = false; far.scale.set(1, 1100 / 260 / (assets.city.width / assets.city.height), 1); far.position.y = 40; }
+  if (assets.city) {
+    const t = far.material.map, ar = assets.city.width / assets.city.height, tileW = 520, W = 1600;
+    t.wrapS = THREE.MirroredRepeatWrapping; t.repeat.x = W / tileW;
+    far.material.transparent = false; far.scale.set(W / 1100, tileW / ar / 260, 1); far.position.y = tileW / ar / 2 - 40;
+    // langit menyambung dengan warna bagian atas gambar
+    const c = document.createElement('canvas'); c.width = 32; c.height = 4;
+    c.getContext('2d').drawImage(assets.city, 0, 0, assets.city.width, assets.city.height * 0.04, 0, 0, 32, 4);
+    const d = c.getContext('2d').getImageData(0, 0, 32, 4).data; let r = 0, g = 0, b = 0;
+    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; }
+    const n = d.length / 4, top = `rgb(${r / n | 0},${g / n | 0},${b / n | 0})`;
+    scene.background = new THREE.Color(top);
+  }
   far.material.needsUpdate = true;
   setChar(Math.min(charIdx, CHARS.length - 1)); makeChaser();
   toMenu();

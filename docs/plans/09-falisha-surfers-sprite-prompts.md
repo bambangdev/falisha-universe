@@ -3,9 +3,10 @@
 Buat **satu gambar per prompt** di Gemini (Nano Banana), simpan dengan **nama file persis** seperti judul bagian, lalu upload ke
 **`games/falisha-surfers/assets/raw/`** (GitHub → *Add file → Upload files*).
 
-Game **membaca file ini langsung**. Latar magenta dihapus otomatis di browser, jadi tidak perlu build atau script. Selama file
-belum ada, game memakai karakter 3D sementara yang wajahnya diambil dari foto. Upload sebagian dulu juga boleh, misalnya hanya
-`runner_falisha.png`.
+Setelah upload, file diolah dengan `games/falisha-surfers/tools/build_sprites.py` (cukup minta Claude). Tool ini mendeteksi
+setiap pose otomatis, jadi grid dari Gemini **tidak harus persis**. Latar dan bayangan magenta dihapus, lalu hasilnya disimpan
+sebagai atlas transparan di `assets/sprites/`. Nomor frame → pose diatur di bagian `SHEETS` pada tool itu. Selama atlas belum
+ada, game memakai karakter 3D sementara yang wajahnya diambil dari foto.
 
 Format **PNG** paling bagus. JPG juga bisa dibaca, tapi pinggiran sprite jadi kurang bersih.
 
@@ -169,17 +170,17 @@ in the background. Bright, energetic, kid-friendly.
 ---
 
 ## Checklist upload
-- [ ] runner_falisha.png
-- [ ] runner_arsyad.png
-- [ ] runner_nono.png
-- [ ] runner_pupu.png
-- [ ] runner_baymax.png
-- [ ] chaser.png
-- [ ] items.png
-- [ ] obstacles.png
-- [ ] train_front.png
-- [ ] train_side.png
-- [ ] bg_city.png
-- [ ] cover.png
+- [x] runner_falisha.png
+- [x] runner_arsyad.png
+- [x] runner_nono.png
+- [x] runner_pupu.png
+- [x] runner_baymax.png
+- [x] chaser.png
+- [x] items.png
+- [x] obstacles.png
+- [x] train_front.png
+- [x] train_side.png
+- [x] bg_city.png
+- [x] cover.png
 
 Urutan paling berguna: **runner_falisha → items → chaser → obstacles → kereta → latar → pelari lain → cover.**

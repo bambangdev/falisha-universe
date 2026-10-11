@@ -279,17 +279,17 @@ export function makeRamp(len, h) {
 
 /* ---------- rintangan: low (lompat), high (guling), cart (lompat), boxes (lompat) ---------- */
 export const OBST = {
-  low: { y0: 0, y1: 1.0, w: 2.0, d: 0.35, cell: 0 },
-  high: { y0: 1.15, y1: 2.6, w: 2.1, d: 0.35, cell: 1 },
-  cart: { y0: 0, y1: 1.3, w: 1.7, d: 1.0, cell: 2 },
-  boxes: { y0: 0, y1: 1.25, w: 1.5, d: 1.0, cell: 3 }
+  low: { y0: 0, y1: 1.0, w: 2.0, d: 0.35, cell: 0, sh: 1.05 },
+  high: { y0: 1.15, y1: 2.6, w: 2.1, d: 0.35, cell: 1, sh: 2.05 },
+  cart: { y0: 0, y1: 1.3, w: 1.7, d: 1.0, cell: 2, sh: 1.65 },
+  boxes: { y0: 0, y1: 1.25, w: 1.5, d: 1.0, cell: 3, sh: 1.3 }
 };
 const stripes = (a, b) => canvas(256, 64, (g, w, h) => { g.fillStyle = a; g.fillRect(0, 0, w, h); g.fillStyle = b;
   for (let x = -h; x < w; x += 56) { g.beginPath(); g.moveTo(x, h); g.lineTo(x + h, 0); g.lineTo(x + h + 26, 0); g.lineTo(x + 26, h); g.fill(); } });
 let stripeRW, stripeYB;
 export function makeObstacle(type, cells) {
   const o = OBST[type], cell = cells && cells[o.cell];
-  if (cell) return billboard(cell, o.w * 1.08);
+  if (cell) return billboard(cell, 0, o.sh);
   const g = new THREE.Group(), post = mat('#9aa3ad', { metalness: 0.6, roughness: 0.3 });
   stripeRW ||= stripes('#ffffff', '#e02424'); stripeYB ||= stripes('#ffd21a', '#1e1e1e');
   if (type === 'low') {
@@ -318,8 +318,8 @@ export function makeObstacle(type, cells) {
   return g;
 }
 
-export function billboard(cell, width) {
-  const s = width / (cell.x1 - cell.x0 + 1), geo = new THREE.PlaneGeometry(cell.w * s, cell.h * s);
+export function billboard(cell, width, height) {
+  const s = height ? height / (cell.y1 - cell.y0 + 1) : width / (cell.x1 - cell.x0 + 1), geo = new THREE.PlaneGeometry(cell.w * s, cell.h * s);
   geo.translate(-((cell.x0 + cell.x1) / 2 - cell.w / 2) * s, -(cell.h / 2 - cell.y1) * s, 0);
   const g = new THREE.Group();
   g.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: cellTexture(cell), transparent: true, alphaTest: 0.35, side: THREE.DoubleSide })));
@@ -371,7 +371,7 @@ export function makeCatenary() {
   return g;
 }
 export function makeLamp(cells) {
-  if (cells && cells[4]) return billboard(cells[4], 0.9);
+  if (cells && cells[4]) return billboard(cells[4], 0, 3.8);
   const g = new THREE.Group(), m = mat('#2f7d4f', { metalness: 0.4, roughness: 0.4 });
   const p = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 4, 10), m); p.position.y = 2; g.add(p);
   const arm = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.08, 0.08), m); arm.position.set(0.35, 3.95, 0); g.add(arm);
@@ -380,7 +380,7 @@ export function makeLamp(cells) {
 }
 export function makeProp(cells) {
   const pick = Math.floor(Math.random() * 3);
-  if (cells && cells[5 + pick]) return billboard(cells[5 + pick], [1.2, 1.8, 1.6][pick]);
+  if (cells && cells[5 + pick]) return billboard(cells[5 + pick], 0, [1.4, 1.1, 2.8][pick]);
   const g = new THREE.Group();
   if (pick === 1) { // bangku merah-putih
     const r = mat('#e02424'), w = mat('#f4f4f4');
