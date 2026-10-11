@@ -47,11 +47,12 @@ function buildLayers() {
   planets = makePlanetsLayer(2400, H);
   deckF = makeDeck(512, H - FLOOR + 120, false); deckC = makeDeck(512, CEIL + 120, true);
 }
-function tile(img, off, y, h, flipY = false) {
-  const w = img.width * h / img.height; let x = -((off % w) + w) % w;
-  for (; x < W; x += w) {
-    if (flipY) { g.save(); g.translate(x, y + h); g.scale(1, -1); g.drawImage(img, 0, 0, w, h); g.restore(); }
-    else g.drawImage(img, x, y, w, h);
+/* Ulang gambar ke kanan. mirror: tiap ulangan ganjil dicerminkan agar tepi gambar yang tidak seamless tetap menyambung. */
+function tile(img, off, y, h, flipY = false, mirror = false) {
+  const w = img.width * h / img.height, n0 = Math.floor(off / w); let x = -(off - n0 * w);
+  for (let n = n0; x < W; x += w, n++) {
+    const fx = mirror && n % 2 !== 0;
+    g.save(); g.translate(x + (fx ? w : 0), y + (flipY ? h : 0)); g.scale(fx ? -1 : 1, flipY ? -1 : 1); g.drawImage(img, 0, 0, w, h); g.restore();
   }
 }
 
@@ -108,7 +109,7 @@ function spawnChunk() {
     for (let i = 0; i < n; i++) {
       const rr = rnd(26, 50);
       ents.push({ type: 'rock', x: x + i * rnd(170, 260), y: rnd(CEIL + rr, FLOOR - rr), r: rr, vy: rnd(-60, 60), rot: rnd(0, TAU), vr: rnd(-2, 2),
-        shape: Array.from({ length: 11 }, () => rnd(0.78, 1.08)), cell: pick(['rock1', 'rock2']) });
+        shape: Array.from({ length: 11 }, () => rnd(0.78, 1.08)), cell: pick(['rock1', 'rock2', 'rock3']) });
     }
     return n * 220 + 160;
   }
@@ -166,7 +167,7 @@ function update(dt) {
   if ((powerGap -= mv) <= 0) { const k = pick(['shield', 'shield', 'magnet', 'double', 'boost', 'heart']); ents.push({ type: 'power', k, x: W + 60, y: rnd(CEIL + 90, FLOOR - 90), ph: 0 }); powerGap = rnd(2400, 3800); }
   if ((missileT -= dt) <= 0 && laserBusy <= 0) { spawnMissiles(); missileT = rnd(6, 10) - diff() * 3; }
   if (dist > 5000 && (laserT -= dt) <= 0 && laserBusy <= 0 && !ents.some(e => e.type === 'zap' && e.x < W + 100)) { spawnLaser(); laserT = rnd(22, 34) - diff() * 8; }
-  if (ART.decor && (decorGap -= mv * 0.35) <= 0) { decor.push({ x: W + 150, y: rnd(CEIL + 60, FLOOR - 160), k: Math.floor(Math.random() * 8), s: rnd(70, 130) }); decorGap = rnd(700, 1300); }
+  if (ART.decor && (decorGap -= mv * 0.35) <= 0) { decor.push({ x: W + 150, y: rnd(CEIL + 60, FLOOR - 160), k: pick([0, 1, 3, 4, 6, 7]), s: rnd(60, 105) }); decorGap = rnd(700, 1300); }
   // entitas
   const hx = P.x + 4, hy = P.y - 8;
   for (const e of ents) {
@@ -235,24 +236,16 @@ function updateDead(dt) {
 const FA = () => ART.falisha;
 let faScale = 0;
 function falishaFrame(pose, t) {
-  const f = FA(), m = f.map, cyc = (a, sp) => a[Math.floor(t * sp) % a.length];
-  switch (pose) {
-    case 'run': return f[cyc(m.run, 12)];
-    case 'fly': return f[cyc(m.fly, 14)];
-    case 'fall': return f[m.fall];
-    case 'zap': return f[m.zap];
-    case 'tumble': return f[cyc(m.tumble, 8)];
-    case 'dizzy': return f[m.dizzy];
-    default: return f[m.wave];
-  }
+  const f = FA(), m = f.map, cyc = (v, sp) => Array.isArray(v) ? v[Math.floor(t * sp) % v.length] : v;
+  const SP = { run: 10, fly: 14, zap: 12, tumble: 8 };
+  return f[cyc(m[pose] ?? m.wave, SP[pose] || 1)] || f[cyc(m.run, 10)];
 }
 function drawPlayer() {
   const blink = P.inv > 0 && P.inv < 5 && state === 'play' && Math.floor(tPlay * 14) % 2;
   if (blink) return;
   if (FA()) {
-    if (!faScale) faScale = 130 / (FA().map.run.reduce((s, i) => s + cellH(FA()[i]), 0) / FA().map.run.length);
+    if (!faScale) faScale = 148 / (FA().map.run.reduce((s, i) => s + cellH(FA()[i]), 0) / FA().map.run.length);
     const c = falishaFrame(P.pose, P.t);
-    if (P.pose === 'fly' && state === 'play') { flame(g, P.x - 40, P.y + 30, 50, tPlay); }
     drawCell(g, c, P.x, P.y + (P.pose === 'dizzy' ? 10 : 0), { s: faScale, rot: P.pose === 'tumble' && FA().map.tumble.length < 2 ? P.t * 9 : 0 });
   } else drawFalisha(g, P.x, P.y + 4, P.pose, P.t, 1.05);
   if (P.shield && state === 'play') {
@@ -286,7 +279,7 @@ function drawUfo(x, y) {
   g.fillStyle = Math.sin(tPlay * 10) > 0 ? '#ffe14a' : '#ff6b6b'; for (let i = -2; i <= 2; i++) { g.beginPath(); g.arc(x + i * 14, y + 2, 3.5, 0, TAU); g.fill(); }
 }
 function drawMissileEnt(e) {
-  if (e.st === 'fly') { if (HZ('missile')) drawCell(g, HZ('missile'), e.x, e.y, { h: 44 }); else drawMissile(g, e.x, e.y, tPlay); return; }
+  if (e.st === 'fly') { if (HZ('missile')) drawCell(g, HZ('missile'), e.x, e.y, { h: 44, flip: true }); else drawMissile(g, e.x, e.y, tPlay); return; }
   const x = W - 46, on = e.st === 'lock' || Math.floor(e.t * 8) % 2 === 0;
   if (e.t < 0) return;
   if (HZ('alarm')) drawCell(g, HZ('alarm'), x, e.y, { h: e.st === 'lock' ? 58 : 46, alpha: on ? 1 : 0.5 });
@@ -313,16 +306,16 @@ function draw() {
   g.fillStyle = '#0b0a2e'; g.fillRect(0, 0, W, innerHeight / sc);
   g.translate(0, oy);
   if (shake > 0) g.translate(rnd(-1, 1) * shake * 14, rnd(-1, 1) * shake * 14);
-  tile(space, dist * 0.05, 0, H);
+  tile(space, dist * 0.05, 0, H, false, !!ART.space);
   if (!ART.space) tile(planets, dist * 0.12, 0, H);
-  for (const d of decor) if (ART.decor[d.k]) drawCell(g, ART.decor[d.k], d.x, d.y, { h: d.s, alpha: 0.85 });
+  for (const d of decor) if (ART.decor[d.k]) drawCell(g, ART.decor[d.k], d.x, d.y, { h: d.s, alpha: 0.6 });
   // dek
   if (ART.floor) { tile(ART.floor, dist, FLOOR - 6, H - FLOOR + 140); tile(ART.floor, dist, CEIL - (H - FLOOR + 140) + 6, H - FLOOR + 140, true); }
   else { tile(deckF, dist, FLOOR - 4, deckF.height); tile(deckC, dist, CEIL - deckC.height + 4, deckC.height); }
   // koin
   for (const c of coins) {
     if (c.x < -40 || c.x > W + 40) continue;
-    const cc = ART.items && ART.items[0];
+    const cc = ART.items && ART.items[ART.items.map.coin];
     if (cc) { g.save(); g.translate(c.x, c.y); g.scale(Math.max(0.2, Math.abs(Math.cos(tPlay * 3 + c.x * 0.01))), 1); drawCell(g, cc, 0, 0, { h: 34 }); g.restore(); }
     else drawCoin(g, c.x, c.y, 15, tPlay);
   }

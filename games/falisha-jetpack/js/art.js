@@ -195,6 +195,7 @@ export function drawPower(g, k, x, y, t) {
   const rg = g.createRadialGradient(x - 8, y - 10, 3, x, y, r); rg.addColorStop(0, 'rgba(255,255,255,.95)'); rg.addColorStop(0.6, p.color + 'aa'); rg.addColorStop(1, p.color + '00');
   g.fillStyle = rg; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill();
   g.strokeStyle = p.color; g.lineWidth = 3; g.beginPath(); g.arc(x, y, r - 2, t * 3, t * 3 + 4.5); g.stroke();
-  if (ART.items && ART.items[p.cell]) drawCell(g, ART.items[p.cell], x, y, { h: 40 });
+  const ic = ART.items && ART.items[ART.items.map[k]];
+  if (ic) drawCell(g, ic, x, y, { h: 40 });
   else { g.font = '30px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(p.emoji, x, y + 2); }
 }

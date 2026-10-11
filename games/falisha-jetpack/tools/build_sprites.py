@@ -15,11 +15,13 @@ ROOT = 'games/falisha-jetpack'
 RAW, OUT = f'{ROOT}/assets/raw', f'{ROOT}/assets/sprites'
 MAX_H = 300  # tinggi frame terbesar di atlas (px)
 
+# Nomor frame mengikuti urutan deteksi (lihat --debug). Gemini menggambar sebagian besar pose Falisha dari
+# belakang/depan; yang menghadap kanan: lari 2-4 dan terbang 14. Frame yang tidak dipetakan dibuang dari atlas.
 SHEETS = {
-    'falisha_astro': dict(mode='auto', run=[0, 1, 2, 3], fly=[4, 5], fall=6, land=7, zap=8, tumble=[9, 10], dizzy=11,
-                          wave=12, cheer=13, sad=14, portrait=15),
-    'hazards': dict(mode='grid', cols=4, rows=2, names=['orb', 'missile', 'alarm', 'cannon', 'rock1', 'rock2', 'mine', 'ufo']),
-    'items': dict(mode='grid', cols=4, rows=2, names=['coin', 'shield', 'magnet', 'double', 'boost', 'gem', 'heart', 'trophy']),
+    'falisha_astro': dict(mode='auto', t0=0.1, run=[2, 3, 4, 3], fly=[14], fall=13, zap=[16, 17], tumble=[10, 11, 18],
+                          dizzy=23, wave=24, cheer=25, sad=26, portrait=31),
+    'hazards': dict(mode='auto', missile=1, alarm=2, rock1=4, rock2=5, rock3=6, mine=7, ufo=8),
+    'items': dict(mode='grid', cols=8, rows=4, coin=0, shield=1, magnet=2, double=3, boost=4, heart=6, trophy=7),
     'decor': dict(mode='grid', cols=4, rows=2, names=['satellite', 'planet', 'comet', 'module', 'cat', 'ship', 'flag', 'robot']),
 }
 
@@ -161,12 +163,20 @@ def main():
         frames = cut_auto(rgba) if spec['mode'] == 'auto' else cut_grid(rgba, spec['cols'], spec['rows'])
         if dbg: debug_sheet(name, frames, dbg)
         fmap = resolve(frames, spec)
+        used = sorted({i for v in fmap.values() for i in (v if isinstance(v, list) else [v])})
+        remap = {o: n for n, o in enumerate(used)}
+        frames = [frames[i] for i in used]
+        fmap = {k: [remap[i] for i in v] if isinstance(v, list) else remap[v] for k, v in fmap.items()}
         manifest[name] = {**pack(name, frames), 'map': fmap}
         print(f'{name}: {len(frames)} frame')
     for name, size in (('bg_space', 2048), ('floor', 2048)):
         p = find(name)
         if p:
-            im = Image.open(p).convert('RGB'); im.thumbnail((size, size)); im.save(f'{OUT}/{name}.jpg', quality=85)
+            im = Image.open(p).convert('RGB')
+            if name == 'floor':  # buang latar polos di atas dek: mulai dari baris terang pertama (tepi dek)
+                rows = np.asarray(im).astype(int).mean(axis=(1, 2))
+                im = im.crop((0, int(np.argmax(rows > 100)), im.width, im.height))
+            im.thumbnail((size, size)); im.save(f'{OUT}/{name}.jpg', quality=85)
             manifest[name] = {'file': f'{name}.jpg', 'size': im.size}
     p = find('cover')
     if p:
