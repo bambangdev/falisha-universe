@@ -1,0 +1,48 @@
+/* Smoke test Playwright. Server: `python3 -m http.server 8765` dari root repo.
+   Jalankan: PW=$(npm root -g)/playwright SMOKE_OUT=dir node games/falisha-jetpack/tools/smoke.js [w h] */
+const { chromium } = require(process.env.PW || 'playwright');
+const OUT = process.env.SMOKE_OUT || '/tmp';
+const [W, H] = [+process.argv[2] || 1280, +process.argv[3] || 720];
+const fail = msg => { console.error('FAIL ' + msg); process.exitCode = 1; };
+(async () => {
+  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const p = await b.newPage({ viewport: { width: W, height: H } });
+  const errs = [];
+  p.on('pageerror', e => errs.push('pageerror: ' + e.message));
+  p.on('console', m => { if (m.type() === 'error' && !/404|Failed to load resource/.test(m.text())) errs.push(m.text()); });
+  await p.goto('http://localhost:8765/games/falisha-jetpack/');
+  await p.waitForFunction(() => window.__jet && __jet.state() === 'menu', null, { timeout: 20000 });
+  await p.waitForTimeout(800);
+  await p.screenshot({ path: `${OUT}/menu_${W}.png` });
+  await p.keyboard.press('Enter');
+  await p.evaluate(() => { __jet.P.inv = 1e9; __jet.step(60 * 6); });
+  await p.waitForTimeout(300);
+  await p.screenshot({ path: `${OUT}/run_${W}.png` });
+  await p.keyboard.down('Space'); await p.waitForTimeout(700);
+  const yUp = await p.evaluate(() => __jet.P.y);
+  await p.screenshot({ path: `${OUT}/fly_${W}.png` });
+  await p.keyboard.up('Space');
+  if (yUp > 560) fail('tidak terbang saat Spasi ditahan (y=' + yUp + ')');
+  await p.evaluate(() => { __jet.spawnMissiles(); __jet.spawnLaser(); __jet.step(110); });
+  await p.waitForTimeout(300);
+  await p.screenshot({ path: `${OUT}/warn_${W}.png` });
+  await p.evaluate(() => { __jet.step(30); });
+  await p.waitForTimeout(300);
+  await p.screenshot({ path: `${OUT}/laser_${W}.png` });
+  await p.evaluate(() => { ['shield', 'magnet', 'double', 'heart'].forEach(k => __jet.collect(k)); __jet.hold(true); __jet.step(60 * 60); __jet.hold(false); __jet.step(60 * 60); });
+  await p.waitForTimeout(300);
+  await p.screenshot({ path: `${OUT}/far_${W}.png` });
+  const info = await p.evaluate(() => ({ st: __jet.state(), dist: __jet.dist(), ents: __jet.ents(), coins: __jet.coins() }));
+  console.log('info', JSON.stringify(info));
+  if (info.st !== 'play' || info.dist < 20000) fail('tidak berjalan normal');
+  if (info.ents > 60 || info.coins > 400) fail('entitas menumpuk');
+  await p.evaluate(() => { __jet.collect('boost'); __jet.step(60); });
+  await p.waitForTimeout(300);
+  await p.screenshot({ path: `${OUT}/boost_${W}.png` });
+  await p.evaluate(() => { __jet.P.inv = 0; __jet.pw.boost = 0; __jet.P.shield = false; __jet.P.lives = 0; for (let i = 0; i < 200 && __jet.state() === 'play'; i++) __jet.step(60); __jet.stepDead(60 * 6); });
+  await p.waitForFunction(() => __jet.state() === 'over', null, { timeout: 30000 }).catch(() => fail('tidak game over'));
+  await p.waitForTimeout(400);
+  await p.screenshot({ path: `${OUT}/over_${W}.png` });
+  if (errs.length) fail(errs.join('\n')); else console.log('OK tanpa error');
+  await b.close();
+})();

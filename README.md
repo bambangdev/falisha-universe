@@ -47,6 +47,13 @@ Portal web game retro pixel art untuk keluarga, dioptimalkan untuk layar tablet 
 - **Sprite:** render 3D kartun dari Nano Banana ([prompt](docs/plans/09-falisha-surfers-sprite-prompts.md)). File asli di `games/falisha-surfers/assets/raw/`, diolah jadi atlas transparan dengan `python3 -I games/falisha-surfers/tools/build_sprites.py`
 - **Path:** `/games/falisha-surfers/`
 
+### 10. Falisha Jetpack 🚀🪐
+- **Genre:** Side-scroller endless ala *Jetpack Joyride*, berlatar luar angkasa
+- **Karakter:** Falisha si astronot
+- **Fitur:** tahan untuk terbang; zapper listrik (diam & berputar), roket berpemandu dengan peringatan, laser horizontal, asteroid, ranjau, UFO; koin bintang; power-up perisai, magnet, koin x2, turbo, dan nyawa tambahan; rekor tersimpan
+- **Sprite:** dibuat dengan Nano Banana memakai [prompt ini](docs/plans/10-falisha-jetpack-sprite-prompts.md), lalu diolah dengan `python3 -I games/falisha-jetpack/tools/build_sprites.py`. Sebelum sprite ada, game memakai grafis sementara dengan wajah dari foto
+- **Path:** `/games/falisha-jetpack/`
+
 ---
 
 ## 🚀 Menjalankan Secara Lokal

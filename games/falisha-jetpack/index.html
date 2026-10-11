@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b0a2e">
+  <title>Falisha Jetpack</title>
+  <meta name="description" content="Falisha Jetpack: remake Jetpack Joyride di luar angkasa. Tahan untuk terbang, hindari zapper listrik, roket, laser dan asteroid, kumpulkan koin bintang!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Lilita+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Jetpack</h1>
+    <canvas id="game" aria-label="Layar game Falisha Jetpack"></canvas>
+
+    <div id="sys">
+      <a class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-pause" class="sbtn" aria-label="Pause">⏸</button>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+    </div>
+
+    <div id="rotate">📱🔄<p>Putar HP ke posisi tidur (landscape) supaya lebih seru!</p></div>
+
+    <section id="loading" class="panel"><div class="spin"></div><p>Memuat…</p></section>
+
+    <section id="hud" class="hidden">
+      <div class="hud-r">
+        <div class="pill dist" id="h-dist">0 m</div>
+        <div class="pill best" id="h-best">Rekor 0 m</div>
+        <div class="pill coin">⭐ <span id="h-coins">0</span></div>
+      </div>
+      <div id="h-powers"></div>
+      <button id="fly" type="button" aria-label="Tahan untuk terbang">🚀<small>TAHAN</small></button>
+      <div id="toast"></div>
+    </section>
+
+    <section id="menu" class="hidden">
+      <div class="menu-card">
+        <img id="m-face" class="hero" alt="Falisha">
+        <h2 class="logo">FALISHA<span>JETPACK</span></h2>
+        <p class="sub">Petualangan Angkasa! Terbang, hindari zapper &amp; roket, kumpulkan koin bintang.</p>
+        <button id="btn-start" class="big">▶ MAIN</button>
+        <div class="stats">
+          <span>🏆 Rekor <b id="m-best">0 m</b></span>
+          <span>⭐ Koin <b id="m-coins">0</b></span>
+        </div>
+        <p class="howto">Tahan layar / tombol 🚀 untuk terbang, lepas untuk turun<br>Keyboard: tahan Spasi atau ↑ • P pause • M suara</p>
+        <p id="m-sprites" class="note"></p>
+      </div>
+    </section>
+
+    <section id="over" class="hidden">
+      <div class="menu-card small">
+        <img id="o-face" class="face" alt="">
+        <h2>Aduh, kena! 💫</h2>
+        <p id="o-new" class="new hidden">⭐ REKOR BARU! ⭐</p>
+        <div class="result">
+          <div><small>Jarak</small><b id="o-dist">0 m</b></div>
+          <div><small>Koin</small><b id="o-coins">0</b></div>
+          <div><small>Rekor</small><b id="o-best">0 m</b></div>
+        </div>
+        <button id="btn-again" class="big">↻ TERBANG LAGI</button>
+        <button id="btn-menu" class="ghost">Ke Menu</button>
+      </div>
+    </section>
+
+    <section id="pause" class="hidden">
+      <div class="menu-card small">
+        <h2>Istirahat dulu ⏸</h2>
+        <button id="btn-resume" class="big">▶ LANJUT</button>
+        <button id="btn-quit" class="ghost">Keluar ke Menu</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
