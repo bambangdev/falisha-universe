@@ -27,6 +27,9 @@ const GAMES = [
   { id: 'falisha-surfers', title: 'Falisha Surfers', href: 'games/falisha-surfers/', cover: 'portal/cover_game9.jpg',
     desc: 'Remake Subway Surfers 3D! Lari di rel KRL, lompat, guling, naik atap kereta, kumpulkan koin, pakai jetpack & hoverboard, dan kabur dari Pak Satpam!',
     tags: ['Endless Runner', '3D', '5 Karakter'] },
+  { id: 'falisha-jetpack', title: 'Falisha Jetpack', href: 'games/falisha-jetpack/', cover: 'portal/cover_game10.jpg',
+    desc: 'Remake Jetpack Joyride di luar angkasa! Tahan untuk terbang, hindari zapper listrik, roket, laser & asteroid, kumpulkan koin bintang dan power-up.',
+    tags: ['Jetpack', 'Luar Angkasa', 'Endless'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 const grid = document.getElementById('grid');
