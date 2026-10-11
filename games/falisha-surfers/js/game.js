@@ -514,6 +514,21 @@ $('btn-resume').onclick = () => pause(false);
 $('btn-quit').onclick = () => { state = 'over'; toMenu(); };
 $('h-board').onclick = useBoard;
 
+/* joypad virtual (tablet/HP). Default menyala di layar sentuh; pilihan disimpan. */
+const touchDev = matchMedia('(pointer: coarse), (hover: none)').matches;
+function setPad(on) { document.body.classList.toggle('pad-on', on); store.set('pad', on); $('btn-pad').classList.toggle('off', !on); }
+setPad(store.get('pad', touchDev));
+$('btn-pad').onclick = () => setPad(!document.body.classList.contains('pad-on'));
+const PAD = { left: () => moveLane(-1), right: () => moveLane(1), jump, roll };
+document.querySelectorAll('.pbtn').forEach(b => {
+  b.addEventListener('pointerdown', e => {
+    e.preventDefault(); e.stopPropagation(); Chip?.ensure(); b.classList.add('on'); PAD[b.dataset.act]();
+  });
+  const up = () => b.classList.remove('on');
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => b.addEventListener(t, up));
+  b.addEventListener('contextmenu', e => e.preventDefault());
+});
+
 /* ---------- loop ---------- */
 let last = performance.now();
 function frame(now) {

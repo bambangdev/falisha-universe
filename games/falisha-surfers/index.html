@@ -26,6 +26,7 @@
       <button id="btn-pause" class="sbtn" aria-label="Pause">⏸</button>
       <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
       <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+      <button id="btn-pad" class="sbtn" aria-label="Tampilkan atau sembunyikan joypad">🎮</button>
     </div>
 
     <section id="loading" class="panel center"><div class="spin"></div><p>Memuat…</p></section>
@@ -39,6 +40,16 @@
         <div class="pill coin">🪙 <span id="h-coins">0</span></div>
       </div>
       <button id="h-board" class="boardbtn" aria-label="Pakai hoverboard">🛹 3</button>
+      <div id="pad" aria-label="Joypad virtual">
+        <div class="pad-l">
+          <button type="button" class="pbtn" data-act="left" aria-label="Pindah kiri">◀</button>
+          <button type="button" class="pbtn" data-act="right" aria-label="Pindah kanan">▶</button>
+        </div>
+        <div class="pad-r">
+          <button type="button" class="pbtn" data-act="jump" aria-label="Lompat">▲</button>
+          <button type="button" class="pbtn" data-act="roll" aria-label="Guling">▼</button>
+        </div>
+      </div>
       <div id="toast"></div>
     </section>
 
@@ -53,7 +64,7 @@
           <span>🪙 Koin <b id="m-coins">0</b></span>
           <span>🛹 <b id="m-boards">3</b></span>
         </div>
-        <p class="howto">Geser ⬅➡ pindah jalur • Geser ⬆ lompat • Geser ⬇ guling • Ketuk 2x hoverboard<br>
+        <p class="howto">Tombol joypad ◀ ▶ ▲ ▼ atau geser layar • Ketuk 2x / 🛹 hoverboard • 🎮 sembunyikan joypad<br>
           Keyboard: ←/→ • ↑/Spasi • ↓ • H hoverboard • P pause</p>
         <p id="m-sprites" class="note"></p>
       </div>
