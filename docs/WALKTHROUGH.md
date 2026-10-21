@@ -12,7 +12,7 @@ Catatan perjalanan pengembangan dari awal sampai akhir. Plan detail tiap game ad
 | 4 | Falisha Pac | Arcade maze (remake Pac-Man) | `/games/falisha-pac/` | [plan](plans/04-falisha-pac-plan.md) |
 | 5 | Falisha Kart | Kart racing ala Mario Kart (Mode 7) | `/games/falisha-kart/` | [plan](plans/05-falisha-kart-plan.md) |
 
-Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan untuk tablet (Samsung Tab S8) dan desktop. Portal ada di `/` (`index.html`, `portal/`).
+Semua game: HTML5 Canvas + Web Audio + Vanilla CSS, tanpa backend, dioptimalkan untuk tablet (Samsung Tab S8) dan desktop. Portal ada di `/` (`index.html`, `portal/`), tampilannya ala home konsol (PS5 / Nintendo Switch): latar blur sampul game terpilih, hero judul + tombol MAIN, rel ubin mendatar dengan ubin terpilih yang membesar dan berpendar, bar petunjuk tombol di bawah. Navigasi: panah kiri/kanan, D-pad/stik gamepad, hover & roda mouse, geser/tap di layar sentuh; Enter/A/tap ubin terpilih untuk main. Pilihan terakhir diingat di `localStorage`.
 
 ## Kronologi
 
