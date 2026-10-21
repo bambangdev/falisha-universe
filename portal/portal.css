@@ -1,33 +1,119 @@
-:root { --gold:#ffd23f; --red:#ff4d5a; --night:#0b1030; }
+/* Portal Dunia Falisha – tampilan home ala konsol (PS5 / Nintendo Switch) */
+:root {
+  --gold:#ffd23f; --red:#ff4d5a; --night:#06091c;
+  --cyan:#3ee0ff; --cyan2:#9ff4ff;
+  --tile-w: clamp(150px, 21vw, 290px);
+  --tile-gap: clamp(12px, 1.6vw, 22px);
+  --pad: clamp(16px, 4vw, 56px);
+  --font-ui: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-px: 'Press Start 2P', monospace;
+}
 * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html, body { margin:0; min-height:100%; background: radial-gradient(circle at 50% 0%, #2a2f86 0%, #141a52 40%, var(--night) 100%) fixed; color:#fff; font-family:'Press Start 2P', monospace; }
-body { overflow-x:hidden; min-height:100dvh; display:flex; flex-direction:column; align-items:center; padding:24px 20px 20px; }
-#stars { position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
-.top, .grid, .foot { position:relative; z-index:1; }
-.top { text-align:center; margin-top:8px; }
-.logo { margin:0; font-size:clamp(26px, 5vw, 52px); line-height:1.4; letter-spacing:2px; text-shadow: 0 0 20px rgba(255,210,63,.7), 4px 4px 0 #3a0d1a; }
-.logo span { color:#fff; } .logo b { color:var(--gold); animation: glow 2.2s ease-in-out infinite; }
-@keyframes glow { 50% { text-shadow: 0 0 28px #fff36b, 4px 4px 0 #3a0d1a; filter:brightness(1.25); } }
-.tag { font-size:clamp(10px,1.4vw,14px); color:#cfd6ff; margin:14px 0 0; }
-.sbtn { position:fixed; top:10px; right:10px; width:46px; height:46px; border-radius:10px; border:2px solid var(--gold); background:rgba(11,16,48,.6); color:#fff; font-size:20px; opacity:.8; cursor:pointer; }
-.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap:26px; width:min(1200px, 100%); margin:32px 0; flex:1; align-content:start; }
-.card { position:relative; display:block; text-decoration:none; color:#fff; border-radius:18px; overflow:hidden; border:3px solid var(--gold); background:#10153f; box-shadow:0 10px 30px rgba(0,0,0,.5), 0 0 0 0 rgba(255,210,63,.0); transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s; animation: rise .7s both; }
-.card:nth-child(2) { animation-delay:.12s } .card:nth-child(3) { animation-delay:.24s }
-@keyframes rise { from { opacity:0; transform:translateY(30px) scale(.96); } }
-.card:hover, .card:focus-visible { transform: translateY(-8px) scale(1.02); box-shadow:0 18px 40px rgba(0,0,0,.6), 0 0 36px rgba(255,210,63,.55); outline:none; }
-.card:active { transform: scale(.98); }
-.cover { aspect-ratio:16/9; width:100%; display:block; object-fit:cover; image-rendering:pixelated; transition: transform .6s; }
-.card:hover .cover { transform: scale(1.06); }
-.shine { position:absolute; inset:0 0 auto 0; aspect-ratio:16/9; background:linear-gradient(110deg, transparent 40%, rgba(255,255,255,.35) 50%, transparent 60%); transform:translateX(-100%); pointer-events:none; }
-.card:hover .shine { transform:translateX(100%); transition: transform .8s; }
-.info { padding:16px 18px 18px; background:linear-gradient(180deg,#171d5a,#0f1342); }
-.info h2 { margin:0 0 10px; font-size:clamp(14px,2vw,20px); color:var(--gold); line-height:1.4; }
-.info p { margin:0 0 14px; font-size:10px; line-height:1.8; color:#d7ddff; }
-.chips { display:flex; flex-wrap:wrap; gap:8px; }
-.chip { font-size:8px; padding:6px 8px; border-radius:20px; background:rgba(255,210,63,.15); border:1px solid rgba(255,210,63,.5); color:#ffe9a0; }
-.play { position:absolute; right:14px; top:14px; padding:10px 14px; border-radius:30px; background:var(--red); font-size:10px; box-shadow:0 0 14px rgba(255,77,90,.8); }
-.card.locked { filter:grayscale(.9) brightness(.6); border-color:#555; cursor:not-allowed; pointer-events:none; }
-.card.locked .play { background:#444; box-shadow:none; }
-.lockcover { aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:64px; background:repeating-linear-gradient(45deg,#1a1f55,#1a1f55 14px,#141842 14px,#141842 28px); }
-.foot { font-size:9px; color:#8e97d8; margin-top:8px; text-align:center; }
-@media (prefers-reduced-motion: reduce) { .card, .logo b { animation:none; } }
+html, body { margin:0; height:100%; background:var(--night); color:#fff; font-family:var(--font-ui); }
+body { min-height:100dvh; height:100dvh; display:grid; grid-template-rows:auto 1fr auto; overflow:hidden; }
+
+/* latar: sampul game terpilih di-blur, crossfade 2 lapis */
+.bg { position:fixed; inset:0; z-index:0; overflow:hidden; background:radial-gradient(circle at 50% 0%, #1f2a7a 0%, #0f1448 45%, var(--night) 100%); }
+.bg-img { position:absolute; inset:-6%; background-size:cover; background-position:center; filter:blur(26px) saturate(1.35) brightness(.5); opacity:0; transform:scale(1.08); transition:opacity .7s ease; }
+.bg-img.show { opacity:1; }
+.bg-vignette { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,9,28,.55) 0%, rgba(6,9,28,.15) 35%, rgba(6,9,28,.75) 100%); }
+#stars { position:fixed; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:.55; }
+.topbar, .home, .hints { position:relative; z-index:2; }
+
+/* bar atas ala Switch: pengguna kiri, status kanan */
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:calc(12px + env(safe-area-inset-top)) var(--pad) 8px; }
+.user { display:flex; align-items:center; gap:14px; }
+.avatar { width:clamp(36px, 4.5vw, 54px); height:clamp(36px, 4.5vw, 54px); border-radius:50%; object-fit:cover; border:3px solid var(--gold); box-shadow:0 0 0 3px rgba(255,210,63,.25), 0 6px 16px rgba(0,0,0,.5); background:#222; }
+.logo { font-family:var(--font-px); font-size:clamp(11px, 1.7vw, 18px); letter-spacing:1px; text-shadow:0 0 14px rgba(255,210,63,.5), 3px 3px 0 #3a0d1a; }
+.logo b { color:var(--gold); animation:glow 2.4s ease-in-out infinite; }
+@keyframes glow { 50% { text-shadow:0 0 22px #fff36b, 3px 3px 0 #3a0d1a; filter:brightness(1.2); } }
+.status { display:flex; align-items:center; gap:10px; }
+.clock { font-weight:900; font-size:clamp(14px, 1.9vw, 22px); letter-spacing:1px; margin-right:6px; font-variant-numeric:tabular-nums; text-shadow:0 2px 8px rgba(0,0,0,.6); }
+.sbtn { width:clamp(38px, 4.2vw, 46px); height:clamp(38px, 4.2vw, 46px); border-radius:50%; border:2px solid rgba(255,255,255,.35); background:rgba(255,255,255,.1); color:#fff; font-size:18px; cursor:pointer; backdrop-filter:blur(6px); transition:background .2s, transform .2s, border-color .2s; }
+.sbtn:hover, .sbtn:focus-visible { background:rgba(255,255,255,.22); border-color:var(--cyan); transform:scale(1.08); outline:none; }
+.sbtn.off { opacity:.55; }
+
+/* area utama */
+.home { display:grid; grid-template-rows:1fr auto; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
+.home::-webkit-scrollbar { display:none; }
+
+/* hero ala PS5: judul besar game terpilih + tombol MAIN */
+.hero { padding:clamp(6px, 2vh, 28px) var(--pad) 0; align-self:end; max-width:min(760px, 100%); min-height:0; }
+.kicker { margin:0 0 10px; font-family:var(--font-px); font-size:clamp(8px, 1vw, 11px); color:var(--cyan); letter-spacing:2px; text-shadow:0 0 10px rgba(62,224,255,.6); }
+.hero-title { margin:0; font-weight:900; font-size:clamp(26px, 4.6vw, 58px); line-height:1.05; letter-spacing:-.5px; text-shadow:0 4px 24px rgba(0,0,0,.7), 0 0 30px rgba(255,210,63,.18); }
+.hero-desc { margin:12px 0 0; font-weight:600; font-size:clamp(12px, 1.5vw, 18px); line-height:1.55; color:#e3e8ff; text-shadow:0 2px 10px rgba(0,0,0,.7); max-width:62ch; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.chip { font-family:var(--font-px); font-size:clamp(7px, .8vw, 9px); padding:7px 10px; border-radius:20px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.35); color:#fff; backdrop-filter:blur(4px); }
+.playbtn { display:inline-flex; align-items:center; gap:12px; margin-top:clamp(12px, 2.2vh, 24px); padding:clamp(10px, 1.4vh, 16px) clamp(22px, 3vw, 40px); border-radius:40px; background:linear-gradient(180deg, #ffe066, var(--gold)); color:#2a1700; text-decoration:none; font-family:var(--font-px); font-size:clamp(11px, 1.3vw, 15px); box-shadow:0 8px 24px rgba(255,210,63,.35), inset 0 -3px 0 rgba(0,0,0,.18); transition:transform .2s, box-shadow .2s; }
+.playbtn:hover, .playbtn:focus-visible { transform:translateY(-2px) scale(1.04); box-shadow:0 12px 32px rgba(255,210,63,.55), 0 0 0 4px rgba(255,255,255,.25); outline:none; }
+.playbtn:active { transform:scale(.97); }
+.playicon { font-size:1.1em; }
+.hero.locked .playbtn { background:#555; color:#ccc; box-shadow:none; pointer-events:none; }
+.hero .anim { animation:slidein .35s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes slidein { from { opacity:0; transform:translateX(-16px); } }
+
+/* rel ubin game ala Switch/PS5: baris mendatar, ubin terpilih membesar */
+.rail-wrap { padding:clamp(18px, 4vh, 40px) 0 clamp(10px, 2vh, 22px); overflow:hidden; }
+.rail { display:flex; gap:var(--tile-gap); padding:14px calc(var(--pad) + 8px) 18px; overflow-x:auto; overflow-y:hidden; scroll-behavior:smooth; scroll-snap-type:x proximity; scroll-padding:0 var(--pad); scrollbar-width:none; outline:none; }
+.rail::-webkit-scrollbar { display:none; }
+.tile { position:relative; flex:0 0 var(--tile-w); aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#10153f; border:3px solid rgba(255,255,255,.14); box-shadow:0 10px 24px rgba(0,0,0,.5); scroll-snap-align:start; text-decoration:none; color:#fff; cursor:pointer; transform:scale(1); transition:transform .28s cubic-bezier(.2,.8,.2,1), border-color .28s, box-shadow .28s, opacity .28s; animation:rise .6s both; opacity:.85; }
+.tile:nth-child(2) { animation-delay:.05s } .tile:nth-child(3) { animation-delay:.1s } .tile:nth-child(4) { animation-delay:.15s } .tile:nth-child(5) { animation-delay:.2s } .tile:nth-child(n+6) { animation-delay:.25s }
+@keyframes rise { from { opacity:0; transform:translateY(24px); } }
+.tile img { width:100%; height:100%; display:block; object-fit:cover; image-rendering:pixelated; transition:transform .6s; }
+.tile .label { position:absolute; left:0; right:0; bottom:0; padding:22px 10px 8px; font-weight:800; font-size:clamp(10px, 1.05vw, 14px); line-height:1.2; background:linear-gradient(180deg, transparent, rgba(0,0,0,.75)); text-shadow:0 1px 4px #000; opacity:0; transform:translateY(6px); transition:opacity .25s, transform .25s; }
+.tile:hover .label, .tile.sel .label { opacity:1; transform:none; }
+.tile.sel { opacity:1; transform:scale(1.13); z-index:3; border-color:var(--cyan2); animation:pulse 1.6s ease-in-out infinite; }
+.tile.sel img { transform:scale(1.04); }
+@keyframes pulse {
+  0%, 100% { box-shadow:0 0 0 3px rgba(62,224,255,.55), 0 0 22px 4px rgba(62,224,255,.5), 0 16px 34px rgba(0,0,0,.6); }
+  50% { box-shadow:0 0 0 3px rgba(159,244,255,.95), 0 0 34px 10px rgba(62,224,255,.85), 0 16px 34px rgba(0,0,0,.6); }
+}
+.tile:hover:not(.sel) { opacity:1; transform:scale(1.05); border-color:rgba(255,255,255,.45); }
+.tile.locked { cursor:not-allowed; }
+.tile.locked .lockcover { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:clamp(34px, 4vw, 56px); background:repeating-linear-gradient(45deg,#1a1f55,#1a1f55 14px,#141842 14px,#141842 28px); filter:grayscale(.6) brightness(.8); }
+.tile.locked.sel { border-color:#aab; animation:none; box-shadow:0 0 0 3px rgba(255,255,255,.35), 0 16px 34px rgba(0,0,0,.6); }
+
+/* bar petunjuk tombol ala Switch */
+.hints { display:flex; align-items:center; gap:clamp(14px, 3vw, 36px); padding:10px var(--pad) calc(12px + env(safe-area-inset-bottom)); border-top:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(6,9,28,.2), rgba(6,9,28,.7)); font-weight:800; font-size:clamp(11px, 1.2vw, 14px); color:#dfe4ff; }
+.hint { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+kbd { display:inline-flex; align-items:center; justify-content:center; min-width:24px; height:24px; padding:0 7px; border-radius:12px; background:rgba(255,255,255,.14); border:1.5px solid rgba(255,255,255,.45); font-family:var(--font-ui); font-weight:900; font-size:11px; color:#fff; }
+kbd.btn-a { width:24px; padding:0; border-radius:50%; background:#2b2f3a; border-color:#fff; }
+.credit { margin-left:auto; font-weight:600; font-size:clamp(9px, 1vw, 12px); color:#8e97d8; white-space:nowrap; }
+
+/* transisi peluncuran: ubin membesar lalu layar memutih */
+.flash { position:fixed; inset:0; z-index:9; background:#fff; opacity:0; pointer-events:none; transition:opacity .45s ease; }
+body.launching .flash { opacity:1; }
+body.launching .tile.sel { transform:scale(1.35); transition-duration:.5s; animation:none; }
+body.launching .hero { opacity:0; transition:opacity .3s; }
+
+/* potret / layar sempit: hero di tengah, ubin lebih kecil */
+@media (max-aspect-ratio: 1/1) {
+  :root { --tile-w: clamp(150px, 42vw, 240px); }
+  .hero { text-align:center; max-width:100%; }
+  .hero-desc { margin-inline:auto; -webkit-line-clamp:4; }
+  .chips { justify-content:center; }
+  .credit { display:none; }
+  .hints { justify-content:center; }
+}
+@media (max-width: 480px) {
+  .logo { display:none; }
+  .hint:nth-child(3) { display:none; }
+}
+@media (max-height: 520px) and (min-aspect-ratio: 1/1) {
+  :root { --tile-w: clamp(120px, 16vw, 190px); }
+  .topbar { padding-top:calc(6px + env(safe-area-inset-top)); padding-bottom:0; }
+  .avatar { width:32px; height:32px; border-width:2px; }
+  .kicker { margin-bottom:4px; }
+  .hero { padding-top:4px; }
+  .hero-title { font-size:clamp(20px, 4vw, 30px); }
+  .hero-desc { margin-top:4px; font-size:12px; -webkit-line-clamp:1; }
+  .chips { margin-top:6px; } .chip { padding:5px 8px; }
+  .playbtn { margin-top:8px; padding:8px 20px; font-size:11px; }
+  .rail-wrap { padding:8px 0 4px; } .rail { padding:10px calc(var(--pad) + 8px) 12px; }
+  .hints { padding-top:6px; padding-bottom:calc(6px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile, .logo b, .tile.sel, .hero .anim { animation:none; }
+  .rail { scroll-behavior:auto; }
+  .bg-img, .flash, .tile { transition:none; }
+}

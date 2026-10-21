@@ -4,22 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0b1030">
+  <meta name="theme-color" content="#06091c">
   <title>Dunia Falisha – Portal Game Keluarga</title>
-  <meta name="description" content="Portal kumpulan game buatan keluarga: Falisha vs Yanto dan Warisan Combat.">
+  <meta name="description" content="Portal kumpulan game buatan keluarga Falisha: tampilan home ala konsol, pilih game lalu MAIN!">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="portal/portal.css">
 </head>
 <body>
+  <div class="bg" aria-hidden="true"><div class="bg-img" id="bg-a"></div><div class="bg-img" id="bg-b"></div><div class="bg-vignette"></div></div>
   <canvas id="stars" aria-hidden="true"></canvas>
-  <header class="top">
-    <h1 class="logo"><span>DUNIA</span> <b>FALISHA</b></h1>
-    <p class="tag">Pilih game yang mau dimainkan ⚡</p>
-    <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+
+  <header class="topbar">
+    <div class="user">
+      <img class="avatar" src="assets/Photo/falisaa.jpeg" alt="Falisha">
+      <span class="logo">DUNIA <b>FALISHA</b></span>
+    </div>
+    <div class="status">
+      <span id="clock" class="clock" aria-label="Jam">--:--</span>
+      <button id="btn-snd" class="sbtn" aria-label="Suara" title="Suara (M)">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh" title="Layar penuh (F)">⛶</button>
+    </div>
   </header>
-  <main id="grid" class="grid" aria-label="Daftar game"></main>
-  <footer class="foot">Dibuat dengan ❤ untuk Falisha &amp; keluarga</footer>
+
+  <main class="home">
+    <section class="hero" id="hero" aria-live="polite">
+      <p class="kicker"><span id="hero-count">1 / 1</span> · PILIH GAME</p>
+      <h1 id="hero-title" class="hero-title">Dunia Falisha</h1>
+      <p id="hero-desc" class="hero-desc"></p>
+      <div id="hero-tags" class="chips"></div>
+      <a id="hero-play" class="playbtn" href="#"><span class="playicon">▶</span> MAIN</a>
+    </section>
+
+    <section class="rail-wrap">
+      <div id="rail" class="rail" role="listbox" aria-label="Daftar game" tabindex="0"></div>
+    </section>
+  </main>
+
+  <footer class="hints">
+    <span class="hint"><kbd>◀</kbd><kbd>▶</kbd> Pilih</span>
+    <span class="hint"><kbd class="btn-a">A</kbd><kbd>Enter</kbd> Main</span>
+    <span class="hint"><kbd>F</kbd> Layar penuh</span>
+    <span class="credit">Dibuat dengan ❤ untuk Falisha &amp; keluarga</span>
+  </footer>
+
+  <div id="flash" class="flash" aria-hidden="true"></div>
+  <script src="shared/audio.js"></script>
   <script src="portal/portal.js"></script>
 </body>
 </html>
