@@ -96,3 +96,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1b1f5e; c
   .hud-l { top: calc(max(10px, env(safe-area-inset-top)) + 46px); } .score { font-size: 12px; } .bar { width: 120px; height: 12px; }
 }
 @media (max-height: 520px) { .logo { font-size: 30px; } .stats { margin-top: 8px; } .special { margin: 4px 0 8px; } }
+
+/* mode key-art untuk sampul portal (?cover=1, dipotret tools/cover.js) */
+body.cover #sys, body.cover #hud, body.cover #menu, body.cover #loading { display: none !important; }
+#cover { position: absolute; left: 4%; top: 6%; z-index: 40; text-align: left; }
+#cover .logo { font-size: 72px; transform: rotate(-4deg); }
+#cover p { margin-top: 18px; font-family: 'Press Start 2P', monospace; font-size: 12px; color: #fff; text-shadow: 2px 2px 0 #000; }

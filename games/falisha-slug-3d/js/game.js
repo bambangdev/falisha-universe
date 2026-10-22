@@ -574,9 +574,21 @@ function frame(now) {
 (async () => {
   show('loading');
   try { assets = await loadAll(CHARS.map(c => c.id)); } catch (e) { console.warn('Sprite gagal dimuat', e); assets = { heroes: {}, bgs: {} }; }
-  toMenu();
+  if (location.search.includes('cover=1')) coverMode(); else toMenu();
   requestAnimationFrame(frame);
 })();
+
+/* pose key-art untuk sampul portal: Falisha di tank menghadapi Mech Yanto, prajurit panik */
+function coverMode() {
+  charIdx = 0; loadMission(2, false); music(-1);
+  const t = tanks[1]; P.inTank = true; P.tank = t; t.active = true; t.x = 59.5; P.x = 59.5; P.face = 1; P.invuln = 0;
+  boss.active = true; G.cx = 62.5;
+  for (const e of enemies) { if (e.type === 'soldier' && e.x > 50) { e.x = 63 + Math.random() * 2; e.panic = true; e.vx = 0; e.face = 1; } }
+  hostages.forEach((h, i) => { h.freed = true; h.x = 55 + i * 1.6; h.y = 0; h.actor.root.position.set(h.x, 0, 0.6); });
+  bullets.push({ x: 62, y: 1.9, vx: 0.4, vy: 0, dmg: 0, life: 9999, kind: 'vulcan' }, { x: 63.5, y: 1.7, vx: 0.4, vy: 0, dmg: 0, life: 9999, kind: 'vulcan' });
+  fx.spark(64.5, 1.9, '#ffd23f', 24); fx.spark(63.2, 2.6, '#ff9f1c', 16);
+  P.shootT = 9999; state = 'cover'; document.body.classList.add('cover'); $('cover').classList.remove('hidden'); $('toast').classList.remove('show');
+}
 
 /* kait untuk smoke test (tools/smoke.js) */
 window.__slug = {

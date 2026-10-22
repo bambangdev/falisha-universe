@@ -54,6 +54,14 @@ Portal web game retro pixel art untuk keluarga, dioptimalkan untuk layar tablet 
 - **Sprite:** dibuat dengan Nano Banana memakai [prompt ini](docs/plans/10-falisha-jetpack-sprite-prompts.md), lalu diolah dengan `python3 -I games/falisha-jetpack/tools/build_sprites.py`. Sebelum sprite ada, game memakai grafis sementara dengan wajah dari foto
 - **Path:** `/games/falisha-jetpack/`
 
+### 11. Falisha Slug 3D 🔫🪖
+- **Genre:** Run & gun 2.5D ala *Metal Slug* — dunia Three.js dengan kamera samping, karakter sprite/billboard
+- **Jagoan:** Falisha, Arsyad, Babah Nono, Ibu Pupu, Baymax — tiap karakter punya jurus spesial ⚡ (Kilat Dash, Teriak Sonic, Kopi Tubruk, Suruh Makan!, Tinju Roket). Anggota keluarga yang tidak dipilih jadi sandera yang harus diselamatkan
+- **Fitur:** 3 misi (Pantai Gurun, Hutan Tropik, Kota Kilat → Benteng Yanto), pistol / Heavy Machine Gun / Rocket Launcher / granat, tank SV-001 dengan vulcan & meriam, prajurit yang lari panik (tanpa darah), robot mainan, chopper & gunship mini-boss, heli evakuasi, bos **YANTO-01 MECH** ("Kerjain Kumon!"), joypad virtual + gamepad, skor & rekor tersimpan
+- **Sprite:** dibuat dengan **Google Flow** memakai [prompt ini](docs/plans/11-falisha-slug-3d-sprite-prompts.md), upload ke `games/falisha-slug-3d/assets/raw/`, lalu olah dengan `python3 -I games/falisha-slug-3d/tools/build_sprites.py`. Sebelum sprite ada, game memakai aktor chibi 3D dengan wajah dari foto
+- **Tes:** `python3 -m http.server 8765` lalu `PW=$(npm root -g)/playwright node games/falisha-slug-3d/tools/smoke.js` memainkan semua misi sampai menang
+- **Path:** `/games/falisha-slug-3d/`
+
 ---
 
 ## 🚀 Menjalankan Secara Lokal

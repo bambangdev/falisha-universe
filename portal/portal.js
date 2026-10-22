@@ -30,6 +30,9 @@ const GAMES = [
   { id: 'falisha-jetpack', title: 'Falisha Jetpack', href: 'games/falisha-jetpack/', cover: 'portal/cover_game10.jpg',
     desc: 'Remake Jetpack Joyride di luar angkasa! Tahan untuk terbang, hindari zapper listrik, roket, laser & asteroid, kumpulkan koin bintang dan power-up.',
     tags: ['Jetpack', 'Luar Angkasa', 'Endless'] },
+  { id: 'falisha-slug-3d', title: 'Falisha Slug 3D', href: 'games/falisha-slug-3d/', cover: 'portal/cover_game11.jpg',
+    desc: 'Remake Metal Slug 2.5D! Pilih 5 jagoan keluarga, naiki tank SV-001, selamatkan sandera, kalahkan robot & gunship, lalu hadapi Mech Yanto yang teriak "Kerjain Kumon!"',
+    tags: ['Run & Gun', '3D', '5 Karakter'] },
   { id: 'soon', title: 'Segera Hadir', locked: true, desc: 'Game berikutnya sedang dibuat...', tags: ['???'] }
 ];
 
