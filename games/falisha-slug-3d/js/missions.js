@@ -42,7 +42,7 @@ export const MISSIONS = [
     hostages: [{ x: 13, y: 2.4, gift: 'H' }, { x: 34.5, y: 2.6, gift: 'R' }, { x: 60.5, y: 2.6, gift: 'food' }],
     enemies: [
       { type: 'soldier', x: 12.5, y: 2.4, hp: 3 }, { type: 'soldier', x: 20.5, y: 4.1, hp: 3 },
-      { type: 'chopper', x: 26.25, y: 6.4, hp: 6 }, { type: 'robot', x: 33.75, y: 2.6, hp: 5 },
+      { type: 'chopper', x: 26.25, y: 6.4, hp: 6 }, { type: 'robot', x: 37, y: 2.6, hp: 5 },
       { type: 'soldier', x: 43, y: 4.4, hp: 3 }, { type: 'robot', x: 45, y: 0, hp: 5 },
       { type: 'chopper', x: 48, y: 6.6, hp: 20, isMiniBoss: true },
       { type: 'soldier', x: 61, y: 0, hp: 3 }

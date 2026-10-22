@@ -21,7 +21,19 @@ function slice(img, e) {
     out.push(x1 < 0 ? null : { cv, w, h, x0, y0, x1, y1 });
   }
   out.map = e.map;
+  deriveHatch(out);
   return out;
+}
+
+/* Sel 'inTank' dari Flow biasanya ikut menggambar tank; buat sel 'hatch' = bagian atas figur saja (kepala-bahu). */
+function deriveHatch(cells) {
+  const src = cells.map && cells[cells.map.inTank]; if (!src) return;
+  const cv = document.createElement('canvas'); cv.width = src.w; cv.height = src.h;
+  const g = cv.getContext('2d'); g.drawImage(src.cv, 0, 0);
+  const cut = Math.round(src.y0 + (src.y1 - src.y0) * 0.42);
+  g.clearRect(0, cut, src.w, src.h - cut);
+  cells.push({ cv, w: src.w, h: src.h, x0: src.x0, y0: src.y0, x1: src.x1, y1: cut - 1 });
+  cells.map = { ...cells.map, hatch: cells.length - 1 };
 }
 
 export async function loadAll(ids) {

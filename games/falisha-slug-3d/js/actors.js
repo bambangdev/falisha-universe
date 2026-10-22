@@ -217,6 +217,8 @@ export class SpriteActor {
     this.mesh = new THREE.Mesh(planeGeo, this.mat); this.mesh.scale.set(this.planeW, this.planeH, 1);
     this.mesh.position.set(-(cx - c0.w / 2) / c0.w * this.planeW, -(c0.h - bottom) / c0.h * this.planeH, 0);
     this.root.add(this.mesh); billboards.add(this.mesh);
+    // sel hatch (kepala-bahu) tampak lebih tinggi dari kaki; simpan selisihnya supaya bisa diturunkan ke lubang tank
+    const hc = map.hatch != null && cells[map.hatch]; this.hatchLift = hc ? (bottom - hc.y1) / c0.h * this.planeH : 0;
     this.phase = 0; this.face = 1; this.set(map.idle ?? (map.run ? map.run[0] : 0));
   }
   setFace(f) { this.face = f; this.root.scale.x = f; }
@@ -231,7 +233,7 @@ export class SpriteActor {
     }
     if (pose === 'panic' && Array.isArray(m.panic)) { this.phase += dt * 10; return this.set(m.panic[Math.floor(this.phase) % m.panic.length]); }
     if (pose === 'broken' && Array.isArray(m.broken)) { this.phase += dt * 6; return this.set(m.broken[Math.floor(this.phase) % m.broken.length]); }
-    const v = m[pose]; this.set(Array.isArray(v) ? v[0] : (v ?? m.idle ?? 0));
+    const v = pose === 'inTank' ? (m.hatch ?? m.inTank) : m[pose]; this.set(Array.isArray(v) ? v[0] : (v ?? m.idle ?? 0));
   }
   dispose() { billboards.delete(this.mesh); }
 }

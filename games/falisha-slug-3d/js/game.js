@@ -402,7 +402,7 @@ function visuals(dt) {
     else if (P.shootT > 0) pose = P.aimUp ? 'shootUp' : 'shoot';
     else if (moving) pose = 'run';
     hero.setFace(P.face); hero.update(dt, pose, Math.abs(P.vx));
-    if (P.inTank) hero.root.position.set(P.tank.x - 0.3 * P.face, 2.1, 0.1); else hero.root.position.set(P.x, P.y, 1.3);
+    if (P.inTank) hero.root.position.set(P.tank.x - 0.3 * P.face, 2.0 - (hero.hatchLift || 0), 0.1); else hero.root.position.set(P.x, P.y, 1.3);
     hero.root.visible = !(P.invuln > 0 && P.invuln < 40 && Math.floor(tPlay * 14) % 2 && state === 'play');
     heroShadow.position.set(P.x, (P.inTank ? 0 : groundAt(M, P.x, P.y, P.y + 5)) + 0.02, 1.3); heroShadow.visible = !P.inTank;
     heroShadow.scale.setScalar(Math.max(0.4, 1 - (P.y - groundAt(M, P.x, P.y, P.y + 5)) * 0.15));
