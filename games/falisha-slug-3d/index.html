@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1b1f5e">
+  <title>Falisha Slug 3D</title>
+  <meta name="description" content="Falisha Slug 3D: remake Metal Slug 2.5D. Pilih 5 jagoan keluarga, naiki tank SV-001, selamatkan sandera, dan kalahkan Mech Yanto!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Lilita+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+</head>
+<body>
+  <main id="wrap">
+    <h1 class="sr-only">Falisha Slug 3D</h1>
+    <canvas id="game" aria-label="Layar game Falisha Slug 3D"></canvas>
+
+    <div id="sys">
+      <a class="sbtn" href="../../index.html" aria-label="Kembali ke Portal">🏠</a>
+      <button id="btn-pause" class="sbtn" aria-label="Pause">⏸</button>
+      <button id="btn-mute" class="sbtn" aria-label="Suara">🔊</button>
+      <button id="btn-full" class="sbtn" aria-label="Layar penuh">⛶</button>
+      <button id="btn-pad" class="sbtn" aria-label="Tampilkan atau sembunyikan joypad">🎮</button>
+    </div>
+
+    <section id="loading" class="panel"><div class="spin"></div><p>Memuat…</p></section>
+
+    <section id="hud" class="hidden">
+      <div class="hud-l">
+        <div id="h-title" class="mtitle">MISI 1</div>
+        <div id="h-score" class="score">SCORE 000000</div>
+        <div class="arms"><span id="h-arms">ARMS ∞</span><span id="h-bomb">BOMB 10</span><span id="h-sp">⚡ 3</span></div>
+      </div>
+      <div class="hud-r">
+        <div class="hpwrap"><span id="h-name">FALISHA</span><div id="h-hp" class="bar"><i></i></div></div>
+        <div id="h-armor" class="armor hidden"><span>SLUG</span><b></b><b></b><b></b></div>
+      </div>
+      <div id="boss-bar" class="bossbar hidden"><span>YANTO-01 MECH</span><div class="bar"><i></i></div></div>
+      <div id="toast"></div>
+      <div id="pops" aria-hidden="true"></div>
+      <div id="pad" aria-label="Joypad virtual">
+        <div id="dpad" role="group" aria-label="Arah">
+          <span class="dp-up">▲</span><span class="dp-left">◀</span><span class="dp-center">●</span><span class="dp-right">▶</span><span class="dp-down">▼</span>
+        </div>
+        <div class="pad-r">
+          <div class="pad-row">
+            <button type="button" class="pbtn small" data-act="slug" id="pb-slug" aria-label="Tank">🚜</button>
+            <button type="button" class="pbtn small" data-act="bomb" aria-label="Granat">💣</button>
+            <button type="button" class="pbtn small" data-act="special" aria-label="Jurus spesial">⚡</button>
+          </div>
+          <div class="pad-row">
+            <button type="button" class="pbtn fire" data-act="fire" aria-label="Tembak">🔥</button>
+            <button type="button" class="pbtn jump" data-act="jump" aria-label="Lompat">⬆</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="hidden">
+      <div class="menu-card">
+        <h2 class="logo">FALISHA SLUG<span>3D</span></h2>
+        <p class="sub">Remake Metal Slug! Selamatkan keluarga, naiki tank SV-001, kalahkan Mech Yanto!</p>
+        <div id="chars"></div>
+        <p id="m-special" class="special"></p>
+        <button id="btn-start" class="big">▶ MISI MULAI</button>
+        <div class="stats"><span>🏆 Rekor <b id="m-best">0</b></span></div>
+        <p class="howto">◀▶ jalan • ▲ bidik atas • ▼ jongkok • 🔥/J tembak • ⬆/K lompat • 💣/L granat • 🚜/E tank • ⚡/I jurus • P pause<br>
+          Gamepad: D-pad, X tembak, A lompat, B granat, Y tank, RB jurus</p>
+        <p id="m-sprites" class="note"></p>
+      </div>
+    </section>
+
+    <section id="clear" class="hidden">
+      <div class="menu-card small">
+        <h2 id="c-title">MISI 1 SELESAI!</h2>
+        <div class="result">
+          <div><small>Sandera</small><b id="c-host">0/0</b></div>
+          <div><small>Skor</small><b id="c-score">0</b></div>
+        </div>
+        <button id="btn-next" class="big">▶ LANJUT</button>
+      </div>
+    </section>
+
+    <section id="over" class="hidden">
+      <div class="menu-card small">
+        <img id="o-face" class="face" alt="">
+        <h2 id="o-title">CONTINUE?</h2>
+        <p id="o-new" class="new hidden">⭐ REKOR BARU! ⭐</p>
+        <div class="result">
+          <div><small>Skor</small><b id="o-score">0</b></div>
+          <div><small>Rekor</small><b id="o-best">0</b></div>
+        </div>
+        <button id="btn-cont" class="big">↻ LANJUT</button>
+        <button id="btn-menu" class="ghost">Ke Menu</button>
+      </div>
+    </section>
+
+    <section id="pause" class="hidden">
+      <div class="menu-card small">
+        <h2>Istirahat dulu ⏸</h2>
+        <button id="btn-resume" class="big">▶ LANJUT</button>
+        <button id="btn-quit" class="ghost">Keluar ke Menu</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../shared/audio.js"></script>
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
